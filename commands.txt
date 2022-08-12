@@ -1,0 +1,9 @@
+npx create-react-app ''
+npm install @apollo/client graphql
+npm install react-router-dom@6
+npm install @mui/material @emotion/react @emotion/styled @mui/x-data-grid
+npm install sweetalert
+npm install @mui/icons-material
+npm install react-leaflet leaflet
+npm install boxicons
+npm install react-bootstrap bootstrap
