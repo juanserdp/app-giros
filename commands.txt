@@ -7,3 +7,8 @@ npm install @mui/icons-material
 npm install react-leaflet leaflet
 npm install boxicons
 npm install react-bootstrap bootstrap
+
+//1. npm install react-bootstrap bootstrap
+//2. npm install react-router-dom@6
+//3. npm install @apollo/client graphql
+//4. npm install sweetalert
