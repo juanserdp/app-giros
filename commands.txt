@@ -12,3 +12,6 @@ npm install react-bootstrap bootstrap
 //2. npm install react-router-dom@6
 //3. npm install @apollo/client graphql
 //4. npm install sweetalert
+//5. npm install --save-dev react-test-renderer
+
+//6. npm install @mui/material @emotion/react @emotion/styled @mui/x-data-grid @mui/icons-material

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-
+import "./assets/styles/fonts.css";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 // import client from "./services/apollo/client";
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://192.168.0.24:4000/graphql'
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -29,7 +29,9 @@ const client = new ApolloClient({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <React.StrictMode>
     <ApolloProvider client={client}>
       <App />
     </ApolloProvider>
+  </React.StrictMode>
 );

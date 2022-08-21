@@ -1,0 +1,793 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` Muestra un modal de error al pasarle una contraseña mala 1`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={true}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[` Muestra un modal de error al pasarle una contraseña mala 2`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={false}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`FormLogin Muestra un modal de error al pasarle una contraseña mala 1`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={true}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`FormLogin Muestra un modal de error al pasarle una contraseña mala 2`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={false}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`FormLogin Muestra un modal de error al pasarle una contraseña mala 3`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={true}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`FormLogin Muestra un modal de error al pasarle una contraseña mala 4`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={false}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Muestra un modal de error al pasarle una contraseña mala 1`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={false}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Muestra un modal de error al pasarle una contraseña mala 2`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={false}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Muestra un modal de error al pasarle una contraseña mala 3`] = `
+<div
+  className="container-md"
+>
+  <form
+    className=""
+    style={
+      Object {
+        "height": "300px",
+        "margin": "auto",
+        "marginTop": "calc(50vh - 150px)",
+        "maxWidth": "330px",
+        "padding": "15px",
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicEmail"
+      >
+        Numero de Identificacion
+      </label>
+      <input
+        className="form-control"
+        id="formBasicEmail"
+        onChange={[Function]}
+        placeholder="Ingrese el numero"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <label
+        className="form-label"
+        htmlFor="formBasicPassword"
+      >
+        Contraseña
+      </label>
+      <input
+        className="form-control"
+        id="formBasicPassword"
+        onChange={[Function]}
+        placeholder="Ingrese la contraseña"
+        type="password"
+        value=""
+      />
+    </div>
+    <div
+      className="mb-3"
+    >
+      <div
+        className="form-check"
+      >
+        <input
+          className="form-check-input"
+          defaultChecked={false}
+          disabled={false}
+          id="formBasicCheckbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          className="form-check-label"
+          htmlFor="formBasicCheckbox"
+          title=""
+        >
+          Recordarme
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+      disabled={false}
+      onClick={[Function]}
+      type="button"
+    >
+      Ingresar
+    </button>
+  </form>
+</div>
+`;

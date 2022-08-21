@@ -30,15 +30,15 @@ export function FormLogin() {
                 swal("Error al iniciar sesión", login.error, "error");
             }
         },
-        onError: ({networkError}) => {
-              if (networkError) {
+        onError: ({ networkError }) => {
+            if (networkError) {
                 console.error(`[Network error]: ${networkError}`, " from FormLogin.js");
-                swal("Error!", networkError.result.errors[0].message, "error");
+                if (networkError.result.errors[0].message)
+                    swal("Error!", networkError.result.errors[0].message, "error");
             }
         }
     });
-    const handlerSubmit = (evento) => {
-        evento.preventDefault();
+    const handlerSubmit = () => {
         if (recordarCredenciales) guardarCredenciales(formLogin.numeroDocumento, formLogin.clave);
         else borrarCredenciales();
         if (formLogin.numeroDocumento !== "" && formLogin.clave !== "") login();
@@ -70,8 +70,8 @@ export function FormLogin() {
                     <Form.Check onChange={() => setRecordarCredenciales(!recordarCredenciales)
                     } defaultChecked={recordarCredenciales} type="checkbox" label="Recordarme" />
                 </Form.Group>
-                
-                <Button onClick={handlerSubmit} variant="primary" type="submit">
+
+                <Button onClick={(evento)=>handlerSubmit(evento)} variant="primary" >
                     Ingresar
                 </Button>
             </Form>
