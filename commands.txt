@@ -15,3 +15,5 @@ npm install react-bootstrap bootstrap
 //5. npm install --save-dev react-test-renderer
 
 //6. npm install @mui/material @emotion/react @emotion/styled @mui/x-data-grid @mui/icons-material
+
+npm i prop-types

@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useMutation, useQuery} from '@apollo/client';
-import { ModalAsesor } from "../components/ModalAsesor";
+import { ModalAsesor } from "../components/asesores/ModalAsesor";
 import { NavBar } from "../components/NavBar";
-import { TablaAsesores } from "../components/TablaAsesores";
+import { TablaAsesores } from "../components/asesores/TablaAsesores";
 import { OBTENER_ASESORES } from '../services/apollo/gql/asesor/obtenerAsesores';
 import { ELIMINAR_ASESOR } from '../services/apollo/gql/asesor/eliminarAsesor';
 import { EDITAR_ASESOR } from '../services/apollo/gql/asesor/editarAsesor';
 import { CREAR_ASESOR } from "../services/apollo/gql/asesor/crearAsesor";
-import Spinner from 'react-bootstrap/Spinner';
 
 export default function Asesores() {
     const { loading, error, data, refetch } = useQuery(OBTENER_ASESORES);
@@ -32,6 +31,7 @@ export default function Asesores() {
                 eliminarAsesor={eliminarAsesor}
                 refetch={refetch}
                 handleShow={handleShow}
+                loading={loading}
             />
             <ModalAsesor
                 show={show}
@@ -43,28 +43,6 @@ export default function Asesores() {
                     obtenerAsesores: []
                 }}
             />
-            {(loading) ?
-                <div style={{
-                    width: "100%",
-                    height: "100vh",
-                    display: 'flex',
-                    position: "absolute",
-                    top: "0",
-                    backgroundColor: "rgba(0, 0, 0, 0.2)",
-                    justifyContent: 'center',
-                    alignItems: "center",
-                    zIndex:"1"
-                }}>
-                    <div >
-                        <h1>
-                            <span>CARGAND</span>
-                            <Spinner size="lg" animation="border" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </Spinner>
-                        </h1>
-                    </div>
-                </div > : false}
-
         </>
     );
 };

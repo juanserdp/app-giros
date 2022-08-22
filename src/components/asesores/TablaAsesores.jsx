@@ -1,14 +1,28 @@
-import { DataGrid, GridActionsCellItem, useGridApiRef } from '@mui/x-data-grid';
-import { CustomToolbarAsesor } from './CustomToolbarAsesor';
+import { useNavigate } from 'react-router-dom';
+import {
+    DataGrid,
+    GridActionsCellItem,
+    useGridApiRef,
+} from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupIcon from '@mui/icons-material/Group';
-import ReplyIcon from '@mui/icons-material/Reply';
 import swal from "sweetalert";
-import { handleError } from '../util/handleError';
-import { useNavigate } from 'react-router-dom';
-export function TablaAsesores({ asesores, eliminarAsesor, refetch, handleShow }) {
+import { CustomToolbarAsesor } from './CustomToolbarAsesor';
+import { handleError } from '../../util/handleError';
+import React, { useState } from 'react';
+import { LinearProgress } from '@mui/material';
+import { CustomNoRowsOverlay } from './CustomNoRowsOverlay';
+import { GridColumnMenu } from './GridColumnMenu';
+
+export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, handleShow }) {
     const navigate = useNavigate();
+    // ALTURA DE CADA FILA
+    const [rowHeight, setRowHeight] = useState(50);
+
+    // DECIDE SI MOSTRAR O NO EL SLIDER
+    const [showSlider, setShowSlider] = useState(false);
+
     const handlerEliminarAsesor = async (id) => {
         const willDelete = await swal({
             title: "Esta seguro?",
@@ -27,9 +41,6 @@ export function TablaAsesores({ asesores, eliminarAsesor, refetch, handleShow })
                     },
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
-                swal("El usuarios ha sido eliminado!", {
-                    icon: "success",
-                });
             }
             else swal("Su informacion esta a salvo!");
         } else {
@@ -45,51 +56,45 @@ export function TablaAsesores({ asesores, eliminarAsesor, refetch, handleShow })
         {
             field: 'nombres',
             headerName: 'NOMBRES',
-            flex: 1,
+            width: "250",
             headerAlign: 'center',
 
         },
         {
             field: 'apellidos',
             headerName: 'APELLIDOS',
-            flex: 1,
+            width: "250",
             headerAlign: 'center'
         },
         {
             field: 'tipoDocumento',
             headerName: 'TIPO DOCUMENTO',
-            flex: 1,
+            width: "200",
             headerAlign: 'center',
             align: "center",
         },
         {
             field: 'numeroDocumento',
             headerName: 'NUM. DOCUMENTO',
-            flex: 1,
+            width: "200",
             headerAlign: 'center',
             align: "center",
+
         },
-        // {
-        //     field: 'clave',
-        //     headerName: 'CONTRASEÑA',
-        //     flex: 1,
-        //     align: "center",
-        //     headerAlign: 'center',
-        // },
         {
             field: 'saldo',
             headerName: 'SALDO',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
-            flex: 1,
+            width: "200",
             align: "center",
             headerAlign: 'center',
         },
         {
             field: 'estado',
             headerName: 'ESTADO',
-            flex: 0.6,
+            width: "150",
             align: "center",
             headerAlign: 'center',
             renderCell: (params) => {
@@ -111,33 +116,42 @@ export function TablaAsesores({ asesores, eliminarAsesor, refetch, handleShow })
         {
             field: 'actions',
             headerName: 'ACCIONES',
-            flex: 0.7,
+            width: "150",
             type: 'actions',
             align: "center",
             getActions: (params) => [
                 <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminarAsesor(params.id)} label="Eliminar" />,
-                <GridActionsCellItem icon={<EditIcon />} onClick={()=>{
+                <GridActionsCellItem icon={<EditIcon />} onClick={() => {
+                    // EL SUMISTRO EL ID DEL ASESOR PARA SE MODIFICADO
                     navigate(`/asesores/${params.id}`);
+                    // ABRO EL MODAL PARA MODIFICAR
                     handleShow();
                 }} label="Editar" />,
-                <GridActionsCellItem icon={<GroupIcon />} onClick={()=>navigate(`/usuarios/${params.id}`)} label="Ver usuarios" showInMenu />,
-                <GridActionsCellItem icon={<ReplyIcon />} label="Ver giros" showInMenu />,
+                <GridActionsCellItem icon={<GroupIcon />} onClick={() => navigate(`/usuarios/${params.id}`)} label="Ver usuarios" showInMenu />
             ]
         }
     ];
+
+    
+
     return (
-        <div className='container-fluid px-0' style={{ display: "flex" }}>
+        <div className='container-fluid px-0' >
             <DataGrid
                 headerHeight={50}
                 apiRef={apiRef}
-                rows={asesores.obtenerAsesores}
+                rowHeight={rowHeight}
+                rows={asesores.obtenerAsesores.filter(a => a.numeroDocumento !== "admin")}
                 columns={columnas}
-                pageSize={10}
-                rowsPerPageOptions={[10, 30, 50, 100]}
                 components={{
-                    Toolbar: () => CustomToolbarAsesor({ refetch, handleShow }),
+                    Toolbar: () => CustomToolbarAsesor({showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight  }),
+                    ColumnMenu: GridColumnMenu,
+                    LoadingOverlay: LinearProgress,
+                    NoRowsOverlay: CustomNoRowsOverlay
                 }}
-                disableColumnMenu
+                hideFooterSelectedRowCount={true}
+                loading={loading}
+                // disableColumnMenu
+                autoPageSize={true}
                 sx={{
                     height: 'calc(100vh - 60px)',
                     borderRadius: "0px",

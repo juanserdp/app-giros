@@ -8,6 +8,9 @@ import Login from "./pages/Login";
 import Usuarios from "./pages/Usuarios";
 import { PrivatizarPorRol } from "./routes/PrivatizarPorRol";
 import "./assets/styles/fonts.css";
+import "./assets/styles/scroll.css";
+import { Sesion } from "./util/Sesion";
+export const sesion = new Sesion();
 function App() {
   return (
     <>
