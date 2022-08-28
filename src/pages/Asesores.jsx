@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQuery} from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { ModalAsesor } from "../components/asesores/ModalAsesor";
 import { NavBar } from "../components/NavBar";
 import { TablaAsesores } from "../components/asesores/TablaAsesores";

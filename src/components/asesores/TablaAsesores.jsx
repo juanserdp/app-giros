@@ -8,31 +8,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupIcon from '@mui/icons-material/Group';
 import swal from "sweetalert";
-import { CustomToolbarAsesor } from './CustomToolbarAsesor';
+import { CustomToolbar } from '../CustomToolbar';
 import { handleError } from '../../util/handleError';
 import React, { useState } from 'react';
 import { LinearProgress } from '@mui/material';
-import { CustomNoRowsOverlay } from './CustomNoRowsOverlay';
-import { GridColumnMenu } from './GridColumnMenu';
+import { CustomNoRowsOverlay } from '../CustomNoRowsOverlay';
+import { GridColumnMenu } from '../GridColumnMenu';
+import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 
 export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, handleShow }) {
     const navigate = useNavigate();
     // ALTURA DE CADA FILA
     const [rowHeight, setRowHeight] = useState(50);
-
     // DECIDE SI MOSTRAR O NO EL SLIDER
     const [showSlider, setShowSlider] = useState(false);
+    const navegarTo = "/asesores/crear";
 
-    const handlerEliminarAsesor = async (id) => {
-        const willDelete = await swal({
-            title: "Esta seguro?",
-            text: "Una vez eliminado, no podra recuperar la informacion",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        });
-        if (willDelete) {
-            if (window.confirm("Confirme su desicion!")) {
+    const handlerEliminar = async(id) => {
+        dobleConfirmacionEliminacion(async (error, data) => {
+            if(data){
                 await eliminarAsesor({
                     variables: { id },
                     onCompleted: () => {
@@ -42,11 +36,8 @@ export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, hand
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
             }
-            else swal("Su informacion esta a salvo!");
-        } else {
-            swal("Su informacion esta a salvo!");
-        }
-    }
+        });
+    };
     const currencyFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -120,10 +111,10 @@ export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, hand
             type: 'actions',
             align: "center",
             getActions: (params) => [
-                <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminarAsesor(params.id)} label="Eliminar" />,
+                <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(params.id)} label="Eliminar" />,
                 <GridActionsCellItem icon={<EditIcon />} onClick={() => {
                     // EL SUMISTRO EL ID DEL ASESOR PARA SE MODIFICADO
-                    navigate(`/asesores/${params.id}`);
+                    navigate(`/asesores/editar/${params.id}`);
                     // ABRO EL MODAL PARA MODIFICAR
                     handleShow();
                 }} label="Editar" />,
@@ -132,7 +123,7 @@ export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, hand
         }
     ];
 
-    
+
 
     return (
         <div className='container-fluid px-0' >
@@ -143,7 +134,7 @@ export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, hand
                 rows={asesores.obtenerAsesores.filter(a => a.numeroDocumento !== "admin")}
                 columns={columnas}
                 components={{
-                    Toolbar: () => CustomToolbarAsesor({showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight  }),
+                    Toolbar: () => CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight }),
                     ColumnMenu: GridColumnMenu,
                     LoadingOverlay: LinearProgress,
                     NoRowsOverlay: CustomNoRowsOverlay

@@ -9,7 +9,12 @@ query obtenerAsesorPorId($id: ID!){
         tipoDocumento,
         numeroDocumento,
         clave,
-        saldo
+        saldo,
+        estado,
+        usuarios{
+            id,
+            nombres
+        }
     }
 }
 `;

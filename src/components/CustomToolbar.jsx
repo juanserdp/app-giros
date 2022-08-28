@@ -1,15 +1,18 @@
-import SyncIcon from '@mui/icons-material/Sync';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import UpdateIcon from '@mui/icons-material/Update';
-import ViewWeekIcon from '@mui/icons-material/ViewWeek';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import TableRowsIcon from '@mui/icons-material/TableRows';
 import { GridToolbarContainer, GridToolbarColumnsButton } from '@mui/x-data-grid';
 import { Button as ButtonBootstrap } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Slider } from '@mui/material';
 
-export function CustomToolbarAsesor({showSlider, setShowSlider, refetch, handleShow, setRowHeight, rowHeight }) {
+export function CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, handleShow, setRowHeight, rowHeight }) {
+
+    const { asesor, usuario } = useParams();
+    let location = useLocation();
     const navigate = useNavigate();
-    
+
     const style = {
         width: "100%",
         display: "inline-block",
@@ -23,34 +26,18 @@ export function CustomToolbarAsesor({showSlider, setShowSlider, refetch, handleS
         color: "black",
         fontSize: "20px",
     }
-    function Sli() {
-        return (
-            <>
-                <Slider
-                    sx={{textAlign: "center", width:"300px",}}
-                    step={10}
-                    min={30}
-                    max={80}
-                    onChange={(e, valor) => {
-                        setRowHeight(Number(valor));
-                    }}
-                    value={rowHeight} />
-            </>
-        )
-    }
     return (
         <div id="contenedor-toolbar" >
-            <GridToolbarContainer sx={style} style={{ margin: "15px 0px 0px 0px", padding: "5px 0px 20px 0px" }}>
-                <ButtonBootstrap
+            <GridToolbarContainer id="div-grid-toolbar" sx={style} style={{ margin: "15px 0px 0px 0px", padding: "5px 0px 20px 0px" }}>
+                {(location.pathname.includes("/asesores") || asesor || usuario) ? (<ButtonBootstrap
                     className='mx-2'
                     variant="primary" onClick={() => {
-                        navigate("/asesores/");
+                        navigate(navegarTo);
                         handleShow();
-                    }}
-                >
+                    }}>
                     <PersonAddIcon />
-                    &nbsp;ASESOR
-                </ButtonBootstrap>
+                    &nbsp;CREAR
+                </ButtonBootstrap>) : null}
                 <ButtonBootstrap
                     variant='secondary'
                     className='mx-2'
@@ -65,19 +52,30 @@ export function CustomToolbarAsesor({showSlider, setShowSlider, refetch, handleS
                         const buttonColumnas = document.getElementById("buttonColumnas");
                         buttonColumnas.click();
                     }}>
-                    <ViewWeekIcon />
+                    <ViewColumnIcon />
                     &nbsp;COLUMNAS
                 </ButtonBootstrap>
                 <ButtonBootstrap
                     variant='secondary'
                     className='mx-2'
-                    sx={fuente} size="small" onClick={() => {
+                    sx={fuente}
+                    size="small"
+                    onClick={() => {
                         setShowSlider(!showSlider);
                     }}>
-                    <SyncIcon />
+                    <TableRowsIcon />
                     &nbsp;DENSIDAD
                 </ButtonBootstrap>
-                {(showSlider) ? <div style={{ height: "20px",margin: "0px 50px 0px 50px"  }} ><Sli /></div> : null}
+                {(showSlider) ? <div style={{ height: "20px", margin: "0px 50px 0px 50px" }} ><Slider
+                    sx={{ textAlign: "center", width: "300px", }}
+                    step={10}
+                    min={30}
+                    max={80}
+                    onChange={(e, valor) => {
+                        setRowHeight(Number(valor));
+                    }}
+                    value={rowHeight}
+                /></div> : null}
                 <GridToolbarColumnsButton id="buttonColumnas" style={{ display: "none" }} className='mx-2' sx={fuente} />
             </GridToolbarContainer>
         </div>

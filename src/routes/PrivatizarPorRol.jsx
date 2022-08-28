@@ -1,7 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import { getToken } from '../util/getToken';
+import { Sesion } from '../util/Sesion';
+
 export function PrivatizarPorRol({ children, rolAccess }) {
-    const { rol } = getToken();
+    const sesion = new Sesion();
+    const rol = sesion.getRol();
     if (rol) {
         switch (rolAccess) {
             case "USUARIO":

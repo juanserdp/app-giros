@@ -9,12 +9,14 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { NavLink } from 'react-router-dom';
-import { sesion } from '../App';
-
+import { Sesion } from '../util/Sesion';
+import "../assets/styles/navbar.css";
 export function NavBar() {
+    const sesion = new Sesion();
     const rol = sesion.getRol();
+    const id = sesion.getUid();
     return (
-        <Navbar expand="lg" style={{ height: "60px" }} className="bg-white shadow-sm ">
+        <Navbar expand="lg" style={{ height: "60px" }} className="bg-white shadow-sm navbar-giros">
             <Container fluid>
                 {/* <Nav.Link
                     id="menu-bar-icon"
@@ -26,35 +28,40 @@ export function NavBar() {
                             height="24"
                             style={{ fill: "rgba(255,255, 255, 1)" }}><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg>
                     </Nav.Link> */}
-                <Navbar.Brand style={{ userSelect: "none" }}>PANEL DE CONTROL</Navbar.Brand>
+                <Navbar.Brand style={{ userSelect: "none" }}>GIROS APP</Navbar.Brand>
 
                 <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
                 <Navbar.Offcanvas
-                    id={`offcanvasNavbar-expand-lg`}
+                    id={`offcanvasNavbar-expand-lg`} // DALE UN WIDTH!
                     aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
                     placement="end">
                     <Offcanvas.Header closeButton>
+                        
                         <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
-                            PANEL DE CONTROL
+                            GIROS APP
                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
+
                         <Nav className="me-auto" >
-                            <Nav.Link to={"/inicio"} as={NavLink}><HomeIcon/>&nbsp;Inicio</Nav.Link>
+                    
+
+                            <Nav.Link to={"/inicio"} as={NavLink}><HomeIcon />&nbsp;Inicio</Nav.Link>
 
                             {(rol === "USUARIO") ? <Nav.Link to={"/enviar-giro"} as={NavLink}>&nbsp;Enviar Giro</Nav.Link> : null}
+
                             
-                            <Nav.Link to={"/giros"} as={NavLink}><ReplyIcon/>&nbsp;Giros</Nav.Link>
-                            
+                            <Nav.Link to={(rol === "ASESOR" || rol === "ADMINISTRADOR")?"/giros":`/giros/${id}`} as={NavLink}><ReplyIcon />&nbsp;Giros</Nav.Link>
+
                             {(rol === "ASESOR" || rol === "ADMINISTRADOR") ? <Nav.Link to={"/usuarios"} as={NavLink}><GroupIcon />&nbsp;Usuarios</Nav.Link> : null}
-                            
-                            {(rol === "ADMINISTRADOR") ? <Nav.Link to={"/asesores"} as={NavLink}><SupervisorAccountIcon/>&nbsp;Asesores</Nav.Link> : null}
-                            
-                            <Nav.Link to={"/cuenta"} as={NavLink}><ManageAccountsIcon/>&nbsp;Cuenta</Nav.Link>
-                            
+
+                            {(rol === "ADMINISTRADOR") ? <Nav.Link to={"/asesores"} as={NavLink}><SupervisorAccountIcon />&nbsp;Asesores</Nav.Link> : null}
+
+                            <Nav.Link to={"/cuenta"} as={NavLink}><ManageAccountsIcon />&nbsp;Cuenta</Nav.Link>
+
                             <Nav.Link to={"/"} as={NavLink} onClick={() => {
                                 sesion.cerrarSesion();
-                            }}><ExitToAppIcon/>&nbsp;Salir</Nav.Link>
+                            }}><ExitToAppIcon />&nbsp;Salir</Nav.Link>
                         </Nav>
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>

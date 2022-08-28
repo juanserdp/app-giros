@@ -4,8 +4,9 @@ import App from './App';
 import "./assets/styles/fonts.css";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
+import { Sesion } from './util/Sesion';
 // import client from "./services/apollo/client";
-
+export const sesion = new Sesion();
 const httpLink = createHttpLink({
   uri: 'http://192.168.0.24:4000/graphql'
 });

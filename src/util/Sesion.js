@@ -1,20 +1,20 @@
-export class Sesion{
-    constructor(){
+export class Sesion {
+    constructor() {
         const token = localStorage.getItem("jwt");
-        this.uid =  JSON.parse(window.atob(token.split('.')[1])).uid;
-        this.estado = JSON.parse(window.atob(token.split('.')[1])).estado;
-        this.rol = JSON.parse(window.atob(token.split('.')[1])).rol;
+        this.uid = (token)?JSON.parse(window.atob(token.split('.')[1])).uid:null;
+        this.estado = (token)?JSON.parse(window.atob(token.split('.')[1])).estado:null;
+        this.rol = (token)?JSON.parse(window.atob(token.split('.')[1])).rol:null;
     };
-    cerrarSesion(){
+    cerrarSesion() {
         localStorage.removeItem("jwt");
     };
-    getUid(){
+    getUid() {
         return this.uid;
     }
-    getEstado(){
+    getEstado() {
         return this.estado;
     }
-    getRol(){
+    getRol() {
         return this.rol;
     }
 }

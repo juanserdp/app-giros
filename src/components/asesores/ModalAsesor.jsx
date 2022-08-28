@@ -1,12 +1,12 @@
 import swal from "sweetalert";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { FormAsesor } from "./FormAsesor";
 import { handleError } from "../../util/handleError";
 
 export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAsesor, refetch }) {
-
+  const navigate = useNavigate();
   // OBTENGO EL ID DE UN ASESOR CON EL ENLACE
   const { id } = useParams();
 
@@ -63,6 +63,7 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
             // DEJAMOS EL VALIDADOR DE CAMPOS COMO AL PRINCIPIO Y CERRAMOS MODAL
             setValidated(false);
             handleClose();
+            navigate("/asesores");
           },
           onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
         });
@@ -78,6 +79,7 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
             // DEJAMOS EL VALIDADOR DE CAMPOS COMO AL PRINCIPIO Y CERRAMOS MODAL
             setValidated(false);
             handleClose();
+            navigate("/asesores");
           },
           onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
         });
@@ -96,7 +98,9 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
         keyboard={false}
         size="lg"
       >
-        <Modal.Header closeButton>
+        <Modal.Header 
+        // closeButton
+        >
           <Modal.Title>{(id)?"Editar Asesor":"Crear Asesor"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -111,7 +115,10 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
             setAsesor={setAsesor}/>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={()=>{
+            handleClose();
+            navigate("/asesores");
+          }}>
             Cerrar
           </Button>
           <Button variant="success" onClick={handleSubmit}>Aceptar</Button>

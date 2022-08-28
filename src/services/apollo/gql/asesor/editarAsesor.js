@@ -10,6 +10,7 @@ export const EDITAR_ASESOR = gql`
         $clave: String!
         $saldo: Float!
         $estado: String!
+        $tasaVenta: Float!
     ){
         editarAsesor(
             id: $id,
@@ -20,6 +21,7 @@ export const EDITAR_ASESOR = gql`
             clave: $clave,
             saldo: $saldo,
             estado: $estado
+            tasaVenta: $tasaVenta
             ){
                 nombres
                 apellidos

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4581f2f0-f4d3-4104-bd3d-591ad7cd7ae0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FormLogin.test.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NavBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NavBar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/__snapshots__/FormLogin.test.jsx.snap" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/asesores/CustomNoRowsOverlay.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/asesores/CustomToolbarAsesor.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/asesores/FormAsesor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/asesores/FormAsesor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/asesores/GridColumnMenu.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/asesores/ModalAsesor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/asesores/ModalAsesor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/asesores/TablaAsesores.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/asesores/TablaAsesores.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/giros/ModalGiro.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/giros/ModalGiro.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/giros/TablaGiros.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/giros/TablaGiros.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/usuarios/ModalUsuario.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/usuarios/ModalUsuario.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/usuarios/TablaUsuarios.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/usuarios/TablaUsuarios.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Asesores.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Asesores.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Giros.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Giros.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Inicio.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Inicio.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Usuarios.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Usuarios.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/PrivatizarPorRol.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/PrivatizarPorRol.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/giro/crearGiro.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/giro/crearGiro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/giro/editarGiro.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/giro/editarGiro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/giro/eliminarGiro.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/giro/eliminarGiro.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/giro/obtenerGiro.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/giro/obtenerGirosPorIdUsuario.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/giro/obtenerGirosPorIdUsuario.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/usuario/crearUsuario.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/usuario/crearUsuario.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/usuario/editarUsuario.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/usuario/editarUsuario.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/usuario/eliminarUsuario.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/usuario/eliminarUsuario.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/apollo/gql/usuario/obtenerUsuarios.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/apollo/gql/usuario/obtenerUsuarios.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/Sesion.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/Sesion.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2DuiYZORXDu6dUNWlpRQy1sfwZA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "D:/PROGRAMACION/java spring/sale"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4581f2f0-f4d3-4104-bd3d-591ad7cd7ae0" name="Changes" comment="" />
+      <created>1661555422480</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1661555422480</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

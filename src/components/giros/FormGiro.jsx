@@ -3,27 +3,17 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { currencyFormatter } from "../../util/currencyFormatter";
+import { currencyFormatter } from '../../util/currencyFormatter';
+import { parseNumberFormatToNumber } from '../../util/parseNumberFormatToNumber';
 import { modificarInputValue } from "../../util/modificarInputValue";
-import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber";
+import { bancos } from "../../assets/constants/bancos";
+export function FormGiro({ initialState, handleSubmit, validated, giroPorId, isNotAllowedChangeInput, setUsuario }) {
 
-export function FormAsesor({ initialState, handleSubmit, validated, asesorPorId, isNotAllowedChangeInputBalance, setAsesor }) {
-
-    // CREO EL ESTADO FORM QUE GUARDA EL UN OBJETO CON LOS DATOS 
-    // DEL FORMULARIO, SI SE LE PASA UN asesor LOS COMPLETA CON ESO
-    // SI NO, SE LE INTEGRA UN ESTADO INICIAL
-    const [form, setForm] = useState(asesorPorId[0] || initialState);
-
-    // ESTE ES UN MANEJADOR QUE REACCIONA AL CAMBIO EN EL FORMULARIO
+    const [form, setForm] = useState(giroPorId[0] || initialState);
     const handleInputChange = (event, name) => {
-        // SETEA LA INFORMACION DE LOS CAMPOS DEL FOMULARIO AL ESTADO form
         setForm({ ...form, [name]: event.target.value });
-
-        // SETEA LA INFORMACION DE LOS CAMPOS DEL FOMULARIO AL ESTADO asesor QUE
-        // SERA EL QUE SE ENVIE PARA CREAR O EDITAR
-        setAsesor({ ...form, [name]: event.target.value });
+        setUsuario({ ...form, [name]: event.target.value });
     }
-    // // ESTO ES EL FORM ACTIVA LA VALIDACION DE ARRIBA
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit} >
             <Row className="mb-3">
@@ -32,7 +22,6 @@ export function FormAsesor({ initialState, handleSubmit, validated, asesorPorId,
                     md="5"
                     controlId="validationNombres"
                 >
-                    {/* CUANDO SE RENDERIZA EL FORMULARIO HACE FOCUS A ESTE INPUT */}
                     <Form.Label>Nombres</Form.Label>
                     <Form.Control
                         required
@@ -100,56 +89,115 @@ export function FormAsesor({ initialState, handleSubmit, validated, asesorPorId,
                     </InputGroup>
                 </Form.Group>
             </Row>
+
             <Row className="mb-3">
-                <Form.Group as={Col} md="5" controlId="validationClave">
-                    <Form.Label>Contraseña</Form.Label>
-                    <InputGroup >
-                        <Form.Control
-                            required
-                            type="text"
-                            placeholder="Ingrese su contraseña..."
-                            onChange={(e) => handleInputChange(e, "clave")}
-                            value={form.clave}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Este campo es obligatorio
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                    </InputGroup>
+                <Form.Group as={Col} md="4" controlId="validationEstado">
+                    <Form.Label>Banco</Form.Label>
+                    <Form.Select
+                        required
+                        disabled={isNotAllowedChangeInput}
+                        onChange={(e) => handleInputChange(e, "banco")}
+                        value={form.banco}>
+                        <option value="">Elige el banco...</option>
+                        {bancos.map((banco, indice) => {
+                            return <option  key={indice} value={banco} >{banco}</option>
+                        })}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                        Este campo es obligatorio
+                    </Form.Control.Feedback>
+                    <Form.Control.Feedback>Okey!</Form.Control.Feedback>
                 </Form.Group>
-            </Row>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="5" controlId="validationSaldo">
-                    <Form.Label>Saldo</Form.Label>
+                <Form.Group as={Col} md="4" controlId="validationEstado">
+                    <Form.Label>Tipo de Cuenta</Form.Label>
+                    <Form.Select
+                        required
+                        disabled={isNotAllowedChangeInput}
+                        onChange={(e) => handleInputChange(e, "tipoCuenta")}
+                        value={form.tipoCuenta}>
+                        <option value="">Elige el tipo de cuenta...</option>
+                        <option value="AHORROS" >AHORROS</option>
+                        <option value="CORRIENTE">CORRIENTE</option>
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                        Este campo es obligatorio
+                    </Form.Control.Feedback>
+                    <Form.Control.Feedback>Okey!</Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group as={Col} md="4" controlId="validationSaldo">
+                    <Form.Label>Numero de Cuenta</Form.Label>
                     <Form.Control
                         required
-                        type="text"
-                        placeholder="Ingrese el saldo"
-                        onChange={(e) => {
-                            const str = modificarInputValue(e.target.value);
-                            handleInputChange({target:{
-                                value: parseNumberFormatToNumber(str)
-                            }},"saldo");
-                        }}
-                        value={(form.saldo)?currencyFormatter.format(form.saldo):""}
-                        disabled={isNotAllowedChangeInputBalance}
+                        type="number"
+                        placeholder="Ingrese su numero de cuenta..."
+                        onChange={(e) => handleInputChange(e, "numeroCuenta")}
+                        value={form.numeroCuenta}
                     />
                     <Form.Control.Feedback type="invalid">
                         Este campo es obligatorio
                     </Form.Control.Feedback>
                     <Form.Control.Feedback>Okey!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="5" controlId="validationEstado">
-                    <Form.Label>Estado</Form.Label>
-                    <Form.Select
+
+
+
+
+
+            </Row>
+            <Row className="mb-3">
+                <Form.Group as={Col} md="4" controlId="validationSaldo">
+                    <Form.Label>Valor</Form.Label>
+                    <Form.Control
                         required
-                        disabled={isNotAllowedChangeInputBalance}
-                        onChange={(e) => handleInputChange(e, "estado")}
-                        value={form.estado}>
-                        <option value="">Elige el estado...</option>
-                        <option value="ACTIVO" >ACTIVO</option>
-                        <option value="INACTIVO">INACTIVO</option>
-                    </Form.Select>
+                        type="text"
+                        placeholder="Ingrese el saldo"
+                        onChange={(e) => {
+                            handleInputChange({
+                                target: {
+                                    value: modificarInputValue(e.target.value)
+                                }
+                            }, "valorGiro");
+                        }}
+                        value={(form.valorGiro)?currencyFormatter.format(form.valorGiro):""}
+                        disabled={isNotAllowedChangeInput}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Este campo es obligatorio
+                    </Form.Control.Feedback>
+                    <Form.Control.Feedback>Okey!</Form.Control.Feedback>
+                </Form.Group>
+
+
+
+                <Form.Group
+                    as={Col}
+                    md="4"
+                    controlId="validationNombres"
+                >
+                    <Form.Label>Comprobate de Pago</Form.Label>
+                    <Form.Control
+                        required
+                        type="file"
+                        onChange={(e) => handleInputChange(e, "comprobantePago")}
+                        value={form.comprobantePago}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Este campo es obligatorio
+                    </Form.Control.Feedback>
+                    <Form.Control.Feedback>Okey!</Form.Control.Feedback>
+                </Form.Group>
+
+
+                <Form.Group as={Col} md="4" controlId="validationSaldo">
+                    <Form.Label>Fecha de Envio</Form.Label>
+                    <Form.Control
+                        required
+                        type="date"
+                        placeholder="Ingrese el tope"
+                        value={form.fechaEnvio}
+                        disabled={isNotAllowedChangeInput}
+                    />
                     <Form.Control.Feedback type="invalid">
                         Este campo es obligatorio
                     </Form.Control.Feedback>
