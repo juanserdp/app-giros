@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { FormAsesor } from "./FormAsesor";
 import { handleError } from "../../util/handleError";
+import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 
 export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAsesor, refetch }) {
   const navigate = useNavigate();
@@ -42,21 +43,14 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
     }
     setValidated(true);
     // VALIDO QUE LOS CAMPOS SEAN DIFERENTES A UNDEFINED
-    if (asesor.nombres !== "" &&
-      asesor.apellidos !== "" &&
-      asesor.tipoDocumento !== "" &&
-      asesor.numeroDocumento !== "" &&
-      asesor.clave !== "" &&
-      asesor.saldo !== "" && 
-      asesor.estado !== ""
-    ) {
+    if (validarCamposNotNull(asesor)) {
       // AQUI HAY UNA BIFURCACION, SI EL ID EXISTE ESO QUIERE DECIR QUE
       // SE LE FUE PROPORCIONADO PORQUE SE LE VA A EDITAR LOS DATOS DEL
       // ASESOR
       if (id) {
         // EJECUTAMOS LA MUTATION PARA EDITAR EL ASESOR
         await editarAsesor({
-          variables: {...asesor, saldo: Number(asesor.saldo)}, // LE SUMINISTRAMOS LOS DATOS DEL ASESOR A MODIFICAR
+          variables: { ...asesor, saldo: Number(asesor.saldo) }, // LE SUMINISTRAMOS LOS DATOS DEL ASESOR A MODIFICAR
           onCompleted: () => {
             refetch();
             swal("Editado!", "El asesor ha sido editado.", "success");
@@ -72,7 +66,7 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
       // QUE DEBE CREARDE UN ASESOR
       else {
         await crearAsesor({
-          variables: {...asesor, saldo: Number(asesor.saldo)}, // SUMINISTRAMOS LOS DATOS DEL ASESOR A CREAR
+          variables: { ...asesor, saldo: Number(asesor.saldo) }, // SUMINISTRAMOS LOS DATOS DEL ASESOR A CREAR
           onCompleted: () => {
             refetch();
             swal("Creado!", "El asesor ha sido creado.", "success");
@@ -98,10 +92,10 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
         keyboard={false}
         size="lg"
       >
-        <Modal.Header 
+        <Modal.Header
         // closeButton
         >
-          <Modal.Title>{(id)?"Editar Asesor":"Crear Asesor"}</Modal.Title>
+          <Modal.Title>{(id) ? "Editar Asesor" : "Crear Asesor"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {/* LE PASAMOS EL asesorPorId AL FORMULARIO COMO TAL PARA 
@@ -112,10 +106,10 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
             validated={validated}
             asesorPorId={asesorPorId}
             isNotAllowedChangeInputBalance={false}
-            setAsesor={setAsesor}/>
+            setAsesor={setAsesor} />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={()=>{
+          <Button variant="secondary" onClick={() => {
             handleClose();
             navigate("/asesores");
           }}>

@@ -14,7 +14,8 @@ export const OBTENER_GIROS = gql`
             numeroCuenta
             valorGiro
             comprobantePago
-            fechaEnvio
+            fechaEnvio,
+            tasaCompra
         }
     }
 `;

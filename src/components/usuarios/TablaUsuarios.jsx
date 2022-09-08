@@ -121,14 +121,13 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             getActions: ({id, row}) => [
                 <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(id)} label="Eliminar" />,
                 <GridActionsCellItem icon={<EditIcon />} onClick={() => {
-                    navigate(`/usuarios/${row.asesor}/editar/${id}`);
+                    navigate(`/usuarios/${row.asesor.id}/editar/${id}`);
                     handleShow();
                 }} label="Editar" />,
                 <GridActionsCellItem icon={<ReplyIcon/>} onClick={() => navigate(`/giros/${id}`)} label="Ver giros" showInMenu />
             ]
         }
     ];
-    
     const handlerEliminar = async(id) => {
         dobleConfirmacionEliminacion(async (error, data)=>{
             if(data){

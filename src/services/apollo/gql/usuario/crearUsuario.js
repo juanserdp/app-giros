@@ -25,7 +25,6 @@ export const CREAR_USUARIO= gql`
             capacidadPrestamo: $capacidadPrestamo,
             estado: $estado
             ){
-                asesor
                 nombres
                 apellidos
                 tipoDocumento

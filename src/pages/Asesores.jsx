@@ -9,11 +9,15 @@ import { EDITAR_ASESOR } from '../services/apollo/gql/asesor/editarAsesor';
 import { CREAR_ASESOR } from "../services/apollo/gql/asesor/crearAsesor";
 
 export default function Asesores() {
+    // CONSULTAS
     const { loading, error, data, refetch } = useQuery(OBTENER_ASESORES);
+    
+    // MUTACIONES
     const [crearAsesor] = useMutation(CREAR_ASESOR);
     const [editarAsesor] = useMutation(EDITAR_ASESOR)
     const [eliminarAsesor] = useMutation(ELIMINAR_ASESOR);
 
+    // ESTADOS
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);

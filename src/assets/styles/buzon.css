@@ -1,0 +1,14 @@
+.iconos-buzon:hover{
+
+    padding-top: 3px;
+    background-color: rgb(171, 171, 171);
+}
+
+.iconos-buzon{
+    /* width: 35px;
+    height: 35px; */
+    margin: 0px 3px;
+    padding: 5px;
+    border-radius: 100%;
+    background-color: rgb(200, 200, 200);
+}

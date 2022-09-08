@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const OBTENER_ASESOR_POR_ID = gql`
 query obtenerAsesorPorId($id: ID!){
-    obtenerAsesorPorId(id: $id){
+    asesor: obtenerAsesorPorId(id: $id){
         id
         nombres,
         apellidos,
@@ -14,7 +14,8 @@ query obtenerAsesorPorId($id: ID!){
         usuarios{
             id,
             nombres
-        }
+        },
+        tasaVenta
     }
 }
 `;

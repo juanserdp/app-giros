@@ -1,4 +1,4 @@
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     DataGrid,
     GridActionsCellItem,
@@ -14,10 +14,15 @@ import { CustomNoRowsOverlay } from '../CustomNoRowsOverlay';
 import { GridColumnMenu } from '../GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 import { handleError } from '../../util/handleError';
-import {currencyFormatter} from '../../util/currencyFormatter';  
+import { currencyFormatter } from '../../util/currencyFormatter';
+import { Sesion } from '../../util/Sesion';
 
-export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }){
-    const {obtenerGiros, obtenerGirosPorIdUsuario} = giros;
+export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
+
+    const sesion = new Sesion();
+    const rol = sesion.getRol();
+
+    const { obtenerGiros, obtenerGirosPorIdUsuario } = giros;
 
     const navegarTo = `/enviar-giro`;
     const apiRef = useGridApiRef();
@@ -106,13 +111,20 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }){
 
         },
         {
+            field: 'tasaCompra',
+            headerName: 'TASA COMPRA',
+            width: "200",
+            headerAlign: 'center',
+            align: "center",
+        },
+        {
             field: 'actions',
             headerName: 'ACCIONES',
             width: "150",
             type: 'actions',
             align: "center",
-            getActions: ({id, row}) => [
-                <GridActionsCellItem icon={<DeleteIcon />} onClick={()=>handlerEliminar(id)} label="Eliminar" />,
+            getActions: ({ id, row }) => [
+                <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(id)} label="Eliminar" />,
                 <GridActionsCellItem icon={<EditIcon />} onClick={() => {
                     navigate(`/giros/${row.usuario}/editar/${id}`);
                     handleShow();
@@ -120,10 +132,10 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }){
             ]
         }
     ];
-    
-    const handlerEliminar = async(id) => {
-        dobleConfirmacionEliminacion(async (error, data)=>{
-            if(data){
+
+    const handlerEliminar = async (id) => {
+        dobleConfirmacionEliminacion(async (error, data) => {
+            if (data) {
                 await eliminar({
                     variables: { id },
                     onCompleted: () => {
@@ -135,17 +147,17 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }){
             }
         });
     };
-    
+
     return (
         <div className='container-fluid px-0' >
             <DataGrid
                 headerHeight={50}
                 apiRef={apiRef}
                 rowHeight={rowHeight}
-                rows={obtenerGirosPorIdUsuario || obtenerGiros }
-                columns={columnas}
+                rows={obtenerGirosPorIdUsuario || obtenerGiros}
+                columns={(rol === "USUARIO") ? (columnas.filter(col => col.field !== "actions")) : columnas}
                 components={{
-                    Toolbar: () => CustomToolbar({navegarTo, showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight }),
+                    Toolbar: () => CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight }),
                     ColumnMenu: GridColumnMenu,
                     LoadingOverlay: LinearProgress,
                     NoRowsOverlay: CustomNoRowsOverlay
@@ -158,7 +170,7 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }){
                     height: 'calc(100vh - 60px)',
                     borderRadius: "0px",
                     backgroundColor: "white",
-                    fontSize: "20px"
+                    fontSize: "20px",
                 }}
             />
         </div>

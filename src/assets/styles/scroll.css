@@ -1,5 +1,6 @@
 ::-webkit-scrollbar{
     background-color: hsla(219, 8%, 66%, 0.426);
+    width: 10px !important;
 }
 ::-webkit-scrollbar-thumb{
     background-color: hsl(216, 98.4%, 52.2%);

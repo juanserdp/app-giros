@@ -15,7 +15,7 @@ export const OBTENER_GIROS_POR_ID_USUARIO =gql`
             valorGiro,
             comprobantePago,
             fechaEnvio
-
+            tasaCompra
         }
     }
 `;

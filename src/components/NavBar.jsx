@@ -1,10 +1,14 @@
 import { Offcanvas } from 'react-bootstrap';
+// REACT BOOTSTRAP
 import Container from 'react-bootstrap/Container';
+// MATERIAL UI ICONS
 import GroupIcon from '@mui/icons-material/Group';
 import ReplyIcon from '@mui/icons-material/Reply';
 import HomeIcon from '@mui/icons-material/Home';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+
+import SettingsIcon from '@mui/icons-material/Settings';
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -53,11 +57,15 @@ export function NavBar() {
                             
                             <Nav.Link to={(rol === "ASESOR" || rol === "ADMINISTRADOR")?"/giros":`/giros/${id}`} as={NavLink}><ReplyIcon />&nbsp;Giros</Nav.Link>
 
-                            {(rol === "ASESOR" || rol === "ADMINISTRADOR") ? <Nav.Link to={"/usuarios"} as={NavLink}><GroupIcon />&nbsp;Usuarios</Nav.Link> : null}
+                            {(rol === "ASESOR") ? <Nav.Link to={`/usuarios/${id}`} as={NavLink}><GroupIcon />&nbsp;Usuarios</Nav.Link> : null}
+
+                            {(rol === "ADMINISTRADOR") ? <Nav.Link to={"/usuarios"} as={NavLink}><GroupIcon />&nbsp;Usuarios</Nav.Link> : null}
 
                             {(rol === "ADMINISTRADOR") ? <Nav.Link to={"/asesores"} as={NavLink}><SupervisorAccountIcon />&nbsp;Asesores</Nav.Link> : null}
 
-                            <Nav.Link to={"/cuenta"} as={NavLink}><ManageAccountsIcon />&nbsp;Cuenta</Nav.Link>
+                            {(rol === "ADMINISTRADOR") ? <Nav.Link to={"/configuracion"} as={NavLink}><SettingsIcon />&nbsp;Configuracion</Nav.Link> : null}
+
+                            {(rol === "ASESOR" || rol === "USUARIO") ? <Nav.Link to={"/cuenta"} as={NavLink}><ManageAccountsIcon />&nbsp;Cuenta</Nav.Link> : null}
 
                             <Nav.Link to={"/"} as={NavLink} onClick={() => {
                                 sesion.cerrarSesion();

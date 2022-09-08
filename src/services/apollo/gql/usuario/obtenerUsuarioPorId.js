@@ -5,7 +5,7 @@ query obtenerUsuarioPorId($id: ID!){
     obtenerUsuarioPorId(id: $id){
         id,
         asesor{
-            saldo
+            tasaVenta
         }
         nombres,
         apellidos,

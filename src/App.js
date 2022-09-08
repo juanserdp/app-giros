@@ -9,19 +9,23 @@ import Usuarios from "./pages/Usuarios";
 import { PrivatizarPorRol } from "./routes/PrivatizarPorRol";
 import "./assets/styles/fonts.css";
 import "./assets/styles/scroll.css";
+import { Configuracion } from "./pages/Configuracion";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          {/*
+          ///////////////////
+          /////USUARIOS////// 
+          ///////////////////
+           */}
           <Route path="/" element={<Login />} />
           <Route path="/inicio" element={
             <PrivatizarPorRol rolAccess="USUARIO">
               <Inicio />
             </PrivatizarPorRol>} />
-
-
           {/* TODOS LOS GIROS */}
           <Route path="/giros" element={
             <PrivatizarPorRol rolAccess="USUARIO">
@@ -32,11 +36,7 @@ function App() {
             <PrivatizarPorRol rolAccess="USUARIO">
               <Giros />
             </PrivatizarPorRol>} />
-          {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route path="/giros/:usuario/editar/:id" element={
-            <PrivatizarPorRol rolAccess="ASESOR">
-              <Giros />
-            </PrivatizarPorRol>} />
+
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
           <Route path="/enviar-giro" element={
             <PrivatizarPorRol rolAccess="USUARIO">
@@ -45,20 +45,26 @@ function App() {
           } />
 
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route path="/enviar-giro/:id/:valorGiro/:tasaCompra" element={
+          <Route path="/enviar-giro/:id/:valorGiro" element={
             <PrivatizarPorRol rolAccess="USUARIO">
               <EnviarGiro />
             </PrivatizarPorRol>
           } />
-
-
-
-          {/* TODOS LOS USUARIOS */}
-          <Route path="/usuarios" element={
-            <PrivatizarPorRol rolAccess="ASESOR">
-              <Usuarios />
+          <Route path="/cuenta" element={
+            <PrivatizarPorRol rolAccess="USUARIO">
+              <Cuenta />
             </PrivatizarPorRol>
           } />
+          {/*
+          ///////////////////
+          /////ASESORES////// 
+          ///////////////////
+           */}
+          {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
+          <Route path="/giros/:usuario/editar/:id" element={
+            <PrivatizarPorRol rolAccess="ASESOR">
+              <Giros />
+            </PrivatizarPorRol>} />
           {/* USUARIOS POR ASESOR */}
           <Route path="/usuarios/:asesor" element={
             <PrivatizarPorRol rolAccess="ASESOR">
@@ -77,9 +83,18 @@ function App() {
               <Usuarios />
             </PrivatizarPorRol>
           } />
+          {/*
+          ///////////////////
+          //ADMINISTRADORES// 
+          ///////////////////
+           */}
 
-
-
+          {/* TODOS LOS USUARIOS */}
+          <Route path="/usuarios" element={
+            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+              <Usuarios />
+            </PrivatizarPorRol>
+          } />
           {/* TODOS LOS ASESORES */}
           <Route path="/asesores" element={
             <PrivatizarPorRol rolAccess="ADMINISTRADOR">
@@ -98,9 +113,9 @@ function App() {
               <Asesores />
             </PrivatizarPorRol>
           } />
-          <Route path="/cuenta" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
-              <Cuenta />
+          <Route path="/configuracion" element={
+            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+              <Configuracion />
             </PrivatizarPorRol>
           } />
         </Routes>

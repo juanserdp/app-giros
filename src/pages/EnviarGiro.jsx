@@ -1,14 +1,34 @@
+import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import swal from "sweetalert";
 import { bancos } from "../assets/constants/bancos";
 import { NavBar } from "../components/NavBar";
+import { useCargarDataForm } from "../hooks/useCargarDataForm";
+import { CREAR_GIRO } from "../services/apollo/gql/giro/crearGiro";
+import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUsuarioPorId";
 import { currencyFormatter } from "../util/currencyFormatter";
+import { handleError } from "../util/handleError";
 import { modificarInputValue } from "../util/modificarInputValue";
+import { Sesion } from "../util/Sesion";
+import { validarCamposNotNull } from "../util/validarCamposNotNull";
 
 export default function EnviarGiro() {
-    const { id, valorGiro, tasaCompra } = useParams();
 
+    const sesion = new Sesion();
+    const idUsuario = sesion.getUid();
+    const initialStateTasa = {
+        asesor: {
+            tasaVenta: ""
+        }
+    }
+    const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
+        variables: { id: idUsuario },
+    });
+    const { id, valorGiro } = useParams();
+
+    const [usuario, setUsuario] = useCargarDataForm(initialStateTasa, data);
     const initialState = {
         nombres: "",
         apellidos: "",
@@ -18,14 +38,14 @@ export default function EnviarGiro() {
         tipoCuenta: "",
         numeroCuenta: "",
         valorGiro: valorGiro || "",
-        tasaCompra: tasaCompra || ""
     };
-
     const [form, setForm] = useState(initialState);
 
     const handleInputChange = (event, name) => {
         setForm({ ...form, [name]: event.target.value });
     }
+
+    const [crearGiro] = useMutation(CREAR_GIRO);
 
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
@@ -34,9 +54,26 @@ export default function EnviarGiro() {
             event.stopPropagation();
         }
         setValidated(true);
-        if(id){
+        if (id) {
             alert();
         }
+    }
+    const handleEnviar = async () => {
+        if (validarCamposNotNull(form)) {
+            await crearGiro({
+                variables: {
+                    ...form,
+                    usuario: idUsuario,
+                    valorGiro: Number(form.valorGiro),
+                    tasaCompra: Number(usuario.asesor.tasaVenta)
+                },
+                onCompleted: () => {
+                    swal("Enviado!", "Su giro ha sido enviado con exito", "success");
+                },
+                onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
+            })
+        }
+        else swal("Error!", "Todos los campos son obligatorios!", "error");
     }
 
     const [validated, setValidated] = useState(false);
@@ -125,7 +162,7 @@ export default function EnviarGiro() {
                     <hr />
                     <Row className="mb-3">
                         <h3 className="mb-3">Datos Bancarios</h3>
-                        
+
                         <Form.Group as={Col} md="4" controlId="validationEstado">
                             <Form.Label>Tipo de Cuenta</Form.Label>
                             <Form.Select
@@ -202,22 +239,22 @@ export default function EnviarGiro() {
                             <Form.Control.Feedback>Okey!</Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} md="4" controlId="validationSaldo">
-                                        <Form.Label>Dinero en Bolivares</Form.Label>
-                                        <Form.Control
-                                            required
-                                            type="text"
-                                            placeholder="Ingrese el saldo"
-                                            value={178}
-                                            disabled={true}
-                                        />
-                                        <Form.Control.Feedback type="invalid">
-                                            Este campo es obligatorio
-                                        </Form.Control.Feedback>
-                                        <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                                    </Form.Group>
+                            <Form.Label>Dinero en Bolivares</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                placeholder="Ingrese el saldo"
+                                value={178}
+                                disabled={true}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Este campo es obligatorio
+                            </Form.Control.Feedback>
+                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
+                        </Form.Group>
                     </Row>
                 </Form>
-                <Button className="my-3 mx-5">Enviar</Button>
+                <Button className="my-3 mx-5" onClick={handleEnviar}>Enviar</Button>
             </Container>
         </>
     );

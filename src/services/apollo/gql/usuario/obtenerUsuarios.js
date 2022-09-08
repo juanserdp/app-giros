@@ -4,7 +4,9 @@ export const OBTENER_USUARIOS = gql`
     query{
         obtenerUsuarios{
             id,
-            asesor,
+            asesor{
+                id
+            }
             nombres,
             apellidos,
             tipoDocumento,

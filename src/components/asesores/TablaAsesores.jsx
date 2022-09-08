@@ -141,7 +141,6 @@ export function TablaAsesores({ loading, asesores, eliminarAsesor, refetch, hand
                 }}
                 hideFooterSelectedRowCount={true}
                 loading={loading}
-                // disableColumnMenu
                 autoPageSize={true}
                 sx={{
                     height: 'calc(100vh - 60px)',
