@@ -1,12 +1,12 @@
 import { gql } from "@apollo/client";
 
-export const OBTENER_USUARIOS_POR_ID_ASESOR =gql`
+export const OBTENER_USUARIOS_POR_ID_ASESOR = gql`
     query obtenerUsuariosPorIdAsesor($id:ID!){
-        obtenerUsuariosPorIdAsesor(id:$id){
+        usuarios:obtenerUsuariosPorIdAsesor(id:$id){
             id,
             asesor{
                 id
-            }
+            },
             nombres,
             apellidos,
             tipoDocumento,
@@ -15,7 +15,8 @@ export const OBTENER_USUARIOS_POR_ID_ASESOR =gql`
             saldo,
             deuda,
             capacidadPrestamo,
-            estado
+            estado,
+            tasaVenta
         }
     }
 `;

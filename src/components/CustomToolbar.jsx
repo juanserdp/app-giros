@@ -6,13 +6,26 @@ import { GridToolbarContainer, GridToolbarColumnsButton } from '@mui/x-data-grid
 import { Button as ButtonBootstrap } from 'react-bootstrap';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Slider } from '@mui/material';
+import { useState } from 'react';
 
-export function CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, handleShow, setRowHeight, rowHeight }) {
+export function CustomToolbar({
+    navegarTo,
+    refetch,
+    handleShow,
+}) {
 
-    const { asesor, usuario } = useParams();
-    let location = useLocation();
+    // INSTANCIAS
+    const location = useLocation();
     const navigate = useNavigate();
 
+    // CONSTANTES
+    const { asesor, usuario } = useParams();
+
+    // ESTADOS
+    const [showSlider, setShowSlider] = useState(false);
+    const [count, setCount] = useState(0);
+
+    // ESTILOS
     const style = {
         width: "100%",
         display: "inline-block",
@@ -28,8 +41,16 @@ export function CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, h
     }
     return (
         <div id="contenedor-toolbar" >
-            <GridToolbarContainer id="div-grid-toolbar" sx={style} style={{ margin: "15px 0px 0px 0px", padding: "5px 0px 20px 0px" }}>
-                {(location.pathname.includes("/asesores") || asesor || usuario) ? (<ButtonBootstrap
+            <GridToolbarContainer
+                id="div-grid-toolbar"
+                sx={style}
+                style={{
+                    margin: "15px 0px 0px 0px",
+                    padding: "5px 0px 20px 0px"
+                }}>
+                {(location.pathname.includes("/asesores") || 
+                location.pathname.includes("/usuarios")  || 
+                location.pathname.includes("/giros/usuario")) ? (<ButtonBootstrap
                     className='mx-2'
                     variant="primary" onClick={() => {
                         navigate(navegarTo);
@@ -55,7 +76,7 @@ export function CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, h
                     <ViewColumnIcon />
                     &nbsp;COLUMNAS
                 </ButtonBootstrap>
-                <ButtonBootstrap
+                {/* <ButtonBootstrap
                     variant='secondary'
                     className='mx-2'
                     sx={fuente}
@@ -75,7 +96,7 @@ export function CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, h
                         setRowHeight(Number(valor));
                     }}
                     value={rowHeight}
-                /></div> : null}
+                /></div> : null} */}
                 <GridToolbarColumnsButton id="buttonColumnas" style={{ display: "none" }} className='mx-2' sx={fuente} />
             </GridToolbarContainer>
         </div>

@@ -1,23 +1,31 @@
 import swal from "sweetalert";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import { FormAsesor } from "./FormAsesor";
 import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
+import { dateJSONupdate } from "../../util/dateJSONupdate";
 
-export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAsesor, refetch }) {
+export function ModalAsesor({
+  asesores,
+  show,
+  handleClose,
+  crearAsesor,
+  crearAsesorData,
+  editarAsesor,
+  editarAsesorData,
+  refetch
+}) {
+  // INSTANCIAS
   const navigate = useNavigate();
-  // OBTENGO EL ID DE UN ASESOR CON EL ENLACE
+
+  // CONSTANTES
   const { id } = useParams();
 
-  // SI HAY UN ID ENTONCES EL REALIZA UNA BUSQUEDA Y DEVUELVE
-  // EL ASESOR CON ESE ID EN CASO CONTRARIO DEVUELVE UN UNDEFINED
-  const asesorPorId = asesores.obtenerAsesores.filter(asesor => asesor.id === id);
-  // ^^ DEVUELVE UN ARRAY CON UN SOLO OBJETO 
+  const asesorSeleccionado = asesores.find(asesor => asesor.id === id);
 
-  // DEFINIMOS LOS CAMPOS INICIALES DE MI FORMULARIO
-  const initialState = {
+  const initialStateAsesor = {
     nombres: "",
     apellidos: "",
     tipoDocumento: "",
@@ -27,60 +35,85 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
     estado: ""
   };
 
-  // GUARDAMOS ESOS CAMPOS EN UNA VARIABLE asesor 
-  // SI EN LA BUSQUEDA DEL ID SE ENCUENTRA UN ASESOR ENTONCES
-  // LOS DATOS DE EL SE LE PASAN AL FORMULARIO PARA EDITARLO
-  // EN CASO CONTRARIO SE PONENE LOS CAMPOS INICIALES
-  const [asesor, setAsesor] = useState(asesorPorId[0] || initialState);
+  const initialStateAsesorFormCrear = {
+    nombres: "",
+    apellidos: "",
+    tipoDocumento: "",
+    numeroDocumento: "",
+    clave: "",
+    saldo: ""
+  }
 
+  // ESTADOS
+  const [asesor, setAsesor] = useState((id) ? initialStateAsesor : initialStateAsesorFormCrear);
   const [validated, setValidated] = useState(false);
-  // ESTE MANEJADOR DESPONDE AL BOTON "ACEPTAR" DEL MODAL
+
+  // MANEJADORES
   const handleSubmit = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-    setValidated(true);
-    // VALIDO QUE LOS CAMPOS SEAN DIFERENTES A UNDEFINED
-    if (validarCamposNotNull(asesor)) {
-      // AQUI HAY UNA BIFURCACION, SI EL ID EXISTE ESO QUIERE DECIR QUE
-      // SE LE FUE PROPORCIONADO PORQUE SE LE VA A EDITAR LOS DATOS DEL
-      // ASESOR
-      if (id) {
-        // EJECUTAMOS LA MUTATION PARA EDITAR EL ASESOR
+    // VALIDACION
+    if (id) {
+      if (validarCamposNotNull(asesor)) {
         await editarAsesor({
-          variables: { ...asesor, saldo: Number(asesor.saldo) }, // LE SUMINISTRAMOS LOS DATOS DEL ASESOR A MODIFICAR
+          variables: {
+            id,
+            asesor: dateJSONupdate(asesorSeleccionado, asesor)
+          },
           onCompleted: () => {
-            refetch();
+            // EXITO
             swal("Editado!", "El asesor ha sido editado.", "success");
-            // DEJAMOS EL VALIDADOR DE CAMPOS COMO AL PRINCIPIO Y CERRAMOS MODAL
+            // RESETEAR
             setValidated(false);
+            // CERRAR
             handleClose();
+            // REGRESAR
             navigate("/asesores");
+            // LIMPIAR
+            setAsesor(initialStateAsesor);
+            setValidated(false);
           },
           onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
         });
       }
-      // EN CASO DE QUE NO SE LE HAYA SUMINISTRADO UN ID QUIERE DECIR
-      // QUE DEBE CREARDE UN ASESOR
       else {
+        // ERROR
+        swal("Error!", "No ha editado ningun campo!", "error");
+      }
+    }
+    else {
+      if (validarCamposNotNull(asesor)) {
         await crearAsesor({
-          variables: { ...asesor, saldo: Number(asesor.saldo) }, // SUMINISTRAMOS LOS DATOS DEL ASESOR A CREAR
+          variables: { ...asesor, saldo: Number(asesor.saldo) },
           onCompleted: () => {
-            refetch();
+
+            // EXITO
             swal("Creado!", "El asesor ha sido creado.", "success");
-            // DEJAMOS EL VALIDADOR DE CAMPOS COMO AL PRINCIPIO Y CERRAMOS MODAL
+            // RESETEAR
             setValidated(false);
+            // CERRAR
             handleClose();
+            // REGRESAR
             navigate("/asesores");
+            // LIMPIAR
+            setAsesor(initialStateAsesor);
+            setValidated(false);
           },
           onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
         });
       }
-      refetch();
+      else {
+        // ADVERTENCIAS
+        setValidated(true);
+        // ERROR
+        swal("Error!", "Todos los campos son obligatorios!", "error");
+      }
     }
-    else swal("Error!", "Todos los campos son obligatorios!", "error");
+    // RECARGAR
+    refetch();
   }
 
   return (
@@ -98,26 +131,50 @@ export function ModalAsesor({ asesores, show, handleClose, crearAsesor, editarAs
           <Modal.Title>{(id) ? "Editar Asesor" : "Crear Asesor"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* LE PASAMOS EL asesorPorId AL FORMULARIO COMO TAL PARA 
+          {/* LE PASAMOS EL asesorSeleccionado AL FORMULARIO COMO TAL PARA 
           QUE SI LLEGA A EXISTIR ENTONCES SE MUESTREN EN LOS CAMPOS */}
           <FormAsesor
-            initialState={initialState}
             handleSubmit={handleSubmit}
             validated={validated}
-            asesorPorId={asesorPorId}
+            asesor={asesorSeleccionado || ((id) ? initialStateAsesor : initialStateAsesorFormCrear)}
             isNotAllowedChangeInputBalance={false}
-            setAsesor={setAsesor} />
+            setAsesor={setAsesor}
+            isEditing={id}
+          />
         </Modal.Body>
         <Modal.Footer>
+          
+
+
+
           <Button variant="secondary" onClick={() => {
+            // CERRAR
             handleClose();
+            // REGRESAR
             navigate("/asesores");
+            // LIMPIAR
+            setAsesor(asesor);
           }}>
             Cerrar
           </Button>
-          <Button variant="success" onClick={handleSubmit}>Aceptar</Button>
+          {(crearAsesorData.loading || editarAsesorData.loading) ? (
+            <Button variant="success" disabled>
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              /> &nbsp;
+              Enviando...
+            </Button>
+          ) : (
+            <Button variant="success" onClick={handleSubmit}>Aceptar</Button>
+          )}
         </Modal.Footer>
       </Modal>
     </>
   );
 }
+//crearAsesorData
+

@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const OBTENER_GIROS_POR_ID_USUARIO =gql`
     query obtenerGirosPorIdUsuario($id:ID!){
-        obtenerGirosPorIdUsuario(id:$id){
+        giros: obtenerGirosPorIdUsuario(id:$id){
             id,
             usuario,
             nombres,
@@ -15,7 +15,8 @@ export const OBTENER_GIROS_POR_ID_USUARIO =gql`
             valorGiro,
             comprobantePago,
             fechaEnvio
-            tasaCompra
+            tasaCompra,
+            estadoGiro
         }
     }
 `;

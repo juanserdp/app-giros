@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const OBTENER_ASESORES = gql`
     query{
-        obtenerAsesores{
+        asesores: obtenerAsesores{
             id
             nombres
             apellidos
@@ -11,6 +11,7 @@ export const OBTENER_ASESORES = gql`
             clave
             saldo
             estado
+            tasaVenta
         }
     }
 `;

@@ -28,14 +28,16 @@ function App() {
             </PrivatizarPorRol>} />
           {/* TODOS LOS GIROS */}
           <Route path="/giros" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
+            <PrivatizarPorRol rolAccess="OPERARIO">
               <Giros />
             </PrivatizarPorRol>} />
           {/* TODOS LOS GIROS POR USUARIO*/}
-          <Route path="/giros/:usuario" element={
+          <Route path="/giros/usuario/:usuario" element={
             <PrivatizarPorRol rolAccess="USUARIO">
               <Giros />
             </PrivatizarPorRol>} />
+          
+          
 
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
           <Route path="/enviar-giro" element={
@@ -60,9 +62,14 @@ function App() {
           /////ASESORES////// 
           ///////////////////
            */}
+           {/* TODOS LOS GIROS POR ASESOR*/}
+          <Route path="/giros/asesor/:asesor" element={
+            <PrivatizarPorRol rolAccess="OPERARIO">
+              <Giros />
+            </PrivatizarPorRol>} />
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route path="/giros/:usuario/editar/:id" element={
-            <PrivatizarPorRol rolAccess="ASESOR">
+          <Route path="/giros/usuario/:usuario/editar/:id" element={
+            <PrivatizarPorRol rolAccess="OPERARIO">
               <Giros />
             </PrivatizarPorRol>} />
           {/* USUARIOS POR ASESOR */}

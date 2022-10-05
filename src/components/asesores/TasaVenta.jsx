@@ -23,7 +23,7 @@ const buttonStyle = {
 };
 
 const cardStyle = {
-    height: "220px"
+    // height: "220px"
 };
 
 export function TasaVenta({
@@ -44,21 +44,19 @@ export function TasaVenta({
                 {(loading) ? (
                     <Skeleton height="60px" />
                 ) : (<h3
+                    className="mb-4"
                     style={textStyleH3} >
                     {tasa || 0}
                 </h3>
                 )}
-            </CardContent>
-            {
-                (rol === "ASESOR") ? (
-                    <Row className="">
+                {(rol === "ASESOR") ? (
+                    <Row >
                         <Col md="12">
                             <Button style={buttonStyle} onClick={handleEditarTasa}>Editar</Button>
                         </Col>
                     </Row>
-                ) : null
-            }
-
+                ) : null}
+            </CardContent>
         </Card>
     )
 }

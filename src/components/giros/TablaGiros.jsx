@@ -16,13 +16,12 @@ import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionElimin
 import { handleError } from '../../util/handleError';
 import { currencyFormatter } from '../../util/currencyFormatter';
 import { Sesion } from '../../util/Sesion';
+import { Button } from 'react-bootstrap';
 
 export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
 
     const sesion = new Sesion();
     const rol = sesion.getRol();
-
-    const { obtenerGiros, obtenerGirosPorIdUsuario } = giros;
 
     const navegarTo = `/enviar-giro`;
     const apiRef = useGridApiRef();
@@ -31,18 +30,58 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
     const [rowHeight, setRowHeight] = useState(50);
     const [showSlider, setShowSlider] = useState(false);
 
+    const estadoStyle = (params) => {
+        if (params.value === "PENDIENTE") {
+            return (<span style={{
+                color: "red",
+                borderRadius: "5px",
+                padding: "2px 10px",
+                border: "2px solid red"
+            }}> <b>{params.value}</b></span >)
+        }
+        else if (params.value === "EN PROCESO") {
+            return (<span style={{
+                color: "blue",
+                borderRadius: "5px",
+                padding: "2px 10px",
+                border: "2px solid blue"
+            }}> <b>{params.value}</b></span >)
+        }
+        else if (params.value === "COMPLETADO") {
+            return (<span style={{
+                color: "green",
+                borderRadius: "5px",
+                padding: "2px 10px",
+                border: "2px solid green"
+            }}><b>{params.value}</b></span>)
+        }
+    };
+
+    const comprobantePago = (params) => {
+        if (rol === "USUARIO") {
+            if (params.value == null)
+                return (<Button disabled>Descargar</Button>);
+            else return (<Button>Descargar</Button>);
+        }
+        else {
+            if (params.value == null)
+                return (<Button>Cargar</Button>);
+            else return (<div><Button>Cargado</Button><Button>Cargar</Button></div>);
+        }
+    };
+
     const columnas = [
         {
             field: 'nombres',
             headerName: 'NOMBRES',
-            width: "250",
+            width: "200",
             headerAlign: 'center',
 
         },
         {
             field: 'apellidos',
             headerName: 'APELLIDOS',
-            width: "250",
+            width: "200",
             headerAlign: 'center'
         },
         {
@@ -55,7 +94,7 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
         {
             field: 'numeroDocumento',
             headerName: 'NUM. DOCUMENTO',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
 
@@ -71,7 +110,7 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
         {
             field: 'tipoCuenta',
             headerName: 'TIPO CUENTA',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
 
@@ -79,7 +118,7 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
         {
             field: 'numeroCuenta',
             headerName: 'NUMERO CUENTA',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
 
@@ -90,22 +129,22 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
-            width: "200",
+            width: "150",
             align: "center",
             headerAlign: 'center',
         },
         {
             field: 'comprobantePago',
             headerName: 'COMPROBANTE PAGO',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
-
+            renderCell: (params) => comprobantePago(params)
         },
         {
             field: 'fechaEnvio',
             headerName: 'FECHA ENVIO',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
 
@@ -113,9 +152,17 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
         {
             field: 'tasaCompra',
             headerName: 'TASA COMPRA',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
+        },
+        {
+            field: 'estadoGiro',
+            headerName: 'ESTADO',
+            width: "150",
+            align: "center",
+            headerAlign: 'center',
+            renderCell: (params) => estadoStyle(params)
         },
         {
             field: 'actions',
@@ -126,7 +173,7 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
             getActions: ({ id, row }) => [
                 <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(id)} label="Eliminar" />,
                 <GridActionsCellItem icon={<EditIcon />} onClick={() => {
-                    navigate(`/giros/${row.usuario}/editar/${id}`);
+                    navigate(`/giros/usuario/${row.usuario}/editar/${id}`);
                     handleShow();
                 }} label="Editar" />
             ]
@@ -153,8 +200,8 @@ export function TablaGiros({ giros, refetch, loading, handleShow, eliminar }) {
             <DataGrid
                 headerHeight={50}
                 apiRef={apiRef}
-                rowHeight={rowHeight}
-                rows={obtenerGirosPorIdUsuario || obtenerGiros}
+                rowHeight={50}
+                rows={giros}
                 columns={(rol === "USUARIO") ? (columnas.filter(col => col.field !== "actions")) : columnas}
                 components={{
                     Toolbar: () => CustomToolbar({ navegarTo, showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight }),

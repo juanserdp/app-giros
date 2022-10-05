@@ -1,10 +1,10 @@
 import { gql } from "@apollo/client";
-export const RECARGAR_ASESOR =gql`
-    mutation RecargarAsesor(
+export const RECARGAR_USUARIO = gql`
+    mutation RecargarUsuario(
         $numeroDocumento: String!,
         $valorRecarga: Float!
-    ){
-        usuario: recargarAsesor(
+        ){
+        usuario: recargarUsuario(
             numeroDocumento: $numeroDocumento,
             valorRecarga: $valorRecarga
             ){

@@ -8,6 +8,7 @@ import { borrarCredenciales } from '../util/borrarCredenciales';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../services/apollo/gql/login';
+import { Spinner } from 'react-bootstrap';
 
 export function FormLogin() {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function FormLogin() {
     const [formLogin, setFormLogin] = useState(estadoInicial);
     const [recordarCredenciales, setRecordarCredenciales] = useState(localStorage.getItem("recordarCredenciales") || false);
 
-    const [login] = useMutation(LOGIN, {
+    const [login, { loading }] = useMutation(LOGIN, {
         variables: formLogin,
         onCompleted: ({ login }) => {
             if (login.token) {
@@ -46,14 +47,22 @@ export function FormLogin() {
     }
     return (
         <Container fluid="md">
+
             <Form style={{
                 width: "100%",
-                height: "300px",
+                height: "650px",
                 maxWidth: "330px",
                 padding: "15px",
                 margin: "auto",
-                marginTop: "calc(50vh - 150px)"
+                marginTop: "calc(50vh - 325px)"
             }}>
+                <img
+                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy5C__8LdlPzxa7WMOTs54k7jwNlRyKS4xKzIAN0IL2skfCe_yeOQqag5wSoYkwGYqoqo&usqp=CAU'
+                    style={{
+                        width: "100%",
+                        height: "300px"
+                    }}
+                ></img>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Numero de Identificacion</Form.Label>
                     <Form.Control onChange={event => setFormLogin({ ...formLogin, numeroDocumento: event.target.value })
@@ -70,10 +79,22 @@ export function FormLogin() {
                     <Form.Check onChange={() => setRecordarCredenciales(!recordarCredenciales)
                     } defaultChecked={recordarCredenciales} type="checkbox" label="Recordarme" />
                 </Form.Group>
-
-                <Button onClick={(evento)=>handlerSubmit(evento)} variant="primary" >
-                    Ingresar
-                </Button>
+                {(loading) ? (
+                        <Button variant="primary" disabled>
+                            <Spinner
+                                as="span"
+                                animation="grow"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                            /> &nbsp;
+                            Cargando...
+                        </Button>
+                    ) : (
+                        <Button onClick={(evento) => handlerSubmit(evento)} variant="primary" >
+                            Ingresar
+                        </Button>
+                    )}
             </Form>
         </Container>
     );

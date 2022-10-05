@@ -1,35 +1,15 @@
 import { gql } from "@apollo/client";
 
 export const EDITAR_ASESOR = gql`
-    mutation editarAsesor(
+    mutation EditarAsesor(
         $id: ID!
-        $nombres: String!
-        $apellidos: String!
-        $tipoDocumento: String!
-        $numeroDocumento: String!
-        $clave: String!
-        $saldo: Float!
-        $estado: String!
-        $tasaVenta: Float!
+        $asesor: AsesorForUpdateInput!
     ){
         editarAsesor(
             id: $id,
-            nombres: $nombres,
-            apellidos: $apellidos,
-            tipoDocumento: $tipoDocumento,
-            numeroDocumento: $numeroDocumento,
-            clave: $clave,
-            saldo: $saldo,
-            estado: $estado
-            tasaVenta: $tasaVenta
+            asesor: $asesor
             ){
-                nombres
-                apellidos
-                tipoDocumento
-                numeroDocumento
-                clave
-                saldo
-                estado
+                id
         }
     }
 `;

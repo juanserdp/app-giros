@@ -16,6 +16,7 @@ query obtenerAsesorPorId($id: ID!){
             nombres
         },
         tasaVenta
+        valorMinimoGiro
     }
 }
 `;

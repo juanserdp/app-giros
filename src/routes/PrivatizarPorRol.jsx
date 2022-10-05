@@ -7,7 +7,9 @@ export function PrivatizarPorRol({ children, rolAccess }) {
     if (rol) {
         switch (rolAccess) {
             case "USUARIO":
-                return (rol === "USUARIO" || rol === "ASESOR" || rol === "ADMINISTRADOR") ? children : <Navigate to="/" />
+                return (rol === "USUARIO" || rol === "OPERARIO" || rol === "ASESOR" || rol === "ADMINISTRADOR") ? children : <Navigate to="/" />
+            case "OPERARIO":
+                return (rol === "OPERARIO" || rol === "ASESOR" || rol === "ADMINISTRADOR") ? children : <Navigate to="/" />
             case "ASESOR":
                 return (rol === "ASESOR" || rol === "ADMINISTRADOR") ? children : <Navigate to="/" />
             case "ADMINISTRADOR":

@@ -5,18 +5,23 @@ import { Button, Modal } from "react-bootstrap";
 import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { FormGiro } from "./FormGiro";
+import { dateJSONupdate } from "../../util/dateJSONupdate";
 
-export function ModalGiro({ giros, show, handleClose, crearUsuario, editarUsuario, refetch }) {
+export function ModalGiro({
+    giros,
+    show,
+    handleClose,
+    editarGiro,
+    refetch
+}) {
+
+    // INTANCIAS DE CLASE
     const navigate = useNavigate();
+
+    // CONSTANTES
     const { id, usuario } = useParams();
-    let giroPorId = [];
-
-    const { obtenerGirosPorIdUsuario } = giros;
-
-    if (obtenerGirosPorIdUsuario && id) {
-        giroPorId = obtenerGirosPorIdUsuario.filter(giro => giro.id === id);
-    };
-    const initialState = {
+    const giroSeleccionado = giros.find(giro => giro.id === id);
+    const initialStateGiro = {
         nombres: "",
         apellidos: "",
         tipoDocumento: "",
@@ -24,55 +29,51 @@ export function ModalGiro({ giros, show, handleClose, crearUsuario, editarUsuari
         banco: "",
         tipoCuenta: "",
         numeroCuenta: "",
-        valorGiro: ""
+        valorGiro: "",
+        estadoGiro: "",
     };
-    const [giro, setGiro] = useState(giroPorId[0] || initialState);
+
+    // ESTADOS
+    const [giro, setGiro] = useState(initialStateGiro);
     const [validated, setValidated] = useState(false);
 
+    // MANEJADORES
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
         }
-        setValidated(true);
-        if (validarCamposNotNull(giro)) {
+        if (() => {
+            let isFull;
+            for (const prop in giro) {
+                if(prop === "comprobantePago") continue;
+                if (giro[prop] === "" || giro[prop] == null) return false;
+                else isFull = true;
+            }
+            return isFull;
+        }) {
             if (id && usuario) {
-                await editarUsuario({
+                await editarGiro({
                     variables: {
-                        ...giro,
-                        valorGiro: Number(giro.valorGiro),
-                        usuario: usuario
+                        id,
+                        giro: dateJSONupdate(giroSeleccionado, giro)
                     },
                     onCompleted: () => {
                         refetch();
-                        swal("Editado!", "El usuario ha sido editado.", "success");
+                        swal("Editado!", "El giro ha sido editado.", "success");
                         setValidated(false);
                         handleClose();
-                        navigate(`/giros/${usuario}`);
+                        navigate(`/giros/usuario/${usuario}`);
                     },
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
             }
-            // else if (asesor) {
-            //     await crearUsuario({
-            //         variables: {
-            //             ...giro,
-            //             valorGiro: Number(giro.valorGiro),
-            //             usuario: usuario
-            //         },
-            //         onCompleted: () => {
-            //             refetch();
-            //             swal("Creado!", "El usuario ha sido creado.", "success");
-            //             setValidated(false);
-            //             handleClose();
-            //             navigate(`/giros/${usuario}`);
-            //         },
-            //         onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
-            //     });
-            // }
         }
-        else swal("Error!", "Todos los campos son obligatorios!", "error");
+        else {
+            swal("Error!", "Todos los campos son obligatorios!", "error");
+            setValidated(true);
+        }
     }
     return (
         <>
@@ -87,21 +88,19 @@ export function ModalGiro({ giros, show, handleClose, crearUsuario, editarUsuari
                 </Modal.Header>
                 <Modal.Body>
                     <FormGiro
-                        initialState={initialState}
-                        handleSubmit={handleSubmit}
                         validated={validated}
-                        giroPorId={giroPorId}
-                        isNotAllowedChangeInput={false}
+                        giro={giroSeleccionado || initialStateGiro}
+                        isNotAllowedChangeInput={true}
                         setGiro={setGiro} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => {
                         handleClose();
-                        navigate(`/giros/${usuario}`);
+                        navigate(`/giros/usuario/${usuario}`);
                     }}>
                         Cerrar
                     </Button>
-                    <Button variant="success" onClick={handleSubmit}>Aceptar</Button>
+                    <Button  variant="success" onClick={handleSubmit}>Aceptar</Button>
                 </Modal.Footer>
             </Modal>
         </>

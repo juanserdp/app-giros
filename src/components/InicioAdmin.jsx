@@ -1,10 +1,10 @@
 import swal from "sweetalert";
-import { Backdrop, CardContent, CardMedia, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { useState, useEffect } from "react";
-import { Button, Card, Col, Container, FloatingLabel, Form, Row, Accordion } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
+
 import { RECARGAR_ASESOR } from "../services/apollo/gql/asesor/recargarAsesor";
-import { currencyFormatter } from "../util/currencyFormatter";
-import { modificarInputValue } from "../util/modificarInputValue";
+
 import { Buzon } from "./Buzon";
 import { handleError } from "../util/handleError";
 import { validarCamposNotNull } from "../util/validarCamposNotNull";
@@ -169,7 +169,7 @@ export function InicioAdmin() {
             <Container className="my-4"
                 style={{ textAlign: "center" }}>
                 <Row className="mb-3 justify-content-center">
-                    <Col md="8">
+                    <Col md="4">
                         <FormRecargar
                             recargar={recargarAsesor}
                         />

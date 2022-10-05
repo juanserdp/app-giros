@@ -15,34 +15,55 @@ import { CustomNoRowsOverlay } from '../CustomNoRowsOverlay';
 import { GridColumnMenu } from '../GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 import { handleError } from '../../util/handleError';
-import {currencyFormatter} from '../../util/currencyFormatter';  
+import { currencyFormatter } from '../../util/currencyFormatter';
 
 export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminarUsuario }) {
 
-    const {obtenerUsuarios, obtenerUsuariosPorIdAsesor} = usuarios;
-
-    const {asesor} = useParams();
+    // CONSTANTES
+    const { asesor } = useParams();
     const navegarTo = `/usuarios/${asesor}/crear`;
+
+    // INSTANCIAS
     const apiRef = useGridApiRef();
     const navigate = useNavigate();
 
-    
-
-    const [rowHeight, setRowHeight] = useState(50);
-    const [showSlider, setShowSlider] = useState(false);
+    // FUNCIONES
+    const estadoStyle = (params) => {
+        return (params.value === "ACTIVO")
+            ? (<span style={{
+                color: "green",
+                borderRadius: "5px",
+                padding: "2px 10px",
+                border: "2px solid green"
+            }}><b>{params.value}</b></span>)
+            : (<span style={{
+                color: "red",
+                borderRadius: "5px",
+                padding: "2px 10px",
+                border: "2px solid red"
+            }}><b>{params.value}</b></span>)
+    };
+    const acciones = (params) => [
+        <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(params.id)} label="Eliminar" />,
+        <GridActionsCellItem icon={<EditIcon />} onClick={() => {
+            navigate(`/usuarios/${params.row.asesor.id}/editar/${params.id}`);
+            handleShow();
+        }} label="Editar" />,
+        <GridActionsCellItem icon={<ReplyIcon />} onClick={() => navigate(`/giros/usuario/${params.id}`)} label="Ver giros" showInMenu />
+    ];
 
     const columnas = [
         {
             field: 'nombres',
             headerName: 'NOMBRES',
-            width: "250",
+            width: "200",
             headerAlign: 'center',
 
         },
         {
             field: 'apellidos',
             headerName: 'APELLIDOS',
-            width: "250",
+            width: "200",
             headerAlign: 'center'
         },
         {
@@ -55,7 +76,7 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
         {
             field: 'numeroDocumento',
             headerName: 'NUM. DOCUMENTO',
-            width: "200",
+            width: "150",
             headerAlign: 'center',
             align: "center",
 
@@ -66,7 +87,7 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
-            width: "200",
+            width: "150",
             align: "center",
             headerAlign: 'center',
         },
@@ -76,7 +97,7 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
-            width: "200",
+            width: "150",
             align: "center",
             headerAlign: 'center',
         },
@@ -86,7 +107,7 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
-            width: "200",
+            width: "150",
             align: "center",
             headerAlign: 'center',
         },
@@ -96,21 +117,14 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             width: "150",
             align: "center",
             headerAlign: 'center',
-            renderCell: (params) => {
-                return (params.value === "ACTIVO")
-                    ? (<span style={{
-                        color: "green",
-                        borderRadius: "5px",
-                        padding: "2px 10px",
-                        border: "2px solid green"
-                    }}><b>{params.value}</b></span>)
-                    : (<span style={{
-                        color: "red",
-                        borderRadius: "5px",
-                        padding: "2px 10px",
-                        border: "2px solid red"
-                    }}><b>{params.value}</b></span>)
-            }
+            renderCell: (params) => estadoStyle(params)
+        },
+        {
+            field: 'tasaVenta',
+            headerName: 'TASA VENTA',
+            width: "150",
+            align: "center",
+            headerAlign: 'center'
         },
         {
             field: 'actions',
@@ -118,19 +132,14 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             width: "150",
             type: 'actions',
             align: "center",
-            getActions: ({id, row}) => [
-                <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(id)} label="Eliminar" />,
-                <GridActionsCellItem icon={<EditIcon />} onClick={() => {
-                    navigate(`/usuarios/${row.asesor.id}/editar/${id}`);
-                    handleShow();
-                }} label="Editar" />,
-                <GridActionsCellItem icon={<ReplyIcon/>} onClick={() => navigate(`/giros/${id}`)} label="Ver giros" showInMenu />
-            ]
+            getActions:  (params) => acciones(params)
         }
     ];
-    const handlerEliminar = async(id) => {
-        dobleConfirmacionEliminacion(async (error, data)=>{
-            if(data){
+    
+    // MANEJADORES
+    const handlerEliminar = async (id) => {
+        dobleConfirmacionEliminacion(async (error, data) => {
+            if (data) {
                 await eliminarUsuario({
                     variables: { id },
                     onCompleted: () => {
@@ -142,17 +151,21 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             }
         });
     };
-    
+
     return (
         <div className='container-fluid px-0' >
             <DataGrid
                 headerHeight={50}
                 apiRef={apiRef}
-                rowHeight={rowHeight}
-                rows={obtenerUsuariosPorIdAsesor || obtenerUsuarios }
+                rowHeight={50}
+                rows={usuarios}
                 columns={columnas}
                 components={{
-                    Toolbar: () => CustomToolbar({navegarTo, showSlider, setShowSlider, refetch, handleShow, rowHeight, setRowHeight }),
+                    Toolbar: () => CustomToolbar({ 
+                        navegarTo, 
+                        refetch, 
+                        handleShow, 
+                    }),
                     ColumnMenu: GridColumnMenu,
                     LoadingOverlay: LinearProgress,
                     NoRowsOverlay: CustomNoRowsOverlay
@@ -169,5 +182,5 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
                 }}
             />
         </div>
-    );
+    )
 }

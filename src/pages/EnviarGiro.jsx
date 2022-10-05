@@ -1,34 +1,46 @@
+// HOOKS
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
-import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import swal from "sweetalert";
-import { bancos } from "../assets/constants/bancos";
-import { NavBar } from "../components/NavBar";
-import { useCargarDataForm } from "../hooks/useCargarDataForm";
+import { useNavigate, useParams } from "react-router-dom";
+
+// CONSULTAS
 import { CREAR_GIRO } from "../services/apollo/gql/giro/crearGiro";
 import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUsuarioPorId";
-import { currencyFormatter } from "../util/currencyFormatter";
-import { handleError } from "../util/handleError";
-import { modificarInputValue } from "../util/modificarInputValue";
-import { Sesion } from "../util/Sesion";
-import { validarCamposNotNull } from "../util/validarCamposNotNull";
 
+// COMPONENTES
+import { FormEnviarGiros } from "../components/FormEnviarGiros";
+import { NavBar } from "../components/NavBar";
+
+// COMPONENTES LIBRERIAS
+import { Backdrop, CircularProgress } from "@mui/material";
+import { Button,  Container, Form, InputGroup, Row, Spinner } from "react-bootstrap";
+import swal from "sweetalert";
+
+// FUNCIONES
+import { validarCamposNotNull } from "../util/validarCamposNotNull";
+import { handleError } from "../util/handleError";
+import { Sesion } from "../util/Sesion";
+
+
+const textStyleH2 = {
+    fontWeight: "500",
+    fontSize: "2rem",
+    fontFamily: "'Roboto Slab', serif",
+    color: "white",
+    backgroundColor: "#0d6efd",
+    width: "100%", 
+    borderBottom: "2px solid #0d6efd", 
+    outlineWidth: "10px"
+};
 export default function EnviarGiro() {
 
+    // INSTANCIAS DE CLASE
+    const navigate = useNavigate();
     const sesion = new Sesion();
-    const idUsuario = sesion.getUid();
-    const initialStateTasa = {
-        asesor: {
-            tasaVenta: ""
-        }
-    }
-    const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
-        variables: { id: idUsuario },
-    });
-    const { id, valorGiro } = useParams();
 
-    const [usuario, setUsuario] = useCargarDataForm(initialStateTasa, data);
+    // CONSTANTES
+    const { valorGiro } = useParams();
+    const id = sesion.getUid();
     const initialState = {
         nombres: "",
         apellidos: "",
@@ -39,222 +51,92 @@ export default function EnviarGiro() {
         numeroCuenta: "",
         valorGiro: valorGiro || "",
     };
-    const [form, setForm] = useState(initialState);
+    const initialStateUsuario = {
+        usuario: {
+            tasaVenta: ""
+        }
+    };
+    
+    // CONSULTAS
+    const { loading, data, error, refetch } = useQuery(OBTENER_USUARIO_POR_ID, {
+        variables: { id: id },
+    });
+    const usuario = data || initialStateUsuario;
+    
+    // MUTACIONES
+    const [crearGiro, crearGiroMutation] = useMutation(CREAR_GIRO);
 
+    // ESTADOS
+    const [form, setForm] = useState(initialState);
+    const [validated, setValidated] = useState(false);
+
+    // MANEJADORES
     const handleInputChange = (event, name) => {
         setForm({ ...form, [name]: event.target.value });
     }
-
-    const [crearGiro] = useMutation(CREAR_GIRO);
-
-    const handleSubmit = async (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
-        if (id) {
-            alert();
-        }
-    }
-    const handleEnviar = async () => {
+    const handleEnviar = async (event) => {
         if (validarCamposNotNull(form)) {
             await crearGiro({
                 variables: {
                     ...form,
-                    usuario: idUsuario,
+                    usuario: id,
                     valorGiro: Number(form.valorGiro),
-                    tasaCompra: Number(usuario.asesor.tasaVenta)
+                    tasaCompra: Number(usuario.usuario.tasaVenta)
                 },
                 onCompleted: () => {
                     swal("Enviado!", "Su giro ha sido enviado con exito", "success");
+                    refetch();
+                    navigate("/inicio");
+                    setValidated(false);
                 },
                 onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
             })
         }
-        else swal("Error!", "Todos los campos son obligatorios!", "error");
+        else{
+            setValidated(true);
+            swal("Error!", "Todos los campos son obligatorios!", "error");
+        }
     }
-
-    const [validated, setValidated] = useState(false);
-
+    // CARGANDO
+    if (loading) return (
+        <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}>
+            <CircularProgress color="inherit" />
+        </Backdrop>
+    );
+    // ERROR
+    if (error) return (
+        `Error! ${error}`
+    );
     return (
         <>
             <NavBar />
-            <Container className="my-3 p-0" style={{ border: "2px solid gray" }}>
-                <h2 className="mb-3 p-2" style={{ width: "100%", borderBottom: "2px solid gray", background: "#bdc3c7", outlineWidth: "10px" }}>Datos de la persona que recibe el dinero</h2>
-                <Form className="mx-5" noValidate validated={validated} onSubmit={handleSubmit} >
-                    <Row className="mb-3">
-                        <h3 className="mb-3">Datos personales</h3>
-                        <Form.Group
-                            as={Col}
-                            md="5"
-                            controlId="validationNombres"
-                        >
-                            <Form.Label>Nombres</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                placeholder="Ingrese sus nombres..."
-                                autoFocus
-                                onChange={(e) => handleInputChange(e, "nombres")}
-                                value={form.nombres}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
+            <Container className="my-3 p-0 card-container-background rounded" >
+                <h2 className="mb-3 p-3 rounded" style={textStyleH2}>Datos de la persona que recibe el dinero</h2>
 
-
-                        <Form.Group as={Col} md="5" controlId="validationApellidos">
-                            <Form.Label>Apellidos</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                placeholder="Ingrese sus apellidos..."
-                                onChange={(e) => handleInputChange(e, "apellidos")}
-                                value={form.apellidos}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
-
-
-                    <Row className="mb-3">
-
-                        <Form.Group as={Col} md="5" controlId="validationTipoDocumento">
-                            <Form.Label>Tipo de Documento</Form.Label>
-                            <Form.Select
-                                required
-                                aria-label="Elige tu tipo de documento..."
-                                onChange={(e) => handleInputChange(e, "tipoDocumento")}
-                                value={form.tipoDocumento}>
-                                <option value="">Elige el tipo de documento...</option>
-                                <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
-                                <option value="Cedula de Ciudadania">Cédula de Ciudadanía</option>
-                            </Form.Select>
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col} md="5" controlId="validationNumeroDocumento">
-                            <Form.Label>Numero de Documento</Form.Label>
-                            <InputGroup >
-                                <Form.Control
-                                    required
-                                    type="number"
-                                    placeholder="Ingrese su numero de documento..."
-                                    onChange={(e) => handleInputChange(e, "numeroDocumento")}
-                                    value={form.numeroDocumento}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Este campo es obligatorio
-                                </Form.Control.Feedback>
-                                <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                            </InputGroup>
-                        </Form.Group>
-                    </Row>
-                    <hr />
-                    <Row className="mb-3">
-                        <h3 className="mb-3">Datos Bancarios</h3>
-
-                        <Form.Group as={Col} md="4" controlId="validationEstado">
-                            <Form.Label>Tipo de Cuenta</Form.Label>
-                            <Form.Select
-                                required
-                                disabled={false}
-                                onChange={(e) => handleInputChange(e, "tipoCuenta")}
-                                value={form.tipoCuenta}>
-                                <option value="">Elige el tipo de cuenta...</option>
-                                <option value="AHORROS" >AHORROS</option>
-                                <option value="CORRIENTE">CORRIENTE</option>
-                            </Form.Select>
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-
-                        <Form.Group as={Col} md="4" controlId="validationSaldo">
-                            <Form.Label>Numero de Cuenta</Form.Label>
-                            <Form.Control
-                                required
-                                type="number"
-                                placeholder="Ingrese su numero de cuenta..."
-                                onChange={(e) => handleInputChange(e, "numeroCuenta")}
-                                value={form.numeroCuenta}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
-                    <Row>
-                        <Form.Group as={Col} md="4" controlId="validationEstado">
-                            <Form.Label>Banco</Form.Label>
-                            <Form.Select
-                                required
-                                disabled={false}
-                                onChange={(e) => handleInputChange(e, "banco")}
-                                value={form.banco}>
-                                <option value="">Elige el banco...</option>
-                                {bancos.map((banco, indice) => {
-                                    return <option key={indice} value={banco} >{banco}</option>
-                                })}
-                            </Form.Select>
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
-                    <hr />
-                    <Row className="mb-3">
-                        <h3 className="mb-3">Datos de Envio</h3>
-                        <Form.Group as={Col} md="4" controlId="validationSaldo">
-                            <Form.Label>Valor</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                placeholder="Ingrese el saldo"
-                                onChange={(e) => {
-                                    handleInputChange({
-                                        target: {
-                                            value: modificarInputValue(e.target.value)
-                                        }
-                                    }, "valorGiro");
-                                }}
-                                value={(form.valorGiro) ? currencyFormatter.format(form.valorGiro) : ""}
-                                disabled={false}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col} md="4" controlId="validationSaldo">
-                            <Form.Label>Dinero en Bolivares</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                placeholder="Ingrese el saldo"
-                                value={178}
-                                disabled={true}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
-                </Form>
-                <Button className="my-3 mx-5" onClick={handleEnviar}>Enviar</Button>
+               <FormEnviarGiros
+            //    handleSubmit={handleSubmit}
+               validated={validated}
+               handleInputChange={handleInputChange}
+               form={form}
+               usuario={usuario}
+               crearGiroMutation={crearGiroMutation}
+               />
+               {(crearGiroMutation.loading) ? (
+            <Button variant="light" className="my-3 mx-5 light" disabled>
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              /> &nbsp;
+              Enviando...
+            </Button>
+          ) : (
+            <Button variant="light" className="my-3 mx-5 light" onClick={handleEnviar}>Enviar</Button>
+          )}
             </Container>
         </>
     );

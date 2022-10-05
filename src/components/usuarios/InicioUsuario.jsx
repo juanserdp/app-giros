@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Accordion, Button, Carousel, Col, Container, Form, Row } from "react-bootstrap";
+import { Accordion, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { modificarInputValue } from "../../util/modificarInputValue";
 import { Buzon } from "../Buzon";
@@ -53,7 +53,6 @@ export function InicioUsuario() {
 
     // OBTENGO LO DATOS DE SESION DEL USUARIO
     const sesion = new Sesion();
-    const rol = sesion.getRol();
     const id = sesion.getUid();
 
     // CONSULTAS
@@ -61,6 +60,16 @@ export function InicioUsuario() {
     const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
         variables: { id },
     });
+
+    const initialStateUsuario = {
+        usuario: {
+            saldo: 0,
+            deuda: 0,
+            tasaVenta: 0
+        }
+    };
+
+    const usuario = data || initialStateUsuario;
 
     // ESTADOS
     const [configuracion] = useCargarDataForm({ buzon: [] }, buzon.data);
@@ -105,7 +114,7 @@ export function InicioUsuario() {
         <>
             <Container className="my-4" style={{ textAlign: "center" }}>
                 <Row className="mb-3 justify-content-center">
-                    <Col md="8">
+                    <Col md="4">
                         <Card className="card-container-inicio mb-3 rounded">
                             <CardContent className="p-0">
                                 <h2 className="pt-3 mb-0 "
@@ -113,7 +122,7 @@ export function InicioUsuario() {
                                     Enviar Giro
                                 </h2>
 
-                                <Accordion className="mb-5">
+                                <Accordion className="mb-3">
                                     <Accordion.Item style={{ border: "0px" }} eventKey="0" >
                                         <Accordion.Header >
                                         </Accordion.Header>
@@ -132,12 +141,12 @@ export function InicioUsuario() {
 
                                 <Row
                                     as={Form}
-                                    className="mb-3 px-3"
+                                    className="mb-3 px-3 justify-content-center"
                                     validated={validated}
                                     onSubmit={handleEnviar} >
                                     <Form.Group
                                         as={Col}
-                                        md="6"
+                                        md="10"
                                         controlId="validationValorGiro">
                                         <Form.Control
                                             required
@@ -157,15 +166,21 @@ export function InicioUsuario() {
                                         </Form.Control.Feedback>
                                         <Form.Control.Feedback>Okey!</Form.Control.Feedback>
                                     </Form.Group>
-                                    <Form.Group as={Col} md="6" controlId="validationSaldo">
+                                </Row>
+
+                                <Row
+                                    className="mb-4 px-3 justify-content-center"
+                                    validated={validated}>
+                                    <Form.Group as={Col} md="10" controlId="validationSaldo">
                                         <Form.Control
                                             type="text"
                                             placeholder="Ingrese el saldo"
-                                            value={178}
+                                            value={(form.valorGiro) ? currencyFormatter.format(form.valorGiro * (1 / usuario.usuario.tasaVenta)) : ""}
                                             disabled={true}
                                         />
                                     </Form.Group>
                                 </Row>
+
                                 <Row className="">
                                     <Col md="12">
                                         <Button onClick={handleEnviar}
@@ -190,18 +205,18 @@ export function InicioUsuario() {
                 <Row className="mb-3">
                     <Col md="4">
                         <TasaVenta
-                            tasa={(!loading) ? (data.obtenerUsuarioPorId.asesor.tasaVenta) : 0}
+                            tasa={usuario.usuario.tasaVenta}
                             loading={loading}
                             rol="USUARIO" />
                     </Col>
                     <Col md="4">
                         <Saldo
-                            saldo={(!loading) ? (data.obtenerUsuarioPorId.saldo) : 0}
+                            saldo={usuario.usuario.saldo}
                             loading={loading} />
                     </Col>
                     <Col md="4">
                         <Deuda
-                            deuda={(!loading) ? (data.obtenerUsuarioPorId.deuda) : 0}
+                            deuda={usuario.usuario.deuda}
                             loading={loading} />
                     </Col>
                 </Row>

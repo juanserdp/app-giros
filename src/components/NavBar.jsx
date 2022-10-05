@@ -12,27 +12,32 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Sesion } from '../util/Sesion';
 import "../assets/styles/navbar.css";
 export function NavBar() {
+    const navigate = useNavigate();
     const sesion = new Sesion();
     const rol = sesion.getRol();
     const id = sesion.getUid();
     return (
         <Navbar expand="lg" style={{ height: "60px" }} className="bg-white shadow-sm navbar-giros">
             <Container fluid>
-                {/* <Nav.Link
+                <Nav.Link
                     id="menu-bar-icon"
                     style={{padding:"0px 20px 0px 0px"}}
-                    onClick={handleOpenMenu}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            style={{ fill: "rgba(255,255, 255, 1)" }}><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path></svg>
-                    </Nav.Link> */}
-                <Navbar.Brand style={{ userSelect: "none" }}>GIROS APP</Navbar.Brand>
+                    onClick={()=>navigate("/inicio")}
+                    >
+                        <img
+                        style={{
+                            width:"100px",
+                            height:"45px"
+                        }}
+                        src='https://d500.epimg.net/cincodias/imagenes/2015/05/08/pyme/1431098283_691735_1431098420_noticia_normal.jpg'
+                        />
+                       
+                    </Nav.Link>
+                {/* <Navbar.Brand style={{ userSelect: "none" }}>GIROS APP</Navbar.Brand> */}
 
                 <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
                 <Navbar.Offcanvas
@@ -48,14 +53,14 @@ export function NavBar() {
                     <Offcanvas.Body>
 
                         <Nav className="me-auto" >
-                    
 
                             <Nav.Link to={"/inicio"} as={NavLink}><HomeIcon />&nbsp;Inicio</Nav.Link>
 
                             {(rol === "USUARIO") ? <Nav.Link to={"/enviar-giro"} as={NavLink}>&nbsp;Enviar Giro</Nav.Link> : null}
-
                             
-                            <Nav.Link to={(rol === "ASESOR" || rol === "ADMINISTRADOR")?"/giros":`/giros/${id}`} as={NavLink}><ReplyIcon />&nbsp;Giros</Nav.Link>
+                            <Nav.Link to={(rol === "ADMINISTRADOR")?"/giros":((rol === "ASESOR")?`/giros/asesor/${id}`:((rol === "USUARIO")?`/giros/usuario/${id}`:"/giros"))} as={NavLink}><ReplyIcon />&nbsp;Giros</Nav.Link>
+
+
 
                             {(rol === "ASESOR") ? <Nav.Link to={`/usuarios/${id}`} as={NavLink}><GroupIcon />&nbsp;Usuarios</Nav.Link> : null}
 

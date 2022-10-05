@@ -7,7 +7,7 @@ import { handleError } from "../util/handleError";
 import { modificarInputValue } from "../util/modificarInputValue";
 import { validarCamposNotNull } from "../util/validarCamposNotNull";
 
-export function FormRecargar({ handleEnviar, recargar }) {
+export function FormRecargar({ recargar, refetch }) {
     // ESTILOS
     const textStyleH2 = {
         fontWeight: "500",
@@ -33,12 +33,9 @@ export function FormRecargar({ handleEnviar, recargar }) {
     const [form, setForm] = useState(initialState);
 
     // MANEJADORES
-    const handleSubmit = async () => await handleEnviar();
-
     const handleInputChange = (event, name) => {
         setForm({ ...form, [name]: event.target.value });
-    }
-
+    };
     const handleRecargar = async (event) => {
         // LOGICA DE REACT BOOTSTRAP PARA CONTROL DE CAMPOS
         const formReactBoot = event.currentTarget;
@@ -53,12 +50,13 @@ export function FormRecargar({ handleEnviar, recargar }) {
             await recargar({
                 // LE PASAMOS EL FORMULARIO MAS EL CASTEO DEL VALOR DE LA RECARGA A NUMERO
                 variables: { ...form, valorRecarga: Number(form.valorRecarga) },
-                onCompleted: ({ asesor }) => {
+                onCompleted: ({ usuario }) => {
                     // EN CASO DE EXISTO MUESTRA UN MODAL CON UN MENSAJE EXITOSO Y EL NUEVO SALDO DEL ASESOR
-                    swal("Completado!", `El nuevo saldo de ${asesor.nombres} es: ${currencyFormatter.format(asesor.saldo)}`, "success");
+                    swal("Completado!", `El nuevo saldo de ${usuario.nombres} es: ${currencyFormatter.format(usuario.saldo)}`, "success");
                     // REINICIAMOS EL ESTADO VALIDATE PARA EL CONTROL DEL FORMULARIO DE REACTBOOT
                     setValidated(false);
                     setForm(initialState);
+                    refetch();
                 },
                 onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
             });
@@ -70,16 +68,14 @@ export function FormRecargar({ handleEnviar, recargar }) {
             setValidated(true);
         }
     };
-
-
     return (
         <Card className="card-container-inicio rounded">
-            <CardContent className="p-0">
+            <CardContent className="p-0 ">
                 <h2 className="mb-0 pt-3"
                     style={textStyleH2} >
                     Recargas
                 </h2>
-                <Accordion className="mb-5">
+                <Accordion className="mb-3">
                     <Accordion.Item style={{ border: "0px" }} eventKey="0" >
                         <Accordion.Header >
                         </Accordion.Header>
@@ -97,14 +93,13 @@ export function FormRecargar({ handleEnviar, recargar }) {
                 </Accordion>
                 <Row
                     as={Form}
-                    className="mb-4 px-3"
-                    // noValidate
+                    className="mb-2 px-3 justify-content-center"
                     validated={validated}
                 >
                     <Form.Group
                         as={Col}
                         className="mb-3"
-                        md="6"
+                        md="10"
                         controlId="validationSaldo">
                         <Form.Control
                             required
@@ -119,9 +114,14 @@ export function FormRecargar({ handleEnviar, recargar }) {
                         </Form.Control.Feedback>
                         <Form.Control.Feedback>Okey!</Form.Control.Feedback>
                     </Form.Group>
+                </Row>
+                <Row
+                    as={Form}
+                    className="mb-2 px-3 justify-content-center"
+                    validated={validated}>
                     <Form.Group
                         as={Col}
-                        md="6"
+                        md="10"
                         className="mb-3"
                         controlId="validationSaldo">
                         <Form.Control

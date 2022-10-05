@@ -2,11 +2,11 @@ import { gql } from "@apollo/client";
 
 export const OBTENER_USUARIOS = gql`
     query{
-        obtenerUsuarios{
+        usuarios: obtenerUsuarios{
             id,
             asesor{
                 id
-            }
+            },
             nombres,
             apellidos,
             tipoDocumento,
@@ -15,7 +15,8 @@ export const OBTENER_USUARIOS = gql`
             saldo,
             deuda,
             capacidadPrestamo,
-            estado
+            estado,
+            tasaVenta
         }
     }
 `;

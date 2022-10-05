@@ -25,18 +25,7 @@ export const CREAR_GIRO = gql`
             valorGiro: $valorGiro,
             tasaCompra: $tasaCompra
             ){
-                usuario
-                nombres
-                apellidos
-                tipoDocumento
-                numeroDocumento
-                banco
-                tipoCuenta
-                numeroCuenta
-                valorGiro
-                comprobantePago
-                fechaEnvio
-                tasaCompra
+                id
             }
         }
 
