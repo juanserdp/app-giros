@@ -3,19 +3,15 @@ import { Col, Form, Row } from "react-bootstrap";
 
 export function FormDatosPersonales({
     datosPersonales,
-    // handleInputChange,
     setDatosPersonales,
-    handleSubmit,
-    validated
 }) {
     const [form, setForm] = useState(datosPersonales);
-
     const handleInputChange = (event, name) => {
         setForm({ ...form, [name]: event.target.value });
         setDatosPersonales({ ...form, [name]: event.target.value })
     };
     return (
-        <Form noValidate validated={validated} >
+        <Form noValidate  >
             <Row className="m-3">
                 <Form.Group as={Col} md="6" controlId="nombres">
                     <Form.Label>Nombres</Form.Label>

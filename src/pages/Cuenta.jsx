@@ -66,9 +66,7 @@ export default function Cuenta() {
     const [datosPersonales, setDatosPersonales] = useLoadDataFromDB(initialStateDatosPersonales, data, loading);
     const [valorMinimoGiro, setValorMinimoGiro] = useLoadDataFromDB(initialValorMinimoGiro, data, loading);
     const [clave, setClave] = useState(initialStateClave);
-    const [option, setOption] = useState(<><FormDatosPersonales
-        datosPersonales={datosPersonales}
-        setDatosPersonales={setDatosPersonales}/></>);
+    const [option, setOption] = useState(null);
 
     // MANEJADORES
     const handleClick = () => {
@@ -195,12 +193,12 @@ export default function Cuenta() {
                                         <ListItemText primary="Contraseña" />
                                     </ListItemButton>
                                 </ListItem>
-                                <ListItem disablePadding onClick={() => setOption(function () {
-                                    return (<FormDatosPersonales
+                                <ListItem
+                                    disablePadding
+                                    onClick={() => setOption(<FormDatosPersonales
                                         datosPersonales={datosPersonales}
                                         setDatosPersonales={setDatosPersonales}
-                                    />)
-                                })}>
+                                    />)}>
                                     <ListItemButton>
                                         <ListItemIcon>
                                             <PeopleIcon />
@@ -212,8 +210,7 @@ export default function Cuenta() {
                         </Row>
                     </Col>
                     <Col md="9" >
-                        {option}
-                        <Button className="m-3" variant="primary" onClick={handleSubmit} disabled={loadingEditar}>
+                        {(option) ? (<>{option}<Button className="m-3" variant="primary" onClick={handleSubmit} disabled={loadingEditar}>
                             {(loadingEditar) ? (
                                 <><Spinner
                                     as="span"
@@ -223,10 +220,10 @@ export default function Cuenta() {
                                     aria-hidden="true"
                                 /> &nbsp;Enviando...</>
                             ) : "Editar"}
-                        </Button>
+                        </Button></>) : null}
                     </Col>
                 </Row>
-            </Container>
+            </Container >
         </>
     );
 }
