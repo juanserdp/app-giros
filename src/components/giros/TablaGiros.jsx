@@ -83,7 +83,11 @@ export function TablaGiros({
   };
 
   const editarComprobante = (id) => {
-    const inputFile = document.getElementById("inputFile");
+    //const inputFile = document.getElementById("inputFile");
+    const inputFile = document.createElement("input");
+    inputFile.type = "file";
+    inputFile.accept = "image/*";
+    inputFile.style.display = "none";
     if (inputFile) inputFile.click();
     inputFile.addEventListener("change", async function () {
       const fileList = this.files;
@@ -214,6 +218,7 @@ export function TablaGiros({
     />,
     <GridActionsCellItem
       icon={<DescriptionIcon />}
+      disabled={params.row.estado === "COMPLETADO" ? false : true}
       onClick={() => navigate(`/usuarios/${params.id}`)}
       label="Generar factura"
       showInMenu
