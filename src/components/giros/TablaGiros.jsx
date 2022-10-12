@@ -182,7 +182,7 @@ export function TablaGiros({
   };
 
   const acciones = (params) => [
-    rol === "USUARIO" ? (
+    rol === "USUARIO" || rol === "OPERARIO" ? (
       <></>
     ) : (
       <GridActionsCellItem
@@ -218,7 +218,7 @@ export function TablaGiros({
     />,
     <GridActionsCellItem
       icon={<DescriptionIcon />}
-      disabled={params.row.estado === "COMPLETADO" ? false : true}
+      disabled={params.row.estadoGiro === "COMPLETADO" ? false : true}
       onClick={() => navigate(`/usuarios/${params.id}`)}
       label="Generar factura"
       showInMenu
