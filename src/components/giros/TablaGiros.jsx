@@ -2,6 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import GroupIcon from "@mui/icons-material/Group";
+import UploadIcon from "@mui/icons-material/Upload";
+import DownloadIcon from "@mui/icons-material/Download";
+import DescriptionIcon from "@mui/icons-material/Description";
 import swal from "sweetalert";
 import { useState } from "react";
 import { Backdrop, CircularProgress, LinearProgress } from "@mui/material";
@@ -154,6 +158,68 @@ export function TablaGiros({
     }
   };
 
+  const descargarComprobante = (value) => {
+    const binaryString = value;
+    const len = binaryString.length;
+    const array = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      array[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([array], { type: "image/jpeg" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "comprobante_de_pago.png";
+    a.style.textDecoration = "none";
+    a.style.color = "white";
+    a.onload = function () {
+      URL.revokeObjectURL(this.href);
+    };
+    a.click();
+  };
+
+  const acciones = (params) => [
+    rol === "USUARIO" ? (
+      <></>
+    ) : (
+      <GridActionsCellItem
+        icon={<DeleteIcon />}
+        onClick={() => handlerEliminar(params.id)}
+        label="Eliminar"
+      />
+    ),
+    <GridActionsCellItem
+      icon={<EditIcon />}
+      onClick={() => {
+        navigate(`/giros/usuario/${params.row.usuario}/editar/${params.id}`);
+        handleShow();
+      }}
+      label="Editar"
+    />,
+    rol === "USUARIO" ? (
+      <></>
+    ) : (
+      <GridActionsCellItem
+        icon={<UploadIcon />}
+        onClick={() => editarComprobante(params.id)}
+        label="Cargar comprobante"
+        showInMenu
+      />
+    ),
+    <GridActionsCellItem
+      icon={<DownloadIcon />}
+      disabled={params.row.comprobantePago ? false : true}
+      onClick={() => descargarComprobante(params.row.comprobantePago)}
+      label="Descargar comprobante"
+      showInMenu
+    />,
+    <GridActionsCellItem
+      icon={<DescriptionIcon />}
+      onClick={() => navigate(`/usuarios/${params.id}`)}
+      label="Generar factura"
+      showInMenu
+    />,
+  ];
+
   const columnas = [
     {
       field: "nombres",
@@ -212,14 +278,14 @@ export function TablaGiros({
       align: "center",
       headerAlign: "center",
     },
-    {
-      field: "comprobantePago",
-      headerName: "COMPROBANTE PAGO",
-      width: "200",
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => comprobantePago(params),
-    },
+    // {
+    //   field: "comprobantePago",
+    //   headerName: "COMPROBANTE PAGO",
+    //   width: "200",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => comprobantePago(params),
+    // },
     {
       field: "fechaEnvio",
       headerName: "FECHA ENVIO",
@@ -248,21 +314,7 @@ export function TablaGiros({
       width: "150",
       type: "actions",
       align: "center",
-      getActions: ({ id, row }) => [
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          onClick={() => handlerEliminar(id)}
-          label="Eliminar"
-        />,
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          onClick={() => {
-            navigate(`/giros/usuario/${row.usuario}/editar/${id}`);
-            handleShow();
-          }}
-          label="Editar"
-        />,
-      ],
+      getActions: (params) => acciones(params),
     },
   ];
 
@@ -299,11 +351,7 @@ export function TablaGiros({
         apiRef={apiRef}
         rowHeight={50}
         rows={giros}
-        columns={
-          rol === "USUARIO"
-            ? columnas.filter((col) => col.field !== "actions")
-            : columnas
-        }
+        columns={columnas}
         components={{
           Toolbar: () =>
             CustomToolbar({

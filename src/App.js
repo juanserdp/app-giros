@@ -22,74 +22,110 @@ function App() {
           ///////////////////
            */}
           <Route path="/" element={<Login />} />
-          <Route path="/inicio" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
-              <Inicio />
-            </PrivatizarPorRol>} />
+          <Route
+            path="/inicio"
+            element={
+              <PrivatizarPorRol rolAccess="USUARIO">
+                <Inicio />
+              </PrivatizarPorRol>
+            }
+          />
           {/* TODOS LOS GIROS */}
-          <Route path="/giros" element={
-            <PrivatizarPorRol rolAccess="OPERARIO">
-              <Giros />
-            </PrivatizarPorRol>} />
+          <Route
+            path="/giros"
+            element={
+              <PrivatizarPorRol rolAccess="OPERARIO">
+                <Giros />
+              </PrivatizarPorRol>
+            }
+          />
           {/* TODOS LOS GIROS POR USUARIO*/}
-          <Route path="/giros/usuario/:usuario" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
-              <Giros />
-            </PrivatizarPorRol>} />
-          
-          
+          <Route
+            path="/giros/usuario/:usuario"
+            element={
+              <PrivatizarPorRol rolAccess="USUARIO">
+                <Giros />
+              </PrivatizarPorRol>
+            }
+          />
 
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route path="/enviar-giro" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
-              <EnviarGiro />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/enviar-giro"
+            element={
+              <PrivatizarPorRol rolAccess="USUARIO">
+                <EnviarGiro />
+              </PrivatizarPorRol>
+            }
+          />
 
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route path="/enviar-giro/:id/:valorGiro" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
-              <EnviarGiro />
-            </PrivatizarPorRol>
-          } />
-          <Route path="/cuenta" element={
-            <PrivatizarPorRol rolAccess="USUARIO">
-              <Cuenta />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/enviar-giro/:id/:valorGiro"
+            element={
+              <PrivatizarPorRol rolAccess="USUARIO">
+                <EnviarGiro />
+              </PrivatizarPorRol>
+            }
+          />
+          <Route
+            path="/cuenta"
+            element={
+              <PrivatizarPorRol rolAccess="USUARIO">
+                <Cuenta />
+              </PrivatizarPorRol>
+            }
+          />
           {/*
           ///////////////////
           /////ASESORES////// 
           ///////////////////
            */}
-           {/* TODOS LOS GIROS POR ASESOR*/}
-          <Route path="/giros/asesor/:asesor" element={
-            <PrivatizarPorRol rolAccess="OPERARIO">
-              <Giros />
-            </PrivatizarPorRol>} />
+          {/* TODOS LOS GIROS POR ASESOR*/}
+          <Route
+            path="/giros/asesor/:asesor"
+            element={
+              <PrivatizarPorRol rolAccess="OPERARIO">
+                <Giros />
+              </PrivatizarPorRol>
+            }
+          />
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route path="/giros/usuario/:usuario/editar/:id" element={
-            <PrivatizarPorRol rolAccess="OPERARIO">
-              <Giros />
-            </PrivatizarPorRol>} />
+          <Route
+            path="/giros/usuario/:usuario/editar/:id"
+            element={
+              <PrivatizarPorRol rolAccess="USUARIO">
+                <Giros />
+              </PrivatizarPorRol>
+            }
+          />
           {/* USUARIOS POR ASESOR */}
-          <Route path="/usuarios/:asesor" element={
-            <PrivatizarPorRol rolAccess="ASESOR">
-              <Usuarios />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/usuarios/:asesor"
+            element={
+              <PrivatizarPorRol rolAccess="ASESOR">
+                <Usuarios />
+              </PrivatizarPorRol>
+            }
+          />
           {/* USUARIOS POR ASESOR Y POR ID DE USUARIO PARA MODIFICAR */}
-          <Route path="/usuarios/:asesor/editar/:id" element={
-            <PrivatizarPorRol rolAccess="ASESOR">
-              <Usuarios />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/usuarios/:asesor/editar/:id"
+            element={
+              <PrivatizarPorRol rolAccess="ASESOR">
+                <Usuarios />
+              </PrivatizarPorRol>
+            }
+          />
           {/* USUARIOS POR ASESOR Y PARA CREAR UN USUARIO POR ASESOR */}
-          <Route path="/usuarios/:asesor/crear" element={
-            <PrivatizarPorRol rolAccess="ASESOR">
-              <Usuarios />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/usuarios/:asesor/crear"
+            element={
+              <PrivatizarPorRol rolAccess="ASESOR">
+                <Usuarios />
+              </PrivatizarPorRol>
+            }
+          />
           {/*
           ///////////////////
           //ADMINISTRADORES// 
@@ -97,34 +133,49 @@ function App() {
            */}
 
           {/* TODOS LOS USUARIOS */}
-          <Route path="/usuarios" element={
-            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-              <Usuarios />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/usuarios"
+            element={
+              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <Usuarios />
+              </PrivatizarPorRol>
+            }
+          />
           {/* TODOS LOS ASESORES */}
-          <Route path="/asesores" element={
-            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-              <Asesores />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/asesores"
+            element={
+              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <Asesores />
+              </PrivatizarPorRol>
+            }
+          />
           {/* TODOS LOS ASESORES Y CREAR UN ASESOR */}
-          <Route path="/asesores/crear" element={
-            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-              <Asesores />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/asesores/crear"
+            element={
+              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <Asesores />
+              </PrivatizarPorRol>
+            }
+          />
           {/* TODOS LOS ASESORES Y EDITAR UN ASESOR CON SU ID*/}
-          <Route path="/asesores/editar/:id" element={
-            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-              <Asesores />
-            </PrivatizarPorRol>
-          } />
-          <Route path="/configuracion" element={
-            <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-              <Configuracion />
-            </PrivatizarPorRol>
-          } />
+          <Route
+            path="/asesores/editar/:id"
+            element={
+              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <Asesores />
+              </PrivatizarPorRol>
+            }
+          />
+          <Route
+            path="/configuracion"
+            element={
+              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <Configuracion />
+              </PrivatizarPorRol>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>
