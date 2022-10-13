@@ -13,6 +13,7 @@ import { CustomToolbar } from "../CustomToolbar";
 import { CustomNoRowsOverlay } from "../CustomNoRowsOverlay";
 import { GridColumnMenu } from "../GridColumnMenu";
 import { dobleConfirmacionEliminacion } from "../../util/dobleConfirmacionEliminacion";
+import { generarFactura } from "../../util/generarFactura";
 import { handleError } from "../../util/handleError";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { Sesion } from "../../util/Sesion";
@@ -92,74 +93,30 @@ export function TablaGiros({
     inputFile.addEventListener("change", async function () {
       const fileList = this.files;
       const comprobante = fileList[0];
-      const reader = new FileReader();
-      reader.onload = async function (e) {
-        const binaryString = e.target.result;
-        console.log(binaryString);
-        await editarGiro({
-          variables: {
-            id,
-            giro: {
-              comprobantePago: binaryString,
+      alert(comprobante.size);
+      if (comprobante.size < 2000000) {
+        const reader = new FileReader();
+        reader.onload = async function (e) {
+          const binaryString = e.target.result;
+          console.log(binaryString);
+          await editarGiro({
+            variables: {
+              id,
+              giro: {
+                comprobantePago: binaryString,
+              },
             },
-          },
-          onCompleted: () => {
-            refetch();
-            swal("Editado!", "El comprobante ha sido subido.", "success");
-          },
-          onError: ({ graphQLErrors, networkError }) =>
-            handleError({ graphQLErrors, networkError }),
-        });
-      };
-      reader.readAsBinaryString(comprobante);
+            onCompleted: () => {
+              refetch();
+              swal("Editado!", "El comprobante ha sido subido.", "success");
+            },
+            onError: ({ graphQLErrors, networkError }) =>
+              handleError({ graphQLErrors, networkError }),
+          });
+        };
+        reader.readAsBinaryString(comprobante);
+      } else swal("Error!", "No se puede cargar una imagen que pese mas de 2mb", "error");
     });
-  };
-
-  const comprobantePago = (params) => {
-    if (rol === "USUARIO") {
-      if (params.value == null) return <Button disabled>Descargar</Button>;
-      else return <Button>Descargar</Button>;
-    } else {
-      if (params.value == null)
-        return (
-          <div>
-            <input
-              type="file"
-              id="inputFile"
-              accept="image/*"
-              style={{ display: "none" }}
-            />
-            <Button onClick={() => editarComprobante(params.id)}>Cargar</Button>
-          </div>
-        );
-      else {
-        const binaryString = params.value;
-        const len = binaryString.length;
-        const array = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          array[i] = binaryString.charCodeAt(i);
-        }
-        const blob = new Blob([array], { type: "image/jpeg" });
-
-        return (
-          <div>
-            <Button id="buttonDownload">
-              <a
-                download="comprobante_de_pago.png"
-                href={URL.createObjectURL(blob)}
-                style={{
-                  textDecoration: "none",
-                  color: "white",
-                }}
-              >
-                Descargar
-              </a>
-            </Button>
-            <Button onClick={() => editarComprobante(params.id)}>Cargar</Button>
-          </div>
-        );
-      }
-    }
   };
 
   const descargarComprobante = (value) => {
@@ -175,6 +132,18 @@ export function TablaGiros({
     a.download = "comprobante_de_pago.png";
     a.style.textDecoration = "none";
     a.style.color = "white";
+    a.onload = function () {
+      URL.revokeObjectURL(this.href);
+      a.click();
+    };
+  };
+
+  const generar = (giro) => {
+    const factura = generarFactura(giro);
+    const blob = new Blob([factura], { type: "text/html" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.target = "_blank";
     a.onload = function () {
       URL.revokeObjectURL(this.href);
     };
@@ -219,7 +188,7 @@ export function TablaGiros({
     <GridActionsCellItem
       icon={<DescriptionIcon />}
       disabled={params.row.estadoGiro === "COMPLETADO" ? false : true}
-      onClick={() => navigate(`/usuarios/${params.id}`)}
+      onClick={() => generar(params.row)}
       label="Generar factura"
       showInMenu
     />,
@@ -344,7 +313,7 @@ export function TablaGiros({
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={true}
       >
-        Cargando
+        Cargando &nbsp;
         <CircularProgress color="inherit" />
       </Backdrop>
     );
