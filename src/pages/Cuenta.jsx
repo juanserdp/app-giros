@@ -89,6 +89,7 @@ export default function Cuenta() {
   );
   const [clave, setClave] = useState(initialStateClave);
   const [option, setOption] = useState(null);
+  const [optionName, setOptionName] = useState("");
 
   // MANEJADORES
   const handleClick = () => {
@@ -190,11 +191,10 @@ export default function Cuenta() {
                       <List component="div" disablePadding>
                         <ListItemButton
                           sx={{ pl: 4 }}
-                          onClick={() =>
-                            setOption(function () {
-                              return <EstadisticasGiros />;
-                            })
-                          }
+                          onClick={() => {
+                            setOption(<EstadisticasGiros />);
+                            setOptionName("estadisticas");
+                          }}
                         >
                           <ListItemIcon>
                             <ReplyIcon />
@@ -203,11 +203,10 @@ export default function Cuenta() {
                         </ListItemButton>
                         <ListItemButton
                           sx={{ pl: 4 }}
-                          onClick={() =>
-                            setOption(function () {
-                              return <EstadisticasUsuarios />;
-                            })
-                          }
+                          onClick={() => {
+                            setOption(<EstadisticasUsuarios />);
+                            setOptionName("estadisticas");
+                          }}
                         >
                           <ListItemIcon>
                             <PeopleIcon />
@@ -222,16 +221,15 @@ export default function Cuenta() {
                 {rol === "ASESOR" ? (
                   <ListItem
                     disablePadding
-                    onClick={() =>
+                    onClick={() => {
                       setOption(
-                        <>
-                          <FormEnvios
-                            valorMinimoGiro={valorMinimoGiro}
-                            setValorMinimoGiro={setValorMinimoGiro}
-                          />
-                        </>
-                      )
-                    }
+                        <FormEnvios
+                          valorMinimoGiro={valorMinimoGiro}
+                          setValorMinimoGiro={setValorMinimoGiro}
+                        />
+                      );
+                      setOptionName("");
+                    }}
                   >
                     <ListItemButton>
                       <ListItemIcon>
@@ -244,13 +242,10 @@ export default function Cuenta() {
 
                 <ListItem
                   disablePadding
-                  onClick={() =>
-                    setOption(
-                      <>
-                        <FormClave clave={clave} setClave={setClave} />
-                      </>
-                    )
-                  }
+                  onClick={() => {
+                    setOption(<FormClave clave={clave} setClave={setClave} />);
+                    setOptionName("");
+                  }}
                 >
                   <ListItemButton>
                     <ListItemIcon>
@@ -261,14 +256,15 @@ export default function Cuenta() {
                 </ListItem>
                 <ListItem
                   disablePadding
-                  onClick={() =>
+                  onClick={() => {
                     setOption(
                       <FormDatosPersonales
                         datosPersonales={datosPersonales}
                         setDatosPersonales={setDatosPersonales}
                       />
-                    )
-                  }
+                    );
+                    setOptionName("");
+                  }}
                 >
                   <ListItemButton>
                     <ListItemIcon>
@@ -281,7 +277,9 @@ export default function Cuenta() {
             </Row>
           </Col>
           <Col md="9">
-            {option ? (
+            {option == null || optionName == "estadisticas" ? (
+              <> {option}</>
+            ) : (
               <>
                 {option}
                 <Button
@@ -306,7 +304,7 @@ export default function Cuenta() {
                   )}
                 </Button>
               </>
-            ) : null}
+            )}
           </Col>
         </Row>
       </Container>
