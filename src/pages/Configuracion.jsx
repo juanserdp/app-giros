@@ -3,12 +3,11 @@
 import { useState } from "react";
 
 // COMPONENTES
-import { Envios } from "../components/Envios";
 import { FormClave } from "../components/configuracion/FormClave";
 import { Footer } from "../components/Footer";
-import { EstadisticasGiros } from "../components/EstadisticasGiros";
-import { EstadisticasUsuarios } from "../components/EstadisticasUsuarios";
-import { Estadisticas } from "../components/Estadisticas";
+import { EstadisticasGiros } from "../components/estadisticas/EstadisticasGiros";
+import { EstadisticasUsuarios } from "../components/estadisticas/EstadisticasUsuarios";
+import { Estadisticas } from "../components/estadisticas/Estadisticas";
 import { NavBar } from "../components/NavBar";
 
 // COMPONENTES LIBRERIAS

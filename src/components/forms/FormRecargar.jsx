@@ -2,10 +2,10 @@ import { Card, CardContent } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Accordion, Button, Col, Form, Row } from "react-bootstrap";
 import swal from "sweetalert";
-import { currencyFormatter } from "../util/currencyFormatter";
-import { handleError } from "../util/handleError";
-import { modificarInputValue } from "../util/modificarInputValue";
-import { validarCamposNotNull } from "../util/validarCamposNotNull";
+import { currencyFormatter } from "../../util/currencyFormatter";
+import { handleError } from "../../util/handleError";
+import { modificarInputValue } from "../../util/modificarInputValue";
+import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 
 export function FormRecargar({ recargar, refetch }) {
     // ESTILOS

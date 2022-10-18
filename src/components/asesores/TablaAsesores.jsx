@@ -8,11 +8,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupIcon from '@mui/icons-material/Group';
 import swal from "sweetalert";
-import { CustomToolbar } from '../CustomToolbar';
+import { CustomToolbar } from '../toolbar/CustomToolbar';
 import { handleError } from '../../util/handleError';
 import { LinearProgress } from '@mui/material';
-import { CustomNoRowsOverlay } from '../CustomNoRowsOverlay';
-import { GridColumnMenu } from '../GridColumnMenu';
+import { CustomNoRowsOverlay } from '../toolbar/CustomNoRowsOverlay';
+import { GridColumnMenu } from '../toolbar/GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 import { currencyFormatter } from '../../util/currencyFormatter';
 

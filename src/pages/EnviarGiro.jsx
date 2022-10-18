@@ -8,7 +8,7 @@ import { CREAR_GIRO } from "../services/apollo/gql/giro/crearGiro";
 import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUsuarioPorId";
 
 // COMPONENTES
-import { FormEnviarGiros } from "../components/FormEnviarGiros";
+import { FormEnviarGiros } from "../components/forms/FormEnviarGiros";
 import { NavBar } from "../components/NavBar";
 
 // COMPONENTES LIBRERIAS

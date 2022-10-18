@@ -2,22 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import GroupIcon from "@mui/icons-material/Group";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import DescriptionIcon from "@mui/icons-material/Description";
 import swal from "sweetalert";
 import { useState } from "react";
 import { Backdrop, CircularProgress, LinearProgress } from "@mui/material";
-import { CustomToolbar } from "../CustomToolbar";
-import { CustomNoRowsOverlay } from "../CustomNoRowsOverlay";
-import { GridColumnMenu } from "../GridColumnMenu";
+import { CustomToolbar } from "../toolbar/CustomToolbar";
+import { CustomNoRowsOverlay } from "../toolbar/CustomNoRowsOverlay";
+import { GridColumnMenu } from "../toolbar/GridColumnMenu";
 import { dobleConfirmacionEliminacion } from "../../util/dobleConfirmacionEliminacion";
 import { generarFactura } from "../../util/generarFactura";
 import { handleError } from "../../util/handleError";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { Sesion } from "../../util/Sesion";
-import { Button } from "react-bootstrap";
 
 export function TablaGiros({
   giros,

@@ -27,8 +27,8 @@ import { Sesion } from "../util/Sesion";
 import { FormClave } from "../components/configuracion/FormClave";
 import { NavBar } from "../components/NavBar";
 import { FormEnvios } from "../components/configuracion/FormEnvios";
-import { EstadisticasGiros } from "../components/EstadisticasGiros";
-import { EstadisticasUsuarios } from "../components/EstadisticasUsuarios";
+import { EstadisticasGiros } from "../components/estadisticas/EstadisticasGiros";
+import { EstadisticasUsuarios } from "../components/estadisticas/EstadisticasUsuarios";
 import { FormDatosPersonales } from "../components/configuracion/FormDatosPersonales";
 
 // ICONOS MATERIAL
@@ -277,7 +277,7 @@ export default function Cuenta() {
             </Row>
           </Col>
           <Col md="9">
-            {option == null || optionName == "estadisticas" ? (
+            {option == null || optionName === "estadisticas" ? (
               <> {option}</>
             ) : (
               <>

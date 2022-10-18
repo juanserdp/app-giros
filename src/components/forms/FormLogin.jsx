@@ -2,20 +2,25 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import swal from 'sweetalert';
-import { guardarCredenciales } from "../util/guardarCredenciales";
+import { guardarCredenciales } from "../../util/guardarCredenciales";
 import { useState } from 'react';
-import { borrarCredenciales } from '../util/borrarCredenciales';
+import { borrarCredenciales } from '../../util/borrarCredenciales';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { LOGIN } from '../services/apollo/gql/login';
+import { LOGIN } from '../../services/apollo/gql/login';
 import { Spinner } from 'react-bootstrap';
 
 export function FormLogin() {
+    // INSTANCIAS DE CLASE
     const navigate = useNavigate();
+
+    // CONSTANTES
     const estadoInicial = {
         numeroDocumento: localStorage.getItem("numeroDocumento") || "",
         clave: localStorage.getItem("clave") || ""
-    }
+    };
+
+    // ESTADOS
     const [formLogin, setFormLogin] = useState(estadoInicial);
     const [recordarCredenciales, setRecordarCredenciales] = useState(localStorage.getItem("recordarCredenciales") || false);
 

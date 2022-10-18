@@ -2,7 +2,7 @@ import { Carousel } from "react-bootstrap"
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
-import "../assets/styles/buzon.css";
+import "../../assets/styles/buzon.css";
 
 export function Buzon({ rol,
     configuracion,

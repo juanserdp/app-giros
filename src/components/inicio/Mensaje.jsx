@@ -1,5 +1,4 @@
 import { Card, CardContent, Skeleton } from "@mui/material";
-import { useEffect } from "react";
 import { Accordion, Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
 
 const textStyleH2 = {

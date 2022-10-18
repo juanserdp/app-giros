@@ -1,20 +1,26 @@
+// STYLES
 import { Offcanvas } from "react-bootstrap";
-// REACT BOOTSTRAP
 import Container from "react-bootstrap/Container";
-// MATERIAL UI ICONS
+import "../assets/styles/navbar.css";
+// ICONS
 import GroupIcon from "@mui/icons-material/Group";
 import ReplyIcon from "@mui/icons-material/Reply";
 import HomeIcon from "@mui/icons-material/Home";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-
 import SettingsIcon from "@mui/icons-material/Settings";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
+// COMPONENTES
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
+// HOOKS
 import { NavLink, useNavigate } from "react-router-dom";
+
+// UTIL
 import { Sesion } from "../util/Sesion";
-import "../assets/styles/navbar.css";
+
 export function NavBar() {
   const navigate = useNavigate();
   const sesion = new Sesion();
@@ -33,6 +39,7 @@ export function NavBar() {
           onClick={() => navigate("/inicio")}
         >
           <img
+            alt="logotipo"
             style={{
               width: "100px",
               height: "45px",
@@ -40,7 +47,7 @@ export function NavBar() {
             src="https://d500.epimg.net/cincodias/imagenes/2015/05/08/pyme/1431098283_691735_1431098420_noticia_normal.jpg"
           />
         </Nav.Link>
-        {/* <Navbar.Brand style={{ userSelect: "none" }}>GIROS APP</Navbar.Brand> */}
+        <Navbar.Brand style={{ userSelect: "none" }}>NOMBRE EMPRESA</Navbar.Brand>
 
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
         <Navbar.Offcanvas
@@ -72,10 +79,10 @@ export function NavBar() {
                   rol === "ADMINISTRADOR"
                     ? "/giros"
                     : rol === "ASESOR"
-                    ? `/giros/asesor/${id}`
-                    : rol === "USUARIO"
-                    ? `/giros/usuario/${id}`
-                    : "/giros"
+                      ? `/giros/asesor/${id}`
+                      : rol === "USUARIO"
+                        ? `/giros/usuario/${id}`
+                        : "/giros"
                 }
                 as={NavLink}
               >

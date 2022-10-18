@@ -3,13 +3,13 @@ import { Backdrop, Card, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Chart } from "react-google-charts";
-import { useCargarDataChart } from "../hooks/useCargarDataChart";
-import { OBTENER_DATOS } from "../services/apollo/gql/obtenerDatos";
-import { OBTENER_DATOS_POR_ASESOR } from "../services/apollo/gql/obtenerDatosPorAsesor";
-import { currencyFormatter } from "../util/currencyFormatter";
-import { Sesion } from "../util/Sesion";
+import { useCargarDataChart } from "../../hooks/useCargarDataChart";
+import { OBTENER_DATOS } from "../../services/apollo/gql/obtenerDatos";
+import { OBTENER_DATOS_POR_ASESOR } from "../../services/apollo/gql/obtenerDatosPorAsesor";
+import { currencyFormatter } from "../../util/currencyFormatter";
+import { Sesion } from "../../util/Sesion";
 
-export function EstadisticasGiros() {
+export function Estadisticas() {
   const sesion = new Sesion();
   const rol = sesion.getRol();
   const id = sesion.getUid();
@@ -30,7 +30,7 @@ export function EstadisticasGiros() {
   // QUERYS
   const { loading, data, error } = useQuery(
     rol === "ADMINISTRADOR" ? OBTENER_DATOS : OBTENER_DATOS_POR_ASESOR,
-    { variables: { id } }
+    { variables: id }
   );
 
   // ESTADOS
@@ -205,6 +205,39 @@ export function EstadisticasGiros() {
                 hAxis: { title: "Mes", titleTextStyle: { color: "#333" } },
                 vAxis: { minValue: 0 },
                 chartArea: { width: "70%", height: "70%" },
+              }}
+            />
+          </Col>
+        </Row>
+        <Row className="justify-content-center mb-3 px-3">
+          <Col
+            md="12"
+            style={{
+              scrollBehavior: "auto",
+              display: "inline-block",
+              whiteSpace: "nowrap",
+              overflowX: "auto",
+              overflowY: "hidden",
+            }}
+          >
+            <Chart
+              chartType="Bar"
+              width="100%"
+              height="400px"
+              data={[
+                ["", "Asesores", "Usuarios", "Giros"],
+                [
+                  "Actual",
+                  datos.asesores.length,
+                  datos.usuarios.length,
+                  datos.giros.length,
+                ],
+              ]}
+              options={{
+                chart: {
+                  title: "Cantidades",
+                  subtitle: "",
+                },
               }}
             />
           </Col>

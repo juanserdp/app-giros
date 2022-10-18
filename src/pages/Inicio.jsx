@@ -1,5 +1,5 @@
 // COMPONENTS
-import { InicioAdmin } from "../components/InicioAdmin";
+import { InicioAdmin } from "../components/administrador/InicioAdmin";
 import { InicioAsesor } from "../components/asesores/InicioAsesor";
 import { InicioUsuario } from "../components/usuarios/InicioUsuario";
 import { Footer } from "../components/Footer";

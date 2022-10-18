@@ -1,5 +1,5 @@
 import { Card, CardContent, Skeleton } from "@mui/material";
-import { currencyFormatter } from "../util/currencyFormatter";
+import { currencyFormatter } from "../../util/currencyFormatter";
 
 const textStyleH2 = {
     fontWeight: "500",

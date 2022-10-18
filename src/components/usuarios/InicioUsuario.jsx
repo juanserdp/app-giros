@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Accordion, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { modificarInputValue } from "../../util/modificarInputValue";
-import { Buzon } from "../Buzon";
+import { Buzon } from "../inicio/Buzon";
 import { CardContent, Card, Backdrop, CircularProgress } from "@mui/material";
 import { Sesion } from "../../util/Sesion";
 import { OBTENER_USUARIO_POR_ID } from "../../services/apollo/gql/usuario/obtenerUsuarioPorId";
@@ -12,8 +12,8 @@ import swal from "sweetalert";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { OBTENER_BUZON } from "../../services/apollo/gql/buzon/obtenerBuzon";
 import { useCargarDataForm } from "../../hooks/useCargarDataForm";
-import { Deuda } from "../Deuda";
-import { Saldo } from "../Saldo";
+import { Deuda } from "../inicio/Deuda";
+import { Saldo } from "../inicio/Saldo";
 import { TasaVenta } from "../asesores/TasaVenta";
 
 const textStyleH2 = {

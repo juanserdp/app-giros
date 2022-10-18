@@ -1,7 +1,7 @@
 import { Col, Form, InputGroup, Row } from "react-bootstrap";
-import { bancos } from "../assets/constants/bancos";
-import { currencyFormatter } from "../util/currencyFormatter";
-import { modificarInputValue } from "../util/modificarInputValue";
+import { bancos } from "../../assets/constants/bancos";
+import { currencyFormatter } from "../../util/currencyFormatter";
+import { modificarInputValue } from "../../util/modificarInputValue";
 
 const textStyleH2 = {
   fontWeight: "500",

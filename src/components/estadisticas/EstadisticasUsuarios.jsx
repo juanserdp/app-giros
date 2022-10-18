@@ -1,13 +1,12 @@
 import { useQuery } from "@apollo/client";
-import { Backdrop, Card, CircularProgress } from "@mui/material";
+import { Backdrop,  CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Chart } from "react-google-charts";
-import { useCargarDataChart } from "../hooks/useCargarDataChart";
-import { OBTENER_DATOS } from "../services/apollo/gql/obtenerDatos";
-import { OBTENER_DATOS_POR_ASESOR } from "../services/apollo/gql/obtenerDatosPorAsesor";
-import { currencyFormatter } from "../util/currencyFormatter";
-import { Sesion } from "../util/Sesion";
+import { useCargarDataChart } from "../../hooks/useCargarDataChart";
+import { OBTENER_DATOS } from "../../services/apollo/gql/obtenerDatos";
+import { OBTENER_DATOS_POR_ASESOR } from "../../services/apollo/gql/obtenerDatosPorAsesor";
+import { Sesion } from "../../util/Sesion";
 
 export function EstadisticasUsuarios() {
   const sesion = new Sesion();

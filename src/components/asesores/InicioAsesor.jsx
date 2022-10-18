@@ -11,12 +11,11 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import { useMutation, useQuery } from '@apollo/client';
 import swal from "sweetalert";
 // COMPONENTES
-import { Saldo } from "../Saldo";
-import { Deuda } from "../Deuda";
+import { Saldo } from "../inicio/Saldo";
 import { TasaVenta } from "./TasaVenta";
-import { Buzon } from "../Buzon";
+import { Buzon } from "../inicio/Buzon";
 
-import { FormRecargar } from "../FormRecargar";
+import { FormRecargar } from "../forms/FormRecargar";
 
 // MUTATIONS / QUERYS
 import { RECARGAR_USUARIO } from "../../services/apollo/gql/usuario/recargarUsuario";

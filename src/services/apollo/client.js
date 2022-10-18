@@ -1,7 +1,11 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+
+export const urlLocalHost = "http://localhost:4000/graphql";
+export const urlServerHost = "https://fbslg4-4000.preview.csb.app/graphql";
+
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: `https://fbslg4-4000.preview.csb.app/graphql`,
+    uri: urlLocalHost,
   }),
   cache: new InMemoryCache(),
   onError: ({ networkError, graphQLErrors }) => {

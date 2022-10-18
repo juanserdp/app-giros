@@ -3,17 +3,17 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import { useState, useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-import { RECARGAR_ASESOR } from "../services/apollo/gql/asesor/recargarAsesor";
+import { RECARGAR_ASESOR } from "../../services/apollo/gql/asesor/recargarAsesor";
 
-import { Buzon } from "./Buzon";
-import { handleError } from "../util/handleError";
-import { validarCamposNotNull } from "../util/validarCamposNotNull";
+import { Buzon } from "../inicio/Buzon";
+import { handleError } from "../../util/handleError";
+import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { useQuery, useMutation } from "@apollo/client";
-import { useCargarDataForm } from "../hooks/useCargarDataForm";
-import { EDITAR_BUZON } from "../services/apollo/gql/buzon/editarBuzon";
-import { OBTENER_BUZON } from "../services/apollo/gql/buzon/obtenerBuzon";
-import { Mensaje } from "./Mensaje";
-import { FormRecargar } from "./FormRecargar";
+import { useCargarDataForm } from "../../hooks/useCargarDataForm";
+import { EDITAR_BUZON } from "../../services/apollo/gql/buzon/editarBuzon";
+import { OBTENER_BUZON } from "../../services/apollo/gql/buzon/obtenerBuzon";
+import { Mensaje } from "../inicio/Mensaje";
+import { FormRecargar } from "../forms/FormRecargar";
 
 
 

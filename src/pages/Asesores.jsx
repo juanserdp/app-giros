@@ -15,31 +15,30 @@ import { CREAR_ASESOR } from "../services/apollo/gql/asesor/crearAsesor";
 
 
 export default function Asesores() {
-
-    // CONSULTAS
-    const { loading, error, data, refetch } = useQuery(OBTENER_ASESORES);
-
-    // CONSTANTES
-    const initialStateAsesores = {
+    // CONST
+    const INITIAL_STATE_ASESORES = {
         asesores: []
     }
-    const asesores = data || initialStateAsesores;
 
+    // HOOKS
+    // CONSULTAS
+    const { loading, error, data, refetch } = useQuery(OBTENER_ASESORES);
     // MUTACIONES
     const [crearAsesor, crearAsesorData] = useMutation(CREAR_ASESOR);
     const [editarAsesor, editarAsesorData] = useMutation(EDITAR_ASESOR)
-    const [eliminarAsesor] = useMutation(ELIMINAR_ASESOR);
-
+    const [eliminarAsesor, eliminarAsesorData] = useMutation(ELIMINAR_ASESOR);
     // ESTADOS
     const [show, setShow] = useState(false);
+
+    // VAR
+    const asesores = data || INITIAL_STATE_ASESORES;
 
     // MANEJADORES
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    if (error) return (
-        `Error! ${error}`
-    );
+    if (error) return `Error! ${error}`;
+
     return (
         <>
             <NavBar />
@@ -48,17 +47,18 @@ export default function Asesores() {
                 refetch={refetch}
                 loading={loading}
                 eliminarAsesor={eliminarAsesor}
+                eliminarAsesorData={eliminarAsesorData}
                 handleShow={handleShow}
             />
             <ModalAsesor
                 asesores={asesores.asesores}
                 refetch={refetch}
                 show={show}
-                handleClose={handleClose}
                 crearAsesor={crearAsesor}
                 crearAsesorData={crearAsesorData}
                 editarAsesor={editarAsesor}
                 editarAsesorData={editarAsesorData}
+                handleClose={handleClose}
             />
         </>
     );
