@@ -84,22 +84,27 @@ export function FormLogin() {
                     <Form.Check onChange={() => setRecordarCredenciales(!recordarCredenciales)
                     } defaultChecked={recordarCredenciales} type="checkbox" label="Recordarme" />
                 </Form.Group>
-                {(loading) ? (
-                        <Button variant="primary" disabled>
-                            <Spinner
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            /> &nbsp;
-                            Cargando...
-                        </Button>
-                    ) : (
-                        <Button onClick={(evento) => handlerSubmit(evento)} variant="primary" >
-                            Ingresar
-                        </Button>
-                    )}
+                {/* {(loading) ? (
+                    <Button variant="primary" disabled>
+
+                    </Button>
+                ) : (
+                    <Button onClick={(evento) => handlerSubmit(evento)} variant="primary" >
+                        Ingresar
+                    </Button>
+                )} */}
+
+                <Button disabled={loading ? true : false} onClick={(evento) => handlerSubmit(evento)} variant="primary"  >
+                    {loading ? (<><Spinner
+                        as="span"
+                        animation="grow"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    /> &nbsp;
+                        Cargando...</>) : "Ingresar"}
+                </Button>
+
             </Form>
         </Container>
     );

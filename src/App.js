@@ -11,7 +11,7 @@ import "./assets/styles/fonts.css";
 import "./assets/styles/scroll.css";
 import { Configuracion } from "./pages/Configuracion";
 
-function App() {
+export function App() {
   return (
     <>
       <BrowserRouter>

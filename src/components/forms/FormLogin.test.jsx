@@ -1,10 +1,13 @@
-import TestRenderer from 'react-test-renderer';
 import { FormLogin } from './FormLogin';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from '../../pages/Login';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
-import { buscarTagHtml } from '../../util/buscarElementoHtml';
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+import Inicio from '../../pages/Inicio';
+import { PrivatizarPorRol } from '../../routes/PrivatizarPorRol';
 
 const httpLink = createHttpLink({
     uri: 'http://192.168.0.24:4000/graphql'
@@ -15,8 +18,8 @@ const client = new ApolloClient({
     link: httpLink,
 });
 describe("FormLogin", () => {
-    it('Muestra un modal de error al pasarle una contraseña mala', () => {
-        const component = TestRenderer.create(
+    it('Al dar el boton ingresar sin escribir las credneciales mostrara un error', () => {
+        render(
             <ApolloProvider client={client}>
                 <BrowserRouter>
                     <Routes>
@@ -30,35 +33,37 @@ describe("FormLogin", () => {
             </ApolloProvider>
             ,
         );
-        let tree = component.toJSON();
-        // RECORDARME -> INGRESAR
-        TestRenderer.act(() => {
-            const inputs = buscarTagHtml(tree, "input");
-            const checkbox = inputs.filter(i => i.props.type === "checkbox");
-            console.log(checkbox)
-            checkbox[0].props.defaultChecked = true;
-        })
-        TestRenderer.act(() => {
-            const button = buscarTagHtml(tree, "button");
-            button[0].props.onClick();
-        });
-        expect(tree).toMatchSnapshot();
+        userEvent.click(screen.getByText(/Ingresar/));
+        expect(screen.getByText(/¡Todos los campos son obligatorios!/)).toBeInTheDocument();
+    });
+    it('Muestra un modal con un error al pasarle unas credenciales incorrectas', async () => {
+        render(
+            <ApolloProvider client={client}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={
+                            <Login />
+                        } />
+                    </Routes>
+                </BrowserRouter>
+            </ApolloProvider>
+            ,
+        );
+        userEvent.type(screen.getByPlaceholderText(/numero/), 'usuario');
+        userEvent.type(screen.getByPlaceholderText(/contraseña/), '123');
 
-        // NO RECORDARME -> INGRESAR
-        TestRenderer.act(() => {
-            const inputs = buscarTagHtml(tree, "input");
-            const checkbox = inputs.filter(i => i.props.type === "checkbox");
-            console.log(checkbox)
-            checkbox[0].props.defaultChecked = false;
-        })
-        TestRenderer.act(() => {
-            const button = buscarTagHtml(tree, "button");
-            button[0].props.onClick();
-        });
-        expect(tree).toMatchSnapshot();
+        const buttonIngresar = screen.getByText(/Ingresar/);
+
+        userEvent.click(buttonIngresar);
+
+        expect(buttonIngresar).toBeDisabled();
+        expect(buttonIngresar).toHaveTextContent("Cargando...");
+
+        expect(await screen.findByText(/Usuario o contraseña incorrectos/)).toBeInTheDocument();
     });
-    it('Muestra un modal de error al pasarle una contraseña mala', () => {
-        const component = TestRenderer.create(
+
+    it('Ingresa al inicio de la aplicacion si las credenciales son correctas', async () => {
+        render(
             <ApolloProvider client={client}>
                 <BrowserRouter>
                     <Routes>
@@ -67,23 +72,31 @@ describe("FormLogin", () => {
                                 <FormLogin />
                             </Login>
                         } />
+                        <Route
+                            path="/inicio"
+                            element={
+                                <PrivatizarPorRol rolAccess="USUARIO">
+                                    <Inicio />
+                                </PrivatizarPorRol>
+                            }
+                        />
                     </Routes>
                 </BrowserRouter>
-            </ApolloProvider>
-            ,
+            </ApolloProvider>,
         );
-        let tree = component.toJSON();
-        // NO RECORDARME -> INGRESAR
-        TestRenderer.act(() => {
-            const inputs = buscarTagHtml(tree, "input");
-            const checkbox = inputs.filter(i => i.props.type === "checkbox");
-            console.log(checkbox)
-            checkbox[0].props.defaultChecked = false;
-        })
-        TestRenderer.act(() => {
-            const button = buscarTagHtml(tree, "button");
-            button[0].props.onClick();
-        });
-        expect(tree).toMatchSnapshot();
+        screen.debug();
+
+        userEvent.type(screen.getByPlaceholderText("Ingrese el numero"), 'asesor');
+        userEvent.type(screen.getByPlaceholderText("Ingrese la contraseña"), '12345');
+
+        const buttonIngresar = screen.getByText(/Ingresar/);
+
+        userEvent.click(buttonIngresar);
+
+        expect(buttonIngresar).toBeDisabled();
+        expect(buttonIngresar).toHaveTextContent("Cargando...");
+        screen.debug();
+        expect(await screen.findByText(/Enviar Giro/)).toBeInTheDocument();
     });
+
 })
