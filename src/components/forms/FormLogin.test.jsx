@@ -3,100 +3,84 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from '../../pages/Login';
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Inicio from '../../pages/Inicio';
 import { PrivatizarPorRol } from '../../routes/PrivatizarPorRol';
 
-const httpLink = createHttpLink({
-    uri: 'http://192.168.0.24:4000/graphql'
-});
+import { MockedProvider } from "@apollo/client/testing";
+import { mocks } from '../../mocks/mocks';
 
-const client = new ApolloClient({
-    cache: new InMemoryCache(),
-    link: httpLink,
-});
+const cache = new InMemoryCache();
+
 describe("FormLogin", () => {
-    it('Al dar el boton ingresar sin escribir las credneciales mostrara un error', () => {
+
+    it("Obtiene un error cuando doy click en el boton: 'ingresar' sin llenar los campos", () => {
         render(
-            <ApolloProvider client={client}>
+            <MockedProvider mocks={mocks} addTypename={false} cache={cache}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={
-                            <Login>
-                                <FormLogin />
-                            </Login>
-                        } />
+                        <Route path="/" element={<Login />} />
                     </Routes>
                 </BrowserRouter>
-            </ApolloProvider>
-            ,
+            </MockedProvider>
         );
         userEvent.click(screen.getByText(/Ingresar/));
         expect(screen.getByText(/¡Todos los campos son obligatorios!/)).toBeInTheDocument();
     });
-    it('Muestra un modal con un error al pasarle unas credenciales incorrectas', async () => {
+
+    it("Obtiene un error cuando doy click en el boton: 'ingresar' con unas credenciales incorrectas", async () => {
         render(
-            <ApolloProvider client={client}>
+            <MockedProvider mocks={mocks} cache={cache}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={
-                            <Login />
-                        } />
+                        <Route path="/" element={<Login />} />
                     </Routes>
                 </BrowserRouter>
-            </ApolloProvider>
-            ,
+            </MockedProvider>
         );
         userEvent.type(screen.getByPlaceholderText(/numero/), 'usuario');
-        userEvent.type(screen.getByPlaceholderText(/contraseña/), '123');
+        userEvent.type(screen.getByPlaceholderText(/contraseña/), '123456');
 
-        const buttonIngresar = screen.getByText(/Ingresar/);
+        const ingresar = screen.getByText(/Ingresar/);
 
-        userEvent.click(buttonIngresar);
+        userEvent.click(ingresar);
 
-        expect(buttonIngresar).toBeDisabled();
-        expect(buttonIngresar).toHaveTextContent("Cargando...");
+        expect(ingresar).toBeDisabled();
+        expect(ingresar).toHaveTextContent("Cargando...");
 
         expect(await screen.findByText(/Usuario o contraseña incorrectos/)).toBeInTheDocument();
     });
 
     it('Ingresa al inicio de la aplicacion si las credenciales son correctas', async () => {
         render(
-            <ApolloProvider client={client}>
+            <MockedProvider mocks={mocks} cache={cache}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={
-                            <Login>
-                                <FormLogin />
-                            </Login>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/inicio" element={
+                            <PrivatizarPorRol rolAccess="USUARIO">
+                                <h1>Inicio</h1>
+                            </PrivatizarPorRol>
                         } />
-                        <Route
-                            path="/inicio"
-                            element={
-                                <PrivatizarPorRol rolAccess="USUARIO">
-                                    <Inicio />
-                                </PrivatizarPorRol>
-                            }
-                        />
                     </Routes>
                 </BrowserRouter>
-            </ApolloProvider>,
+            </MockedProvider>
         );
-        screen.debug();
 
-        userEvent.type(screen.getByPlaceholderText("Ingrese el numero"), 'asesor');
+        userEvent.type(screen.getByPlaceholderText("Ingrese el numero"), 'usuario');
         userEvent.type(screen.getByPlaceholderText("Ingrese la contraseña"), '12345');
 
-        const buttonIngresar = screen.getByText(/Ingresar/);
+        const ingresar = screen.getByText(/Ingresar/);
 
-        userEvent.click(buttonIngresar);
+        userEvent.click(ingresar);
+        expect(ingresar).toBeDisabled();
+        expect(ingresar).toHaveTextContent("Cargando...");
 
-        expect(buttonIngresar).toBeDisabled();
-        expect(buttonIngresar).toHaveTextContent("Cargando...");
+        expect(await screen.findByText("Inicio")).toBeInTheDocument();
+        expect(window.location.pathname).toBe("/inicio");
+        expect(localStorage.getItem("jwt")).not.toBeNull();
         screen.debug();
-        expect(await screen.findByText(/Enviar Giro/)).toBeInTheDocument();
-    });
-
+    }, 30000);
 })

@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../../services/apollo/gql/login';
 import { Spinner } from 'react-bootstrap';
+import { handleError } from '../../util/handleError';
+import { NumeroDocumento } from './NumeroDocumento';
 
 export function FormLogin() {
     // INSTANCIAS DE CLASE
@@ -24,25 +26,17 @@ export function FormLogin() {
     const [formLogin, setFormLogin] = useState(estadoInicial);
     const [recordarCredenciales, setRecordarCredenciales] = useState(localStorage.getItem("recordarCredenciales") || false);
 
-    const [login, { loading }] = useMutation(LOGIN, {
+    // MUTACIONES
+    const [login, { loading, error }] = useMutation(LOGIN, {
         variables: formLogin,
         onCompleted: ({ login }) => {
             if (login.token) {
                 localStorage.setItem("jwt", login.token);
                 navigate('/inicio');
             }
-            else if (login.error) {
-                console.error("Error!", login.error, "from FormLogin.js");
-                swal("Error al iniciar sesión", login.error, "error");
-            }
+            else if (login.error) swal("Error al iniciar sesión", login.error, "error");
         },
-        onError: ({ networkError }) => {
-            if (networkError) {
-                console.error(`[Network error]: ${networkError}`, " from FormLogin.js");
-                if (networkError.result.errors[0].message)
-                    swal("Error!", networkError.result.errors[0].message, "error");
-            }
-        }
+        onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
     });
     const handlerSubmit = () => {
         if (recordarCredenciales) guardarCredenciales(formLogin.numeroDocumento, formLogin.clave);
@@ -50,9 +44,12 @@ export function FormLogin() {
         if (formLogin.numeroDocumento !== "" && formLogin.clave !== "") login();
         else swal("Error", "¡Todos los campos son obligatorios!", "error");
     }
+    const handleChange = (evento, campo) => {
+        setFormLogin({ ...formLogin, [campo]: evento.target.value })
+    }
+    if (error) return `Error! ${error}`;
     return (
         <Container fluid="md">
-
             <Form style={{
                 width: "100%",
                 height: "650px",
@@ -68,12 +65,14 @@ export function FormLogin() {
                         height: "300px"
                     }}
                 ></img>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Numero de Identificacion</Form.Label>
+                {/* <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Numero de Documento</Form.Label>
                     <Form.Control onChange={event => setFormLogin({ ...formLogin, numeroDocumento: event.target.value })
                     } value={formLogin.numeroDocumento} type="text" placeholder="Ingrese el numero" />
-                </Form.Group>
-
+                </Form.Group> */}
+                <NumeroDocumento
+                    value={formLogin.numeroDocumento}
+                    onChange={handleChange} />
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Contraseña</Form.Label>
                     <Form.Control onChange={event => setFormLogin({ ...formLogin, clave: event.target.value })
@@ -84,27 +83,18 @@ export function FormLogin() {
                     <Form.Check onChange={() => setRecordarCredenciales(!recordarCredenciales)
                     } defaultChecked={recordarCredenciales} type="checkbox" label="Recordarme" />
                 </Form.Group>
-                {/* {(loading) ? (
-                    <Button variant="primary" disabled>
-
-                    </Button>
-                ) : (
-                    <Button onClick={(evento) => handlerSubmit(evento)} variant="primary" >
-                        Ingresar
-                    </Button>
-                )} */}
-
                 <Button disabled={loading ? true : false} onClick={(evento) => handlerSubmit(evento)} variant="primary"  >
-                    {loading ? (<><Spinner
-                        as="span"
-                        animation="grow"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                    /> &nbsp;
-                        Cargando...</>) : "Ingresar"}
+                    {loading ? (
+                        <><Spinner
+                            as="span"
+                            animation="grow"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                        /> &nbsp;
+                            Cargando...</>
+                    ) : "Ingresar"}
                 </Button>
-
             </Form>
         </Container>
     );
