@@ -47,18 +47,12 @@ export function ModalUsuario({
         tasaVenta: ""
     };
 
-    // ESTADOS
+    // HOOKS
     const [usuario, setUsuario] = useState((id && asesor) ? initialStateUsuario : initialStateUsuarioFormCrear);
     const [validated, setValidated] = useState(false);
 
     // MANEJADORES
     const handleSubmit = async (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
         if (id && asesor) {
             if (validarCamposNotNull(usuario)) {
                 await editarUsuario({
@@ -94,13 +88,9 @@ export function ModalUsuario({
                         asesor: asesor
                     },
                     onCompleted: () => {
-                        // CERRAR
                         handleClose();
-                        // NAVEGAR
                         navigate(`/usuarios/${asesor}`);
-                        // EXITO
                         swal("Creado!", "El usuario ha sido creado.", "success");
-                        // LIMPIAR
                         setValidated(false);
                         setUsuario(initialStateUsuario);
                     },
@@ -108,15 +98,13 @@ export function ModalUsuario({
                 });
             }
             else {
-                // ADVERTENCIAS
                 setValidated(true);
-                // ERROR
                 swal("Error!", "Todos los campos son obligatorios!", "error");
             }
         }
-        // REGARCAR
         refetch();
     }
+    
     return (
         <>
             <Modal

@@ -6,6 +6,7 @@ query obtenerUsuarioPorId($id: ID!){
         id,
         asesor{
             tasaVenta
+            valorMinimoGiro
         }
         nombres,
         apellidos,

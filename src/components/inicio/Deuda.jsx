@@ -16,27 +16,17 @@ const textStyleH3 = {
     color: "white",
 };
 
-const cardStyle= {
-    height:"220px"
-}
+const cardStyle = {
+    height: "220px"
+};
 
-export function Deuda({ deuda, loading }) {
+export function Deuda({ deuda }) {
     return (
         <Card className="card-container-deuda rounded" style={cardStyle}>
             <CardContent className="p-0">
-                <h2
-                    className="mb-4 py-2"
-                    style={textStyleH2} >
-                    Deuda
-                </h2>
-                <br/>
-                {(loading) ? (
-                    <Skeleton height="60px" />
-                ) : (<h3
-                    style={textStyleH3} >
-                    {currencyFormatter.format(deuda || 0)}
-                </h3>
-                )}
+                <h2 className="mb-4 py-2" style={textStyleH2}>Deuda</h2>
+                <br />
+                <h3 style={textStyleH3}>{currencyFormatter.format(deuda)}</h3>
             </CardContent>
         </Card>
     )

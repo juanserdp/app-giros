@@ -1,5 +1,5 @@
 // REACT
-import { useEffect} from "react";
+import { useEffect } from "react";
 
 // HOOKS
 import { useCargarDataForm } from "../../hooks/useCargarDataForm";
@@ -12,7 +12,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import swal from "sweetalert";
 // COMPONENTES
 import { Saldo } from "../inicio/Saldo";
-import { TasaVenta } from "./TasaVenta";
+import { TasaVenta } from "../inicio/TasaVenta";
 import { Buzon } from "../inicio/Buzon";
 
 import { FormRecargar } from "../forms/FormRecargar";
@@ -20,13 +20,15 @@ import { FormRecargar } from "../forms/FormRecargar";
 // MUTATIONS / QUERYS
 import { RECARGAR_USUARIO } from "../../services/apollo/gql/usuario/recargarUsuario";
 import { OBTENER_ASESOR_POR_ID } from "../../services/apollo/gql/asesor/obtenerAsesorPorId";
-import { OBTENER_BUZON } from "../../services/apollo/gql/buzon/obtenerBuzon";
 // UTIL
 import { Sesion } from "../../util/Sesion";
 import { handleError } from "../../util/handleError";
 // ESTILOS
 import "../../assets/styles/inicio.css";
 import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
+import { CircularProgressAnimation } from "../CircularProgressAnimation";
+import { ErrorFetch } from "../errors/ErrorFetch";
+import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
 
 export function InicioAsesor() {
 
@@ -38,32 +40,18 @@ export function InicioAsesor() {
             tasaVenta: 0
         }
     };
-
-    // EFECTOS
-    useEffect(() => {
-        const button = document.getElementsByClassName("accordion-button collapsed");
-        for (let boton of button) {
-            boton.style.backgroundColor = "#0d6efd";
-            boton.style.borderTopLeftRadius = "0px";
-            boton.style.borderTopRightRadius = "0px";
-            boton.style.border = "0px";
-            boton.style.height = "20px";
-            boton.style.outlineStyle = "none";
-            boton.style.color = "white";
-            boton.style.fontFamily = "'Roboto Slab', serif";
-            boton.style.fontWeight = "500";
-            boton.style.fontSize = "1.5rem";
-            boton.style.padding = "5px";
-            boton.style.textAlign = "center"
-        };
-    });
+    const initialStateMensajes = {
+        mensajes: []
+    };
 
     // OBTENGO LO DATOS DE SESION DEL USUARIO
     const sesion = new Sesion();
     const id = sesion.getUid();
 
     // CONSULTAS
-    const buzon = useQuery(OBTENER_BUZON);
+    const buzon = useQuery(OBTENER_MENSAJES);
+    const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
+
     const { loading, data, error, refetch } = useQuery(OBTENER_ASESOR_POR_ID, {
         variables: { id }
     });
@@ -73,10 +61,6 @@ export function InicioAsesor() {
     // MUTACIONES
     const [editarTasaVenta] = useMutation(EDITAR_ASESOR);
     const [recargarUsuario] = useMutation(RECARGAR_USUARIO);
-
-    // ESTADOS
-    const [configuracion] = useCargarDataForm({ buzon: [] }, buzon.data);
-    
 
     // MANEJADORES
     const handleEditarTasa = async () => {
@@ -102,22 +86,14 @@ export function InicioAsesor() {
         });
     };
 
-    // CARGANDO
-    if (loading) return (
-        <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={true}>
-            <CircularProgress color="inherit" />
-        </Backdrop>
-    );
+    if (loading) return <CircularProgressAnimation />
 
-    // ERROR
-    if (error) return (
-        `Error! ${error}`
-    );
+    if (error) return <ErrorFetch error={error} />
+
     return (
         <>
             <Container className="my-4" style={{ textAlign: "center" }}>
+
                 <Row className="mb-3 justify-content-center">
                     <Col md="4">
                         <FormRecargar
@@ -126,11 +102,13 @@ export function InicioAsesor() {
                         />
                     </Col>
                 </Row>
+
                 <Row className="mb-3">
                     <Col md="12">
-                        <Buzon configuracion={configuracion} />
+                        <Buzon mensajes={mensajes} />
                     </Col>
                 </Row>
+
                 <Row className="mb-3 justify-content-center">
                     <Col md="4">
                         <TasaVenta
@@ -145,6 +123,7 @@ export function InicioAsesor() {
                             loading={loading} />
                     </Col>
                 </Row>
+
             </Container>
 
         </>

@@ -10,10 +10,17 @@ import { PrivatizarPorRol } from "./routes/PrivatizarPorRol";
 import "./assets/styles/fonts.css";
 import "./assets/styles/scroll.css";
 import { Configuracion } from "./pages/Configuracion";
+import { Sesion } from "./util/Sesion";
+import React, { useState } from "react";
+import { SesionProvider } from "./providers/SesionProvider";
+import { NavigationBar } from "./components/NavigationBar";
+
+export const context = React.createContext();
 
 export function App() {
+
   return (
-    <>
+    <SesionProvider>
       <BrowserRouter>
         <Routes>
           {/*
@@ -104,6 +111,7 @@ export function App() {
             path="/usuarios/:asesor"
             element={
               <PrivatizarPorRol rolAccess="ASESOR">
+                <NavigationBar />
                 <Usuarios />
               </PrivatizarPorRol>
             }
@@ -113,6 +121,7 @@ export function App() {
             path="/usuarios/:asesor/editar/:id"
             element={
               <PrivatizarPorRol rolAccess="ASESOR">
+                <NavigationBar />
                 <Usuarios />
               </PrivatizarPorRol>
             }
@@ -122,6 +131,7 @@ export function App() {
             path="/usuarios/:asesor/crear"
             element={
               <PrivatizarPorRol rolAccess="ASESOR">
+                <NavigationBar />
                 <Usuarios />
               </PrivatizarPorRol>
             }
@@ -137,6 +147,7 @@ export function App() {
             path="/usuarios"
             element={
               <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <NavigationBar />
                 <Usuarios />
               </PrivatizarPorRol>
             }
@@ -176,9 +187,17 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
+          <Route
+            path="/*"
+            element={
+              <div>
+                <h1>Pagina no encontrada</h1>
+              </div>
+            }
+          />
         </Routes>
       </BrowserRouter>
-    </>
+    </SesionProvider>
   );
 }
 

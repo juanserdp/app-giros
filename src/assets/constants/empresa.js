@@ -1,0 +1,1 @@
+export const NOMBRE_EMPRESA = "Nombre de empresa";

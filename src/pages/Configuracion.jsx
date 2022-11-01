@@ -8,7 +8,7 @@ import { Footer } from "../components/Footer";
 import { EstadisticasGiros } from "../components/estadisticas/EstadisticasGiros";
 import { EstadisticasUsuarios } from "../components/estadisticas/EstadisticasUsuarios";
 import { Estadisticas } from "../components/estadisticas/Estadisticas";
-import { NavBar } from "../components/NavBar";
+import { NavigationBar } from "../components/NavigationBar";
 
 // COMPONENTES LIBRERIAS
 import { Avatar, Collapse, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
@@ -60,7 +60,7 @@ export function Configuracion() {
     };
     return (
         <>
-            <NavBar />
+            <NavigationBar />
             <Container>
                 <Row>
                     <Col md="3" className="mt-3">

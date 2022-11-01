@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 // COMPONENTES
 import { TablaGiros } from "../components/giros/TablaGiros";
 import { ModalGiro } from "../components/giros/ModalGiro";
-import { NavBar } from "../components/NavBar";
+import { NavigationBar } from "../components/NavigationBar";
 
 // CONSULTAS
 import { OBTENER_GIROS_POR_ID_USUARIO } from "../services/apollo/gql/giro/obtenerGirosPorIdUsuario";
@@ -15,6 +15,7 @@ import { CREAR_GIRO } from "../services/apollo/gql/giro/crearGiro";
 import { EDITAR_GIRO } from "../services/apollo/gql/giro/editarGiro";
 import { ELIMINAR_GIRO } from "../services/apollo/gql/giro/eliminarGiro";
 import { OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR } from "../services/apollo/gql/giro/obtenerGirosPorUsuariosPorIdAsesor";
+import { ErrorFetch } from "../components/errors/ErrorFetch";
 
 export default function Giros() {
   // CONSTANTES
@@ -28,27 +29,27 @@ export default function Giros() {
     usuario
       ? OBTENER_GIROS_POR_ID_USUARIO
       : asesor
-      ? OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR
-      : OBTENER_GIROS,
+        ? OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR
+        : OBTENER_GIROS,
     { variables: { id: usuario || asesor } }
   );
   const giros = data || initialStateGiros;
 
-  // MUTACIONES
+  // HOOKS
   const [crearGiro] = useMutation(CREAR_GIRO);
   const [editarGiro, editarGiroInfo] = useMutation(EDITAR_GIRO);
   const [eliminarGiro] = useMutation(ELIMINAR_GIRO);
-
-  // ESTADOS
   const [show, setShow] = useState(false);
 
   // MANEJADORES
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  if (error) return `Error! ${error}`;
+
+  if (error) return <ErrorFetch />
+
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <TablaGiros
         giros={giros.giros}
         refetch={refetch}

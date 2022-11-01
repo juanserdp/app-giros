@@ -1,5 +1,9 @@
 import { Card, CardContent, Skeleton } from "@mui/material";
 import { Accordion, Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
+import { Acordion } from "../Acordion";
+import { FeedBack } from "../Feedback";
+import { MensajeCampo } from "../forms/MensajeCampo";
+import { BotonAceptarMensaje } from "./BotonAceptarMensaje";
 
 const textStyleH2 = {
     fontWeight: "500",
@@ -18,77 +22,49 @@ const textStyleH3 = {
 };
 
 
-export function Mensaje({ autoFocusMensaje, setAutoFocusMensaje, mensaje, setMensaje, isNewMensaje, handleMensaje }) {
-    return (
-        <Card className="card-container-saldo rounded " >
-            <CardContent className="p-0">
-                <h2
-                    className="m-0 pt-2"
-                    style={textStyleH2} >
-                    Mensaje
-                </h2>
-                <Accordion className="mb-4">
-                    <Accordion.Item style={{ border: "0px" }} eventKey="0" >
-                        <Accordion.Header >
+export function Mensaje({
+    autoFocusMensaje,
+    setAutoFocusMensaje,
+    initialStateMensaje,
+    mensaje,
+    setMensaje,
+    refetch,
+    isNewMensaje,
+    setIsNewMensaje,
+    idMensajeEditar
+}) {
 
-                        </Accordion.Header>
-                        <Accordion.Body style={{
-                            fontWeight: "300",
-                            fontFamily: "'Roboto Slab', serif",
-                            textAlign: "left"
-                        }}>
-                            Aquí puedes crear un nuevo mensaje y tambien puedes
-                            editar un mensaje del buzon.
-                            <br />
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
+    const handleChange = (e) => setMensaje({ ...mensaje, mensaje: e.target.value });
+
+    return (
+        <Card className="card-container-saldo rounded">
+            <CardContent className="p-0">
+
+                <Acordion
+                    titulo="Mensaje">
+                    Aquí puedes crear un nuevo mensaje y tambien puedes
+                    editar un mensaje del buzon.
+                </Acordion>
 
                 <Row className="mx-3">
-                    <Form.Group
-                        as={Col}
-                        className="mb-3"
-                        md="12"
-                        controlId="validationSaldo"
-                        style={{ textAlign: "left" }}>
-                        <FloatingLabel
-                            controlId="floatingInput"
-                            label={(isNewMensaje) ? "Nuevo Mensaje" : "Editar Mensaje"}
-                            className="mb-3">
-                            <Form.Control
-                                required
-                                placeholder=""
-                                as="textarea"
-                                autoFocus={autoFocusMensaje}
-                                onChange={(e) => {
-                                    setMensaje({ ...mensaje, contenido: e.target.value });
-                                }}
-                                value={mensaje.contenido}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                Este campo es obligatorio
-                            </Form.Control.Feedback>
-                            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                        </FloatingLabel>
-                    </Form.Group>
+                    <MensajeCampo
+                        value={mensaje.mensaje}
+                        onChange={handleChange}
+                        isNewMensaje={isNewMensaje}
+                        autoFocusMensaje={autoFocusMensaje} />
                 </Row>
-                <Row className="">
-                    <Col md="12">
-                        <Button
-                            onClick={() => {
-                                handleMensaje();
-                                setAutoFocusMensaje(false);
-                            }}
-                            style={{
-                                borderRadius: "0px",
-                                width: "100%"
-                            }}
-                            className="btn btn-primary m-0 px-3">Aceptar</Button>
-                    </Col>
-                </Row>
-                <Row className="">
-                    <Col md="12">
 
+                <Row>
+                    <Col md="12">
+                        <BotonAceptarMensaje
+                            id={idMensajeEditar}
+                            mensaje={mensaje}
+                            setAutoFocusMensaje={setAutoFocusMensaje}
+                            setIsNewMensaje={setIsNewMensaje}
+                            isNewMensaje={isNewMensaje}
+                            refetch={refetch}
+                            setMensaje={setMensaje}
+                            initialStateMensaje={initialStateMensaje} />
                     </Col>
                 </Row>
 
@@ -96,4 +72,3 @@ export function Mensaje({ autoFocusMensaje, setAutoFocusMensaje, mensaje, setMen
         </Card>
     )
 };
-

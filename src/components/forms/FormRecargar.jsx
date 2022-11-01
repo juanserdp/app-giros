@@ -6,6 +6,7 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { handleError } from "../../util/handleError";
 import { modificarInputValue } from "../../util/modificarInputValue";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
+import { Acordion } from "../Acordion";
 
 export function FormRecargar({ recargar, refetch }) {
     // ESTILOS
@@ -71,26 +72,13 @@ export function FormRecargar({ recargar, refetch }) {
     return (
         <Card className="card-container-inicio rounded">
             <CardContent className="p-0 ">
-                <h2 className="mb-0 pt-3"
-                    style={textStyleH2} >
-                    Recargas
-                </h2>
-                <Accordion className="mb-3">
-                    <Accordion.Item style={{ border: "0px" }} eventKey="0" >
-                        <Accordion.Header >
-                        </Accordion.Header>
-                        <Accordion.Body style={{
-                            fontWeight: "300",
-                            fontFamily: "'Roboto Slab', serif",
-                            textAlign: "left"
-                        }}>
-                            Aquí puedes recargar el saldo de tus usuarios.
-                            Ingresa el numero su documento y
-                            el monto que va a recargar.
-                            <br />
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
+
+                <Acordion titulo="Recargar">
+                    Aquí puedes recargar el saldo de tus usuarios.
+                    Ingresa el numero su documento y
+                    el monto que va a recargar.
+                </Acordion>
+
                 <Row
                     as={Form}
                     className="mb-2 px-3 justify-content-center"

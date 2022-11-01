@@ -1,21 +1,16 @@
-import { FormLogin } from './FormLogin';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from '../../pages/Login';
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { InMemoryCache } from "@apollo/client";
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import Inicio from '../../pages/Inicio';
-import { PrivatizarPorRol } from '../../routes/PrivatizarPorRol';
-
 import { MockedProvider } from "@apollo/client/testing";
 import { mocks } from '../../mocks/mocks';
 
 const cache = new InMemoryCache();
 
 describe("FormLogin", () => {
-
     it("Obtiene un error cuando doy click en el boton: 'ingresar' sin llenar los campos", () => {
         render(
             <MockedProvider mocks={mocks} addTypename={false} cache={cache}>
@@ -29,7 +24,6 @@ describe("FormLogin", () => {
         userEvent.click(screen.getByText(/Ingresar/));
         expect(screen.getByText(/¡Todos los campos son obligatorios!/)).toBeInTheDocument();
     });
-
     it("Obtiene un error cuando doy click en el boton: 'ingresar' con unas credenciales incorrectas", async () => {
         render(
             <MockedProvider mocks={mocks} cache={cache}>
@@ -52,7 +46,6 @@ describe("FormLogin", () => {
 
         expect(await screen.findByText(/Usuario o contraseña incorrectos/)).toBeInTheDocument();
     });
-
     it('Ingresa al inicio de la aplicacion si las credenciales son correctas', async () => {
         render(
             <MockedProvider mocks={mocks} cache={cache}>
@@ -60,9 +53,7 @@ describe("FormLogin", () => {
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="/inicio" element={
-                            <PrivatizarPorRol rolAccess="USUARIO">
-                                <h1>Inicio</h1>
-                            </PrivatizarPorRol>
+                            <h1>Inicio</h1>
                         } />
                     </Routes>
                 </BrowserRouter>

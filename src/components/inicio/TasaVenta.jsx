@@ -1,4 +1,4 @@
-import { Card, CardContent, Skeleton } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import { Button, Col, Row } from "react-bootstrap";
 
 const textStyleH2 = {
@@ -29,26 +29,14 @@ const cardStyle = {
 export function TasaVenta({
     tasa,
     handleEditarTasa,
-    loading,
     rol
 }) {
     return (
         <Card className="card-container-tasa mb-3 rounded" style={cardStyle}>
             <CardContent className="p-0">
-                <h2
-                    className="mb-4 py-2"
-                    style={textStyleH2} >
-                    Tasa de Venta
-                </h2>
+                <h2 className="mb-4 py-2" style={textStyleH2}>Tasa de Venta</h2>
                 <br />
-                {(loading) ? (
-                    <Skeleton height="60px" />
-                ) : (<h3
-                    className="mb-4"
-                    style={textStyleH3} >
-                    {tasa || 0}
-                </h3>
-                )}
+                <h3 className="mb-4" style={textStyleH3}>{tasa}</h3>
                 {(rol === "ASESOR") ? (
                     <Row >
                         <Col md="12">

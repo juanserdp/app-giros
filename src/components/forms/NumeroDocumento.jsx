@@ -5,6 +5,8 @@ export function NumeroDocumento({ value, onChange }) {
         <Form.Label>Numero de Documento</Form.Label>
         <Form.Control
             onChange={event => onChange(event, "numeroDocumento")}
-            value={value} type="text" placeholder="Ingrese el numero" />
+            value={value}
+            type="text"
+            placeholder="Ingrese el numero" />
     </Form.Group>
 }

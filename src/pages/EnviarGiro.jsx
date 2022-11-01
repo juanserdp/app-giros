@@ -9,7 +9,7 @@ import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUs
 
 // COMPONENTES
 import { FormEnviarGiros } from "../components/forms/FormEnviarGiros";
-import { NavBar } from "../components/NavBar";
+import { NavigationBar } from "../components/NavigationBar";
 
 // COMPONENTES LIBRERIAS
 import { Backdrop, CircularProgress } from "@mui/material";
@@ -111,7 +111,7 @@ export default function EnviarGiro() {
     );
     return (
         <>
-            <NavBar />
+            <NavigationBar />
             <Container className="my-3 p-0 card-container-background rounded" >
                 <h2 className="mb-3 p-3 rounded" style={textStyleH2}>Datos de la persona que recibe el dinero</h2>
 

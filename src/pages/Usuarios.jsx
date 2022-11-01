@@ -1,10 +1,10 @@
 // HOOKS
 import { useMutation, useQuery } from '@apollo/client';
-import { useState } from "react";
+import React, { useState } from "react";
 import { useParams } from 'react-router-dom';
 
 // COMPONENTES
-import { NavBar } from "../components/NavBar";
+import { NavigationBar } from "../components/NavigationBar";
 import { ModalUsuario } from "../components/usuarios/ModalUsuario";
 import { TablaUsuarios } from "../components/usuarios/TablaUsuarios";
 
@@ -14,9 +14,10 @@ import { CREAR_USUARIO } from "../services/apollo/gql/usuario/crearUsuario";
 import { EDITAR_USUARIO } from "../services/apollo/gql/usuario/editarUsuario";
 import { ELIMINAR_USUARIO } from "../services/apollo/gql/usuario/eliminarUsuario";
 import { OBTENER_USUARIOS_POR_ID_ASESOR } from '../services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor';
+import { ErrorFetch } from '../components/errors/ErrorFetch';
 
 export default function Usuarios() {
-    
+
     // CONSTANTES
     const { asesor } = useParams();
 
@@ -46,12 +47,10 @@ export default function Usuarios() {
     const handleShow = () => setShow(true);
 
     // ERROR
-    if (error) return (
-        `Error! ${error}`
-    );
+    if (error) return <ErrorFetch error={error} />;
+
     return (
-        <>
-            <NavBar />
+        <React.Fragment>
             <TablaUsuarios
                 usuarios={usuarios.usuarios}
                 eliminarUsuario={eliminarUsuario}
@@ -69,6 +68,6 @@ export default function Usuarios() {
                 editarUsuarioData={editarUsuarioData}
                 refetch={refetch}
             />
-        </>
+        </React.Fragment>
     );
 };

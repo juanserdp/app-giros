@@ -25,7 +25,7 @@ import { Sesion } from "../util/Sesion";
 
 // COMPONENTES
 import { FormClave } from "../components/configuracion/FormClave";
-import { NavBar } from "../components/NavBar";
+import { NavigationBar } from "../components/NavigationBar";
 import { FormEnvios } from "../components/configuracion/FormEnvios";
 import { EstadisticasGiros } from "../components/estadisticas/EstadisticasGiros";
 import { EstadisticasUsuarios } from "../components/estadisticas/EstadisticasUsuarios";
@@ -147,7 +147,7 @@ export default function Cuenta() {
   if (error) return `Error! ${error}`;
   return (
     <>
-      <NavBar />
+      <NavigationBar />
       <Container className="my-3">
         <Row className="mb-3">
           <Col md="3">

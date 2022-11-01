@@ -1,21 +1,28 @@
+// HOOKS
 import { useNavigate } from "react-router-dom";
-import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
+import { useState } from "react";
+import { useSesionContext } from "../../providers/SesionProvider";
+// ICONOS
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import UploadIcon from "@mui/icons-material/Upload";
 import DownloadIcon from "@mui/icons-material/Download";
 import DescriptionIcon from "@mui/icons-material/Description";
-import swal from "sweetalert";
-import { useState } from "react";
-import { Backdrop, CircularProgress, LinearProgress } from "@mui/material";
+// COMPONENTES
 import { CustomToolbar } from "../toolbar/CustomToolbar";
 import { CustomNoRowsOverlay } from "../toolbar/CustomNoRowsOverlay";
 import { GridColumnMenu } from "../toolbar/GridColumnMenu";
+import { CircularProgressAnimation } from "../CircularProgressAnimation";
+import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
+import { LinearProgress } from "@mui/material";
+// UTILIDADES
 import { dobleConfirmacionEliminacion } from "../../util/dobleConfirmacionEliminacion";
 import { generarFactura } from "../../util/generarFactura";
 import { handleError } from "../../util/handleError";
 import { currencyFormatter } from "../../util/currencyFormatter";
-import { Sesion } from "../../util/Sesion";
+import { descargar } from "../../util/descargar";
+import { transformarImagenABinaryString } from "../../util/transformarImagenABinaryString";
+import swal from "sweetalert";
 
 export function TablaGiros({
   giros,
@@ -26,8 +33,7 @@ export function TablaGiros({
   editarGiro,
   editarGiroInfo,
 }) {
-  const sesion = new Sesion();
-  const rol = sesion.getRol();
+  const { sesionData: { rol } } = useSesionContext();
 
   const navegarTo = `/enviar-giro`;
   const apiRef = useGridApiRef();
@@ -37,104 +43,40 @@ export function TablaGiros({
   const [showSlider, setShowSlider] = useState(false);
 
   const estadoStyle = (params) => {
-    if (params.value === "PENDIENTE") {
-      return (
-        <span
-          style={{
-            color: "red",
-            borderRadius: "5px",
-            padding: "2px 10px",
-            border: "2px solid red",
-          }}
-        >
-          {" "}
-          <b>{params.value}</b>
-        </span>
-      );
-    } else if (params.value === "EN PROCESO") {
-      return (
-        <span
-          style={{
-            color: "blue",
-            borderRadius: "5px",
-            padding: "2px 10px",
-            border: "2px solid blue",
-          }}
-        >
-          {" "}
-          <b>{params.value}</b>
-        </span>
-      );
-    } else if (params.value === "COMPLETADO") {
-      return (
-        <span
-          style={{
-            color: "green",
-            borderRadius: "5px",
-            padding: "2px 10px",
-            border: "2px solid green",
-          }}
-        >
-          <b>{params.value}</b>
-        </span>
-      );
-    }
+    const color = (params.value === "PENDIENTE") ? "red" :
+      ((params.value === "EN PROCESO") ? "blue" : "green");
+    return <span
+      style={{
+        color: color,
+        borderRadius: "5px",
+        padding: "2px 10px",
+        border: `2px solid ${color}`,
+      }} >
+      <b>{params.value}</b>
+    </span>
+
   };
 
-  const editarComprobante = (id) => {
-    //const inputFile = document.getElementById("inputFile");
-    const inputFile = document.createElement("input");
-    inputFile.type = "file";
-    inputFile.accept = "image/*";
-    inputFile.style.display = "none";
-    if (inputFile) inputFile.click();
-    inputFile.addEventListener("change", async function () {
-      const fileList = this.files;
-      const comprobante = fileList[0];
-      alert(comprobante.size);
-      if (comprobante.size < 2000000) {
-        const reader = new FileReader();
-        reader.onload = async function (e) {
-          const binaryString = e.target.result;
-          console.log(binaryString);
-          await editarGiro({
-            variables: {
-              id,
-              giro: {
-                comprobantePago: binaryString,
-              },
-            },
-            onCompleted: () => {
-              refetch();
-              swal("Editado!", "El comprobante ha sido subido.", "success");
-            },
-            onError: ({ graphQLErrors, networkError }) =>
-              handleError({ graphQLErrors, networkError }),
-          });
-        };
-        reader.readAsBinaryString(comprobante);
-      } else swal("Error!", "No se puede cargar una imagen que pese mas de 2mb", "error");
+  const editarComprobante = async (id) => {
+    transformarImagenABinaryString(id, async (binaryString) => {
+      await editarGiro({
+        variables: {
+          id,
+          giro: {
+            comprobantePago: binaryString,
+          },
+        },
+        onCompleted: () => {
+          refetch();
+          swal("Editado!", "El comprobante ha sido subido.", "success");
+        },
+        onError: ({ graphQLErrors, networkError }) =>
+          handleError({ graphQLErrors, networkError }),
+      });
     });
   };
 
-  const descargarComprobante = (value) => {
-    const binaryString = value;
-    const len = binaryString.length;
-    const array = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
-      array[i] = binaryString.charCodeAt(i);
-    }
-    const blob = new Blob([array], { type: "image/jpeg" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "comprobante_de_pago.png";
-    a.style.textDecoration = "none";
-    a.style.color = "white";
-    a.onload = function () {
-      URL.revokeObjectURL(this.href);
-      a.click();
-    };
-  };
+  const handleDescargarComprobante = (value) => descargar(value);
 
   const generar = (giro) => {
     const factura = generarFactura(giro);
@@ -149,9 +91,7 @@ export function TablaGiros({
   };
 
   const acciones = (params) => [
-    rol === "USUARIO" || rol === "OPERARIO" ? (
-      <></>
-    ) : (
+    (rol === "USUARIO" || rol === "OPERARIO") ? null : (
       <GridActionsCellItem
         icon={<DeleteIcon />}
         onClick={() => handlerEliminar(params.id)}
@@ -166,9 +106,7 @@ export function TablaGiros({
       }}
       label="Editar"
     />,
-    rol === "USUARIO" ? (
-      <></>
-    ) : (
+    (rol === "USUARIO") ? null : (
       <GridActionsCellItem
         icon={<UploadIcon />}
         onClick={() => editarComprobante(params.id)}
@@ -179,7 +117,7 @@ export function TablaGiros({
     <GridActionsCellItem
       icon={<DownloadIcon />}
       disabled={params.row.comprobantePago ? false : true}
-      onClick={() => descargarComprobante(params.row.comprobantePago)}
+      onClick={() => handleDescargarComprobante(params.row.comprobantePago)}
       label="Descargar comprobante"
       showInMenu
     />,
@@ -250,14 +188,6 @@ export function TablaGiros({
       align: "center",
       headerAlign: "center",
     },
-    // {
-    //   field: "comprobantePago",
-    //   headerName: "COMPROBANTE PAGO",
-    //   width: "200",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   renderCell: (params) => comprobantePago(params),
-    // },
     {
       field: "fechaEnvio",
       headerName: "FECHA ENVIO",
@@ -305,16 +235,8 @@ export function TablaGiros({
       }
     });
   };
-  if (editarGiroInfo.loading)
-    return (
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={true}
-      >
-        Cargando &nbsp;
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
+
+  if (editarGiroInfo.loading) return <CircularProgressAnimation />;
 
   return (
     <div className="container-fluid px-0">

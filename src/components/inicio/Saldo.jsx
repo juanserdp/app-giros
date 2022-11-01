@@ -14,30 +14,20 @@ const textStyleH3 = {
     fontSize: "2rem",
     fontFamily: "'Roboto Slab', serif",
     color: "white",
-    verticalAlign:"center"
+    verticalAlign: "center"
 };
 
-const cardStyle= {
-    height:"220px"
-}
+const cardStyle = {
+    height: "220px"
+};
 
-export function Saldo({ saldo, loading }) {
+export function Saldo({ saldo }) {
     return (
-        <Card className=" mb-3 card-container-saldo rounded" style={cardStyle}>
+        <Card className="mb-3 card-container-saldo rounded" style={cardStyle}>
             <CardContent className="p-0 ">
-                <h2
-                     className="mb-4 py-2"
-                     style={textStyleH2} >
-                    Saldo
-                </h2>
-                <br/>
-                {(loading) ? (
-                     <Skeleton height="60px" />
-                ) : (<h3
-                    style={textStyleH3} >
-                    {currencyFormatter.format(saldo)}
-                </h3>
-                )}
+                <h2 className="mb-4 py-2" style={textStyleH2}>Saldo</h2>
+                <br />
+                <h3 style={textStyleH3} >{currencyFormatter.format(saldo)}</h3>
             </CardContent>
         </Card>
     )

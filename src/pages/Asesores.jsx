@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/client';
 
 // COMPONENTES
 import { ModalAsesor } from "../components/asesores/ModalAsesor";
-import { NavBar } from "../components/NavBar";
+import { NavigationBar } from "../components/NavigationBar";
 import { TablaAsesores } from "../components/asesores/TablaAsesores";
 
 // CONSULTAS
@@ -41,7 +41,7 @@ export default function Asesores() {
 
     return (
         <>
-            <NavBar />
+            <NavigationBar />
             <TablaAsesores
                 asesores={asesores.asesores}
                 refetch={refetch}
