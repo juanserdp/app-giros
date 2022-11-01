@@ -1,19 +1,17 @@
 import { useQuery } from "@apollo/client";
-import { Backdrop,  CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Backdrop, CircularProgress, Paper } from "@mui/material";
+import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Chart } from "react-google-charts";
+import { styleParrafo } from "../../assets/styles/fuentes";
 import { useCargarDataChart } from "../../hooks/useCargarDataChart";
+import { useSesionContext } from "../../providers/SesionProvider";
 import { OBTENER_DATOS } from "../../services/apollo/gql/obtenerDatos";
 import { OBTENER_DATOS_POR_ASESOR } from "../../services/apollo/gql/obtenerDatosPorAsesor";
 import { Sesion } from "../../util/Sesion";
 
 export function EstadisticasUsuarios() {
-  const sesion = new Sesion();
-  const rol = sesion.getRol();
-  const id = sesion.getUid();
 
-  // DEFINO EL ESTADO INICIAL PARA LOS DATOS
   const initialStateAsesorData = {
     asesores: [],
     usuarios: [],
@@ -26,7 +24,9 @@ export function EstadisticasUsuarios() {
   };
   const [hora, setHora] = useState(new Date().toLocaleTimeString());
 
-  // QUERYS
+  // HOOKS
+  const { sesionData: { id, rol } } = useSesionContext();
+
   const { loading, data, error } = useQuery(
     rol === "ADMINISTRADOR" ? OBTENER_DATOS : OBTENER_DATOS_POR_ASESOR,
     { variables: { id } }
@@ -87,11 +87,10 @@ export function EstadisticasUsuarios() {
   // LO QUE MUESTRA EN CASO DE ERROR
   if (error) return `Error! ${error}`;
   return (
-    <>
+    <React.Fragment>
+      <p style={styleParrafo}>En esta seccion podras ver las estadisticas de tu aplicación sobre los usuarios.</p>
       <div className="p-0 text-center mb-3">
-        <Row>{hora}</Row>
         <Row className="justify-content-center mb-3">
-          <p>En esta seccion podras ver las estadisticas de tu aplicación.</p>
         </Row>
         <Row className="justify-content-center mb-3 px-3">
           <Col
@@ -102,34 +101,34 @@ export function EstadisticasUsuarios() {
               whiteSpace: "nowrap",
               overflowX: "auto",
               overflowY: "hidden",
-            }}
-          >
-            <Chart
-              chartType="Bar"
-              width={rol === "ADMINISTRADOR" ? "100%" : "80%"}
-              height="400px"
-              data={
-                rol === "ADMINISTRADOR"
-                  ? [
+            }}>
+            <Paper elevation={3} className="p-3">
+              <Chart
+                chartType="Bar"
+                width={rol === "ADMINISTRADOR" ? "80%" : "80%"}
+                height="400px"
+                data={
+                  rol === "ADMINISTRADOR"
+                    ? [
                       ["", "Asesores", "Usuarios"],
                       ["Actual", datos.asesores.length, datos.usuarios.length],
                     ]
-                  : [
+                    : [
                       ["", "Usuarios"],
                       ["Actual", datos.usuarios.length],
                     ]
-              }
-              options={{
-                chart: {
-                  title: "Numero de Usuarios",
-                  subtitle:
-                    "Muestra la cantidad de usuarios y asesores registrados en la aplicacion",
-                },
-              }}
-            />
+                }
+                options={{
+                  chart: {
+                    title: "Numero de Usuarios",
+                  },
+                }}
+              />
+            </Paper>
+            <br />
           </Col>
         </Row>
       </div>
-    </>
+    </React.Fragment>
   );
 }

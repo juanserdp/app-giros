@@ -1,76 +1,108 @@
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Button, Form, Row } from "react-bootstrap";
+import swal from "sweetalert";
+import { useSesionContext } from "../../providers/SesionProvider";
+import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
+import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
+import { dateJSONupdate } from "../../util/dateJSONupdate";
+import { handleError } from "../../util/handleError";
+import { Cargando } from "../Cargando";
+import { Apellidos } from "../forms/Apellidos";
+import { Nombres } from "../forms/Nombres";
+import { NumeroDocumento } from "../forms/NumeroDocumento";
+import { TipoDocumento } from "../forms/TipoDocumento";
 
 export function FormDatosPersonales({
-    datosPersonales,
-    setDatosPersonales,
+    datosPersonalesUsuario,
+    refetch
 }) {
-    const [form, setForm] = useState(datosPersonales);
-    const handleInputChange = (event, name) => {
-        setForm({ ...form, [name]: event.target.value });
-        setDatosPersonales({ ...form, [name]: event.target.value })
+    const estadoInicialFormulario = {
+        nombres: "",
+        apellidos: "",
+        numeroDocumento: "",
+        tipoDocumento: ""
     };
+
+    // HOOKS
+    const [editarAsesor, editarAsesorInfo] = useMutation(EDITAR_ASESOR);
+    const [editarUsuario, editarUsuarioInfo] = useMutation(EDITAR_USUARIO);
+    const { sesionData: { id, rol } } = useSesionContext();
+    const [usuario, setUsuario] = useState(datosPersonalesUsuario);
+
+    const loading = editarAsesorInfo.loading || editarUsuarioInfo.loading;
+
+    // MANEJADORES
+    const handleSubmit = async () => {
+
+        const camposParaEditar = dateJSONupdate(datosPersonalesUsuario, usuario);
+        const tamañoObjeto = Object.keys(camposParaEditar).length;
+
+        if (tamañoObjeto > 0) {
+            if (rol === "ASESOR") {
+                await editarAsesor({
+                    variables: {
+                        id,
+                        asesor: { ...camposParaEditar },
+                    },
+                    onCompleted: () => {
+                        swal("Editado!", "El asesor ha sido editado.", "success");
+                        refetch();
+                    },
+                    onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError }),
+                });
+            } else if (rol === "USUARIO") {
+                await editarUsuario({
+                    variables: {
+                        id,
+                        usuario: camposParaEditar,
+                    },
+                    onCompleted: () => {
+                        swal("Editado!", "El usuario ha sido editado.", "success");
+                        refetch();
+                    },
+                    onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError }),
+                });
+            }
+        }
+        else swal("Error!", "No ha editado ningun campo!", "error");
+    };
+
+    const handleInputChange = ({ target: { name, value } }, nombres) => {
+        setUsuario({ ...usuario, [name]: value });
+    };
+
     return (
-        <Form noValidate  >
+        <Form noValidate>
             <Row className="m-3">
-                <Form.Group as={Col} md="6" controlId="nombres">
-                    <Form.Label>Nombres</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        placeholder="Edite su nombre aquí..."
-                        value={form.nombres}
-                        onChange={(e) => handleInputChange(e, "nombres")} />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo es obligatorio
-                    </Form.Control.Feedback>
-                    <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="6" controlId="apellidos">
-                    <Form.Label>Apellidos</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        placeholder="Edite su apellido aquí..."
-                        value={form.apellidos}
-                        onChange={(e) => handleInputChange(e, "apellidos")}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo es obligatorio
-                    </Form.Control.Feedback>
-                </Form.Group>
-            </Row>
-            <Row className="m-3">
-                <Form.Group as={Col} md="6" controlId="tipoDocumento">
-                    <Form.Label>Tipo de Documento</Form.Label>
-                    <Form.Select
-                        required
-                        value={form.tipoDocumento}
-                        onChange={(e) => handleInputChange(e, "tipoDocumento")}
-                    >
-                        <option value="">Edite su tipo de documento aquí</option>
-                        <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
-                        <option value="Cedula de Ciudadania">Cédula de Ciudadanía</option>
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                        Este campo es obligatorio
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="6" controlId="numeroDocumento">
-                    <Form.Label>Numero de Documento</Form.Label>
-                    <Form.Control
-                        required
-                        type="number"
-                        placeholder="Edite su numero de documento aquí..."
-                        value={form.numeroDocumento}
-                        onChange={(e) => handleInputChange(e, "numeroDocumento")}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo es obligatorio
-                    </Form.Control.Feedback>
-                </Form.Group>
+                <Nombres
+                    md={6}
+                    onChange={(e) => handleInputChange(e)}
+                    value={usuario.nombres} />
+                <Apellidos
+                    md={6}
+                    onChange={(e) => handleInputChange(e)}
+                    value={usuario.apellidos} />
             </Row>
 
+            <Row className="m-3">
+                <TipoDocumento
+                    value={usuario.tipoDocumento}
+                    onChange={(e) => handleInputChange(e)}
+                    me={6} />
+                <NumeroDocumento
+                    value={usuario.numeroDocumento}
+                    onChange={(e) => handleInputChange(e)}
+                    me={6} />
+            </Row>
+
+            <Button
+                className="m-3"
+                variant="primary"
+                onClick={handleSubmit}
+                disabled={loading}>
+                {(loading) ? <Cargando /> : "Editar"}
+            </Button>
         </Form>
     )
 }

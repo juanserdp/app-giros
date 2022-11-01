@@ -91,43 +91,18 @@ export function TablaGiros({
   };
 
   const acciones = (params) => [
-    (rol === "USUARIO" || rol === "OPERARIO") ? null : (
-      <GridActionsCellItem
-        icon={<DeleteIcon />}
-        onClick={() => handlerEliminar(params.id)}
-        label="Eliminar"
-      />
+    (rol === "USUARIO" || rol === "OPERARIO") ? <></> : (
+      <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(params.id)} label="Eliminar" />
     ),
-    <GridActionsCellItem
-      icon={<EditIcon />}
-      onClick={() => {
-        navigate(`/giros/usuario/${params.row.usuario}/editar/${params.id}`);
-        handleShow();
-      }}
-      label="Editar"
-    />,
-    (rol === "USUARIO") ? null : (
-      <GridActionsCellItem
-        icon={<UploadIcon />}
-        onClick={() => editarComprobante(params.id)}
-        label="Cargar comprobante"
-        showInMenu
-      />
+    <GridActionsCellItem icon={<EditIcon />} onClick={() => {
+      navigate(`/giros/usuario/${params.row.usuario}/editar/${params.id}`);
+      handleShow();
+    }} label="Editar" />,
+    (rol === "USUARIO") ? <></> : (
+      <GridActionsCellItem icon={<UploadIcon />} onClick={() => editarComprobante(params.id)} label="Cargar comprobante" showInMenu />
     ),
-    <GridActionsCellItem
-      icon={<DownloadIcon />}
-      disabled={params.row.comprobantePago ? false : true}
-      onClick={() => handleDescargarComprobante(params.row.comprobantePago)}
-      label="Descargar comprobante"
-      showInMenu
-    />,
-    <GridActionsCellItem
-      icon={<DescriptionIcon />}
-      disabled={params.row.estadoGiro === "COMPLETADO" ? false : true}
-      onClick={() => generar(params.row)}
-      label="Generar factura"
-      showInMenu
-    />,
+    <GridActionsCellItem icon={<DownloadIcon />} disabled={params.row.comprobantePago ? false : true} onClick={() => handleDescargarComprobante(params.row.comprobantePago)} label="Descargar comprobante" showInMenu />,
+    <GridActionsCellItem icon={<DescriptionIcon />} disabled={params.row.estadoGiro === "COMPLETADO" ? false : true} onClick={() => generar(params.row)} label="Generar factura" showInMenu />,
   ];
 
   const columnas = [
@@ -274,4 +249,4 @@ export function TablaGiros({
       />
     </div>
   );
-}
+};

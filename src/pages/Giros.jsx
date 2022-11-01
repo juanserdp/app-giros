@@ -1,12 +1,11 @@
 // HOOKS
 import { useMutation, useQuery } from "@apollo/client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 // COMPONENTES
 import { TablaGiros } from "../components/giros/TablaGiros";
 import { ModalGiro } from "../components/giros/ModalGiro";
-import { NavigationBar } from "../components/NavigationBar";
 
 // CONSULTAS
 import { OBTENER_GIROS_POR_ID_USUARIO } from "../services/apollo/gql/giro/obtenerGirosPorIdUsuario";
@@ -48,8 +47,7 @@ export default function Giros() {
   if (error) return <ErrorFetch />
 
   return (
-    <>
-      <NavigationBar />
+    <React.Fragment>
       <TablaGiros
         giros={giros.giros}
         refetch={refetch}
@@ -67,6 +65,6 @@ export default function Giros() {
         crearGiro={crearGiro}
         editarGiro={editarGiro}
       />
-    </>
+    </React.Fragment>
   );
 }

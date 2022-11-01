@@ -6,6 +6,7 @@ import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { FormUsuario } from "./FormUsuario";
 import { dateJSONupdate } from "../../util/dateJSONupdate";
+import { Cargando } from "../Cargando";
 
 export function ModalUsuario({
     usuarios,
@@ -23,6 +24,8 @@ export function ModalUsuario({
 
     // CONSTANTES
     const { id, asesor } = useParams();
+    const voyAeditarUnUsuario = (id && asesor) ? true : false;
+    const loading = crearUsuarioData.loading || editarUsuarioData.loading;
     const usuarioSeleccionado = usuarios.find(usuario => usuario.id === id);
     const initialStateUsuario = {
         nombres: "",
@@ -47,9 +50,19 @@ export function ModalUsuario({
         tasaVenta: ""
     };
 
+    const estadoInicialUsuario = (voyAeditarUnUsuario) ? initialStateUsuario : initialStateUsuarioFormCrear;
+
     // HOOKS
-    const [usuario, setUsuario] = useState((id && asesor) ? initialStateUsuario : initialStateUsuarioFormCrear);
+    const [usuario, setUsuario] = useState(estadoInicialUsuario);
     const [validated, setValidated] = useState(false);
+
+    // FUNCIONES
+    const reiniciarEstados = () => {
+        setValidated(false);
+        handleClose();
+        navigate(`/usuarios/${asesor}`);
+        setUsuario(estadoInicialUsuario);
+    };
 
     // MANEJADORES
     const handleSubmit = async (event) => {
@@ -61,15 +74,8 @@ export function ModalUsuario({
                         usuario: dateJSONupdate(usuarioSeleccionado, usuario)
                     },
                     onCompleted: () => {
-                        // CERRAR
-                        handleClose();
-                        // NAVEGAR
-                        navigate(`/usuarios/${asesor}`);
-                        // EXITO
                         swal("Editado!", "El usuario ha sido editado.", "success");
-                        // LIMPIAR
-                        setValidated(false);
-                        setUsuario(initialStateUsuario);
+                        reiniciarEstados();
                     },
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
@@ -88,11 +94,8 @@ export function ModalUsuario({
                         asesor: asesor
                     },
                     onCompleted: () => {
-                        handleClose();
-                        navigate(`/usuarios/${asesor}`);
                         swal("Creado!", "El usuario ha sido creado.", "success");
-                        setValidated(false);
-                        setUsuario(initialStateUsuario);
+                        reiniciarEstados();
                     },
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
@@ -104,51 +107,35 @@ export function ModalUsuario({
         }
         refetch();
     }
-    
+
     return (
-        <>
-            <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                keyboard={false}
-                size="lg">
-                <Modal.Header>
-                    <Modal.Title>{(id) ? "Editar Usuario" : "Crear Usuario"}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <FormUsuario
-                        handleSubmit={handleSubmit}
-                        validated={validated}
-                        usuario={usuarioSeleccionado || ((id && asesor) ? initialStateUsuario : initialStateUsuarioFormCrear)}
-                        setUsuario={setUsuario}
-                        isNotAllowedChangeInputBalance={false}
-                        isEditing={(id && asesor)}
-                    />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => {
-                        handleClose();
-                        navigate(`/usuarios/${asesor}`);
-                    }}>
-                        Cerrar
-                    </Button>
-                    {(crearUsuarioData.loading || editarUsuarioData.loading) ? (
-                        <Button variant="success" disabled>
-                            <Spinner
-                                as="span"
-                                animation="grow"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            /> &nbsp;
-                            Enviando...
-                        </Button>
-                    ) : (
-                        <Button variant="success" onClick={handleSubmit}>Aceptar</Button>
-                    )}
-                </Modal.Footer>
-            </Modal>
-        </>
+        <Modal
+            show={show}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+            size="lg">
+            <Modal.Header>
+                <Modal.Title>{(id) ? "Editar Usuario" : "Crear Usuario"}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <FormUsuario
+                    handleSubmit={handleSubmit}
+                    validated={validated}
+                    usuario={usuarioSeleccionado || estadoInicialUsuario}
+                    setUsuario={setUsuario}
+                    isNotAllowedChangeInputBalance={false}
+                    isEditing={voyAeditarUnUsuario} />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={() => reiniciarEstados()}>
+                    Cerrar
+                </Button>
+
+                <Button variant="success" disabled={loading} onClick={handleSubmit}>
+                    {(loading) ? <Cargando /> : "Aceptar"}
+                </Button>
+            </Modal.Footer>
+        </Modal>
     );
 }

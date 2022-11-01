@@ -200,25 +200,7 @@ export function FormGiro({
           <Form.Control.Feedback>Okey!</Form.Control.Feedback>
         </Form.Group>
 
-        {/* {(rol !== "USUARIO") ? (<Form.Group
-                    as={Col}
-                    md="3"
-                    controlId="validationNombres"
-                >
-                    <Form.Label>Comprobate de Pago</Form.Label>
-                    <Form.Control
-                        required
-                        type="file"
-                        name="image"
-                        // onChange={(e) => handleInputChange(e, "comprobantePago")}
-                        // value={form.comprobantePago}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Este campo es obligatorio
-                    </Form.Control.Feedback>
-                    <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                </Form.Group>) : null} */}
-
+        {/** el estado depende si es operario y OOOOOOOJJJJJJJOOOOOOOO yap solo lo ve el operario y asesor */}
         <Form.Group as={Col} md="3" controlId="validationEstado">
           <Form.Label>Estado</Form.Label>
           <Form.Select
@@ -227,8 +209,8 @@ export function FormGiro({
               rol === "OPERARIO"
                 ? false
                 : form.estadoGiro === "PENDIENTE"
-                ? false
-                : isNotAllowedChangeInput
+                  ? false
+                  : isNotAllowedChangeInput
             }
             onChange={(e) => handleInputChange(e, "estadoGiro")}
             value={form.estadoGiro}

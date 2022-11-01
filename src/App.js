@@ -33,6 +33,7 @@ export function App() {
             path="/inicio"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
+                <NavigationBar />
                 <Inicio />
               </PrivatizarPorRol>
             }
@@ -42,6 +43,7 @@ export function App() {
             path="/giros"
             element={
               <PrivatizarPorRol rolAccess="OPERARIO">
+                <NavigationBar />
                 <Giros />
               </PrivatizarPorRol>
             }
@@ -51,6 +53,7 @@ export function App() {
             path="/giros/usuario/:usuario"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
+                <NavigationBar />
                 <Giros />
               </PrivatizarPorRol>
             }
@@ -61,6 +64,7 @@ export function App() {
             path="/enviar-giro"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
+                <NavigationBar />
                 <EnviarGiro />
               </PrivatizarPorRol>
             }
@@ -71,6 +75,7 @@ export function App() {
             path="/enviar-giro/:id/:valorGiro"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
+                <NavigationBar />
                 <EnviarGiro />
               </PrivatizarPorRol>
             }
@@ -79,6 +84,7 @@ export function App() {
             path="/cuenta"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
+                <NavigationBar />
                 <Cuenta />
               </PrivatizarPorRol>
             }
@@ -93,6 +99,7 @@ export function App() {
             path="/giros/asesor/:asesor"
             element={
               <PrivatizarPorRol rolAccess="OPERARIO">
+                <NavigationBar />
                 <Giros />
               </PrivatizarPorRol>
             }
@@ -102,6 +109,7 @@ export function App() {
             path="/giros/usuario/:usuario/editar/:id"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
+                <NavigationBar />
                 <Giros />
               </PrivatizarPorRol>
             }
@@ -157,6 +165,7 @@ export function App() {
             path="/asesores"
             element={
               <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <NavigationBar />
                 <Asesores />
               </PrivatizarPorRol>
             }
@@ -166,6 +175,7 @@ export function App() {
             path="/asesores/crear"
             element={
               <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <NavigationBar />
                 <Asesores />
               </PrivatizarPorRol>
             }
@@ -175,6 +185,7 @@ export function App() {
             path="/asesores/editar/:id"
             element={
               <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <NavigationBar />
                 <Asesores />
               </PrivatizarPorRol>
             }
@@ -183,6 +194,7 @@ export function App() {
             path="/configuracion"
             element={
               <PrivatizarPorRol rolAccess="ADMINISTRADOR">
+                <NavigationBar />
                 <Configuracion />
               </PrivatizarPorRol>
             }

@@ -111,7 +111,6 @@ export default function EnviarGiro() {
     );
     return (
         <>
-            <NavigationBar />
             <Container className="my-3 p-0 card-container-background rounded" >
                 <h2 className="mb-3 p-3 rounded" style={textStyleH2}>Datos de la persona que recibe el dinero</h2>
 

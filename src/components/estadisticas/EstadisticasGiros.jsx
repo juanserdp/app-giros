@@ -1,20 +1,21 @@
 import { useQuery } from "@apollo/client";
-import { Backdrop, Card, CircularProgress } from "@mui/material";
-import { useState } from "react";
+import { Paper } from "@mui/material";
+import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { Chart } from "react-google-charts";
+import { styleH3, styleParrafo } from "../../assets/styles/fuentes";
 import { useCargarDataChart } from "../../hooks/useCargarDataChart";
+import { useSesionContext } from "../../providers/SesionProvider";
 import { OBTENER_DATOS } from "../../services/apollo/gql/obtenerDatos";
 import { OBTENER_DATOS_POR_ASESOR } from "../../services/apollo/gql/obtenerDatosPorAsesor";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { Sesion } from "../../util/Sesion";
+import { CircularProgressAnimation } from "../CircularProgressAnimation";
+import { ErrorFetch } from "../errors/ErrorFetch";
 
 export function EstadisticasGiros() {
-  const sesion = new Sesion();
-  const rol = sesion.getRol();
-  const id = sesion.getUid();
 
-  // DEFINO EL ESTADO INICIAL PARA LOS DATOS
+  // CONSTANTES
   const initialStateAsesorData = {
     asesores: [],
     usuarios: [],
@@ -25,20 +26,17 @@ export function EstadisticasGiros() {
       },
     ],
   };
-  const [hora, setHora] = useState(new Date().toLocaleTimeString());
 
-  // QUERYS
+  // HOOKS
+  const { sesionData: { id, rol } } = useSesionContext();
   const { loading, data, error } = useQuery(
     rol === "ADMINISTRADOR" ? OBTENER_DATOS : OBTENER_DATOS_POR_ASESOR,
     { variables: { id } }
   );
-
-  // ESTADOS
   const [datos] = useCargarDataChart(initialStateAsesorData, data);
 
   // FUNCIONES
   const totalGirosPorMes = (giros) => {
-    // VECTOR VACIO CON LOS DATOS DEL GRAFICO
     const dataChart = [
       ["Year", "Valor"],
       ["Ene", 0],
@@ -54,162 +52,111 @@ export function EstadisticasGiros() {
       ["Nov", 0],
       ["Dic", 0],
     ];
-    // RECORREMOS EL VECTOR
     for (let giro of giros) {
-      // USAMOS LA FECHA PAR EXTRAER EL MES Y USAR EL AÑO ACTUAL
       giro.fechaEnvio.replace(
         /\b(\d+)\/(\d+)\/(\d+)\b/,
         (coincidencia, dia, mes, ano) => {
-          // SI EL GIRO ESTA EN EL AÑO ACTUAL ENTONCES LO CONSIDERA
           if (new Date().getFullYear().toString() === ano) {
-            // EL VALOR DEL GIRO SE AGREGA AL NUMERO DEL MES DEL VECTOR DATACHART
             dataChart[Number(mes)][1] += giro.valorGiro;
           }
-        }
-      );
+        });
     }
     return dataChart;
   };
 
   const enviosHoy = () => {
-    // CREAMOS UN VARIABLE QUE CUENTA LOS GIROS
-    let girosContador = 0;
 
-    // CREAMOS UN VARIABLE QUE GUARDA LA SUMATORIA DEL VALOR DE CADA GIRO
-    let valorGiros = 0;
-
-    // USAMOS UN VAR AUX PARA GUARDAR LOS GIROS TOTALES
+    let numeroGirosHoy = 0;
+    let valorTotalGirosHoy = 0;
     const giros = datos.giros;
 
-    // RECORREMOS EL VECTOR GIROS
     for (const giro of giros) {
-      giro.fechaEnvio.replace(
-        /\b(\d+)\/(\d+)\/(\d+)\b/,
-        (coincidencia, dia, mes, ano) => {
-          // SI LA FECHA DEL GIRO CORRESPONDE A LA FECHA DE HOY EJECUTARA UNA LOGICA
-          if (new Date().toLocaleDateString() === coincidencia) {
-            // AGREGA EL VALOR DEL GIRO
-            girosContador++;
-            // AÑADIMOS EL VALOR DEL GIRO
-            valorGiros += giro.valorGiro;
-          }
+      giro.fechaEnvio.replace(/\b(\d+)\/(\d+)\/(\d+)\b/, (coincidencia) => {
+        if (new Date().toLocaleDateString() === coincidencia) {
+          numeroGirosHoy++;
+          valorTotalGirosHoy += giro.valorGiro;
         }
-      );
-    }
-    return {
-      longitud: girosContador,
-      total: currencyFormatter.format(valorGiros),
+      });
     };
+
+    return {
+      longitud: numeroGirosHoy,
+      total: currencyFormatter.format(valorTotalGirosHoy),
+    };
+
   };
-  setInterval(() => {
-    setHora(new Date().toLocaleTimeString());
-  }, 1000);
 
-  // LO QUE MUESTRA CUANDO CARGA
-  if (loading)
-    return (
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={true}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
-  // LO QUE MUESTRA EN CASO DE ERROR
-  if (error) return `Error! ${error}`;
+  if (loading) return <CircularProgressAnimation />
+
+  if (error) return <ErrorFetch />
+
   return (
-    <>
-      <div className="p-0 text-center mb-3">
-        <Row>{hora}</Row>
-        <Row className="justify-content-center mb-3">
-          <p>En esta seccion podras ver las estadisticas de tu aplicación.</p>
+    <React.Fragment>
+      <p style={styleParrafo}>En esta seccion podras ver las estadisticas de tu aplicación sobre los giros realizados el dia de hoy.</p>
+      <Row className="justify-content-center mb-3 text-center">
+        <Col
+          md="6"
+          className="d-flex mb-3"
+          style={{
+            justifyContent: "center",
+          }}>
+          <Paper elevation={3}>
+            <div
+              style={styleH3}
+              className="p-3">
+              Numero de Giros del dia de hoy:
+              <br />
+              {enviosHoy().longitud}
+            </div>
+          </Paper>
+        </Col>
 
-          <Col
-            md="6"
-            className="d-flex mb-3"
-            style={{
-              justifyContent: "center",
-            }}
-          >
-            <Card
-              className="d-flex  bg-body"
-              style={{
-                borderRadius: "100%",
-                width: "250px",
-                height: "250px",
-                margin: "",
-              }}
-            >
-              <span
-                style={{
-                  flex: "auto",
-                  alignSelf: "center",
-                  fontSize: "50px",
-                  margin: "auto",
-                }}
-              >
-                <span>Giros:</span>
-                <br />
-                {enviosHoy().longitud}
-              </span>
-            </Card>
-          </Col>
-          <Col
-            className="d-flex mb-3"
-            md="6"
-            style={{
-              justifyContent: "center",
-            }}
-          >
-            <Card
-              className="d-flex bg-body"
-              style={{
-                borderRadius: "100%",
-                width: "250px",
-                height: "250px",
-              }}
-            >
-              <span
-                style={{
-                  flex: "auto",
-                  alignSelf: "center",
-                  fontSize: "30px",
-                }}
-              >
-                <span>Total:</span>
-                <br />
-                {enviosHoy().total}
-              </span>
-            </Card>
-          </Col>
-        </Row>
+        <Col
+          className="d-flex mb-3"
+          md="6"
+          style={{
+            justifyContent: "center",
+          }}>
+          <Paper elevation={3}>
+            <div
+              style={styleH3}
+              className="p-3">
+              Valor Total de los giros de hoy:
+              <br />
+              {enviosHoy().total}
+            </div>
+          </Paper>
+        </Col>
 
-        <Row className="justify-content-center mb-3">
-          <Col
-            md="12"
-            style={{
-              scrollBehavior: "auto",
-              display: "inline-block",
-              whiteSpace: "nowrap",
-              overflowX: "auto",
-              overflowY: "hidden",
-            }}
-          >
+      </Row>
+
+      <Row className="justify-content-center mb-3">
+        <Col
+          md="12"
+          style={{
+            scrollBehavior: "auto",
+            display: "inline-block",
+            whiteSpace: "nowrap",
+            overflowX: "auto",
+            overflowY: "hidden",
+          }}
+        >
+          <Paper elevation={3} className="p-3">
             <Chart
               chartType="AreaChart"
               width="100%"
               height="400px"
               data={totalGirosPorMes(data.giros)}
               options={{
-                title: "Valor Total de Giros por Mes",
+                title: "Valor en Pesos COP",
                 hAxis: { title: "Mes", titleTextStyle: { color: "#333" } },
                 vAxis: { minValue: 0 },
                 chartArea: { width: "70%", height: "70%" },
-              }}
-            />
-          </Col>
-        </Row>
-      </div>
-    </>
+              }} />
+          </Paper>
+          <br />
+        </Col>
+      </Row>
+    </React.Fragment>
   );
 }

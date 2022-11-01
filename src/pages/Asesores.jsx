@@ -41,7 +41,6 @@ export default function Asesores() {
 
     return (
         <>
-            <NavigationBar />
             <TablaAsesores
                 asesores={asesores.asesores}
                 refetch={refetch}

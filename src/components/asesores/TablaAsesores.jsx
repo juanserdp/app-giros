@@ -27,9 +27,6 @@ export function TablaAsesores({
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
 
-    // CONSTANTES
-    const navegarTo = "/asesores/crear";
-
     // MANEJADORES
     const handlerEliminar = async (id) => {
         dobleConfirmacionEliminacion(async (error, data) => {
@@ -37,10 +34,8 @@ export function TablaAsesores({
                 await eliminarAsesor({
                     variables: { id },
                     onCompleted: () => {
-                        // EXITO
-                        swal("Eliminado!", "El asesor ha sido eliminado.", "success");
-                        // RECARGAR
-                        refetch();
+                        swal("Eliminado!", "El asesor ha sido eliminado.", "success"); // EXITO
+                        refetch(); // RECARGAR
                     },
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
@@ -50,30 +45,37 @@ export function TablaAsesores({
 
     // FUNCIONES 
     const acciones = (params) => [
-        <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(params.id)} label="Eliminar" />,
-        <GridActionsCellItem icon={<EditIcon />} onClick={() => {
-            // NAVEGAR RUTA
-            navigate(`/asesores/editar/${params.id}`);
-            // ABRIR MODAL
-            handleShow();
-        }} label="Editar" />,
-        <GridActionsCellItem icon={<GroupIcon />} onClick={() => navigate(`/usuarios/${params.id}`)} label="Ver usuarios" showInMenu />
+        <GridActionsCellItem
+            icon={<DeleteIcon />}
+            onClick={() => handlerEliminar(params.id)}
+            label="Eliminar" />,
+        <GridActionsCellItem
+            icon={<EditIcon />}
+            onClick={() => {
+                navigate(`/asesores/editar/${params.id}`); // NAVEGAR A ESTA RUTA PARA EDITAR UN USUARIO
+                handleShow();// ABRIR MODAL QUE EDITAR UN USUARIO
+            }}
+            label="Editar" />,
+        <GridActionsCellItem
+            icon={<GroupIcon />}
+            onClick={() => navigate(`/usuarios/${params.id}`)}
+            label="Ver usuarios"
+            showInMenu />
     ];
 
     const estadoStyle = (params) => {
-        return (params.value === "ACTIVO")
-            ? (<span style={{
-                color: "green",
-                borderRadius: "5px",
-                padding: "2px 10px",
-                border: "2px solid green"
-            }}><b>{params.value}</b></span>)
-            : (<span style={{
-                color: "red",
-                borderRadius: "5px",
-                padding: "2px 10px",
-                border: "2px solid red"
-            }}><b>{params.value}</b></span>)
+        const color = params.value === "ACTIVO" ? "green" : "red";
+        const styleSpan = {
+            color: color,
+            borderRadius: "5px",
+            padding: "2px 10px",
+            border: `2px solid ${color}`
+        };
+        return (
+            <span style={styleSpan}>
+                {params.value}
+            </span>
+        );
     };
 
     const columnas = [
@@ -143,13 +145,13 @@ export function TablaAsesores({
                 columns={columnas} // COLUMNAS
                 components={{ // COMPONENTES
                     Toolbar: () => <CustomToolbar
-                        navegarTo={navegarTo} // RUTA
+                        navegarTo="/asesores/crear" // RUTA PARA CREAR UN ASESOR
                         refetch={refetch} // RECARGAR
                         handleShow={handleShow} // MOSTRAR MODAL
                     />,
                     ColumnMenu: GridColumnMenu,
                     LoadingOverlay: LinearProgress, // CARGANDO DATOS
-                    NoRowsOverlay: CustomNoRowsOverlay // NO HAY DATOS
+                    NoRowsOverlay: CustomNoRowsOverlay // NO HAY DATOS PARA MOSTRAR
                 }}
                 hideFooterSelectedRowCount={true}
                 loading={loading}
@@ -163,4 +165,4 @@ export function TablaAsesores({
             />
         </div>
     );
-}
+};

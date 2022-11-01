@@ -29,6 +29,7 @@ import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
 import { CircularProgressAnimation } from "../CircularProgressAnimation";
 import { ErrorFetch } from "../errors/ErrorFetch";
 import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
+import { useSesionContext } from "../../providers/SesionProvider";
 
 export function InicioAsesor() {
 
@@ -45,8 +46,7 @@ export function InicioAsesor() {
     };
 
     // OBTENGO LO DATOS DE SESION DEL USUARIO
-    const sesion = new Sesion();
-    const id = sesion.getUid();
+    const { sesionData: { id } } = useSesionContext();
 
     // CONSULTAS
     const buzon = useQuery(OBTENER_MENSAJES);

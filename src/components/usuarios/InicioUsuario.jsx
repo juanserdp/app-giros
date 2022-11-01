@@ -21,6 +21,10 @@ import { useContext } from "react";
 import { context } from "../../App";
 import { useSesionContext } from "../../providers/SesionProvider";
 import { FeedBack } from "../Feedback";
+import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
+import { Acordion } from "../Acordion";
+import { ValorGiro } from "../forms/ValorGiro";
+import { MontoBolivares } from "../forms/MontoBolivares";
 
 export function InicioUsuario() {
     // INSTANCIAS
@@ -53,21 +57,28 @@ export function InicioUsuario() {
         borderTopRightRadius: "0px",
         width: "100%"
     };
+    const initialStateMensajes = {
+        mensajes: []
+    };
 
     // HOOKS
-    useEffect(() => accordionCollapsed());
-    const { id } = useSesionContext();
-    const buzon = useQuery(OBTENER_BUZON);
+    const { sesionData: { id } } = useSesionContext();
+
+    // CONSULTAS
+    const buzon = useQuery(OBTENER_MENSAJES);
+    const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
     const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
         variables: { id },
     });
+
     const usuario = data || initialStateUsuario;
+
     const [configuracion] = useCargarDataForm({ buzon: [] }, buzon.data);
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
 
     // MANEJADORES
-    const handleInputChange = (event, name) => setForm({ ...form, [name]: event.target.value });
+    const handleInputChange = ({ target: { name, value } }) => setForm({ ...form, [name]: value });
 
     const handleEnviar = (event) => {
         if (validarCamposNotNull(form)) {
@@ -90,57 +101,26 @@ export function InicioUsuario() {
                 <Col md="4">
                     <Card className="card-container-inicio mb-3 rounded">
                         <CardContent className="p-0">
-                            <h2
-                                className="pt-3 mb-0"
-                                style={textStyleH2} >
-                                Enviar Giro
-                            </h2>
-
-                            <Accordion className="mb-3">
-                                <Accordion.Item style={{ border: "0px" }} eventKey="0" >
-                                    <Accordion.Header >
-                                    </Accordion.Header>
-                                    <Accordion.Body style={accordionStyle}>
-                                        Aquí puedes enviar giros a las personas.
-                                        Ingrese el valor del monto que va a enviar
-                                        <br />
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            </Accordion>
+                            <Acordion titulo="Enviar Giro">
+                                Aquí puedes enviar giros a las personas.
+                                Ingrese el valor del monto que va a enviar.
+                            </Acordion>
 
                             <Row
                                 as={Form}
                                 validated={validated}
-                                className="mb-3 px-3 justify-content-center"
+                                className="mb-1 px-3 justify-content-center"
                                 onSubmit={handleEnviar} >
-                                <Form.Group
-                                    as={Col}
-                                    md="10"
-                                    controlId="validationValorGiro">
-                                    <Form.Control
-                                        required
-                                        type="text"
-                                        placeholder="Monto"
-                                        onChange={(e) => {
-                                            handleInputChange({
-                                                target: {
-                                                    value: modificarInputValue(e.target.value)
-                                                }
-                                            }, "valorGiro");
-                                        }}
-                                        value={(form.valorGiro) ? currencyFormatter.format(form.valorGiro) : ""} />
-                                    <FeedBack />
-                                </Form.Group>
+                                <ValorGiro
+                                    onChange={(e) => handleInputChange(e)}
+                                    value={form.valorGiro}
+                                    md={10} />
                             </Row>
 
-                            <Row className="mb-4 px-3 justify-content-center">
-                                <Form.Group as={Col} md="10" controlId="validationSaldo">
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Monto en bolivares"
-                                        value={(form.valorGiro) ? currencyFormatter.format(form.valorGiro * (1 / usuario.usuario.tasaVenta)) : ""}
-                                        disabled={true} />
-                                </Form.Group>
+                            <Row className="mb-1 px-3 justify-content-center">
+                                <MontoBolivares
+                                    value={form.valorGiro * (1 / usuario.usuario.tasaVenta)}
+                                    md={10} />
                             </Row>
 
                             <Row>
@@ -163,14 +143,13 @@ export function InicioUsuario() {
 
             <Row className="mb-3">
                 <Col md="12">
-                    <Buzon configuracion={configuracion} />
+                    <Buzon mensajes={mensajes} />
                 </Col>
             </Row>
 
             <hr />
 
             <Row className="mb-3">
-
                 <Col md="4">
                     <TasaVenta
                         tasa={usuario.usuario.tasaVenta}
