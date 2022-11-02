@@ -36,9 +36,9 @@ export function FormDatosPersonales({
     const handleSubmit = async () => {
 
         const camposParaEditar = dateJSONupdate(datosPersonalesUsuario, usuario);
-        const tamañoObjeto = Object.keys(camposParaEditar).length;
+        const tamanoObjeto = Object.keys(camposParaEditar).length;
 
-        if (tamañoObjeto > 0) {
+        if (tamanoObjeto > 0) {
             if (rol === "ASESOR") {
                 await editarAsesor({
                     variables: {

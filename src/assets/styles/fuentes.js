@@ -17,7 +17,9 @@ export const styleH1 = {
 };
 
 export const styleH2 = {
-
+    fontFamily: family,
+    fontSize: "2rem",
+    fontWeight: "500"
 };
 
 export const styleH3 = {

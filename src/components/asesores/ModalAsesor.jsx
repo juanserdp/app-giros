@@ -23,7 +23,7 @@ export function ModalAsesor({
 
   // CONSTANTES
   const { id } = useParams();
-  const voyAeditarUnASesor = id ? true : false;
+  const voyAEditarUnASesor = id ? true : false;
   const loading = crearAsesorData.loading || editarAsesorData.loading;
   const asesorSeleccionado = asesores.find(asesor => asesor.id === id);
   const initialStateAsesor = {
@@ -58,7 +58,7 @@ export function ModalAsesor({
 
   // MANEJADORES
   const handleSubmit = async (event) => {
-    if (voyAeditarUnASesor) {
+    if (voyAEditarUnASesor) {
       if (validarCamposNotNull(asesor)) {
         await editarAsesor({
           variables: {
@@ -72,10 +72,7 @@ export function ModalAsesor({
           onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
         });
       }
-      else {
-        setValidated(true);
-        swal("Error!", "No ha editado ningun campo!", "error");
-      }
+      else swal("Error!", "No ha editado ningun campo!", "error");
     }
     else {
       if (validarCamposNotNull(asesor)) {

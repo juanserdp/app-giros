@@ -13,6 +13,7 @@ import { Clave } from './Clave';
 import logotipo from "../../assets/images/logotipo_login.png"
 import { Cargando } from '../Cargando';
 import { useSesionContext } from '../../providers/SesionProvider';
+import { Row } from 'react-bootstrap';
 export function FormLogin() {
     // INSTANCIAS
     const navigate = useNavigate();
@@ -62,31 +63,37 @@ export function FormLogin() {
         if (formLogin.numeroDocumento !== "" && formLogin.clave !== "") login();
         else swal("Error", "¡Todos los campos son obligatorios!", "error");
     }
-    const handleChange = (evento, campo) => setFormLogin({ ...formLogin, [campo]: evento.target.value });
+    const handleChange = ({ target: { name, value } }) => {
+        setFormLogin({ ...formLogin, [name]: value })
+    };
 
     if (error) return `Error! ${error}`;
 
     return (
         <Container fluid="md">
             <Form style={formStyle}>
-                <img
-                    src={logotipo}
-                    style={imgStyle} />
-                <NumeroDocumento
-                    value={formLogin.numeroDocumento}
-                    onChange={handleChange} />
-                <Clave
-                    value={formLogin.clave}
-                    onChange={handleChange} />
-                <Form.Group
-                    className="mb-3"
-                    controlId="label_recordarCredenciales">
-                    <Form.Check
-                        onChange={() => setRecordarCredenciales(!recordarCredenciales)}
-                        defaultChecked={recordarCredenciales}
-                        type="checkbox"
-                        label="Recordarme" />
-                </Form.Group>
+                <Row>
+                    <img
+                        src={logotipo}
+                        style={imgStyle} />
+                    <NumeroDocumento
+                        value={formLogin.numeroDocumento}
+                        onChange={(e) => handleChange(e)}
+                        md={12} />
+                    <Clave
+                        value={formLogin.clave}
+                        onChange={(e) => handleChange(e)}
+                        md={12} />
+                    <Form.Group
+                        className="mb-3"
+                        controlId="label_recordarCredenciales">
+                        <Form.Check
+                            onChange={() => setRecordarCredenciales(!recordarCredenciales)}
+                            defaultChecked={recordarCredenciales}
+                            type="checkbox"
+                            label="Recordarme" />
+                    </Form.Group>
+                </Row>
                 <Button
                     disabled={loading}
                     onClick={(evento) => handleSubmit(evento)}

@@ -33,15 +33,18 @@ export function TablaGiros({
   editarGiro,
   editarGiroInfo,
 }) {
-  const { sesionData: { rol } } = useSesionContext();
 
-  const navegarTo = `/enviar-giro`;
+  // CONSTANTES
+  const navegarTo = "/enviar-giro";
+
+  // INSTANCIAS
   const apiRef = useGridApiRef();
   const navigate = useNavigate();
 
-  const [rowHeight, setRowHeight] = useState(50);
-  const [showSlider, setShowSlider] = useState(false);
+  // HOOKS
+  const { sesionData: { rol } } = useSesionContext();
 
+  // FUNCIONES
   const estadoStyle = (params) => {
     const color = (params.value === "PENDIENTE") ? "red" :
       ((params.value === "EN PROCESO") ? "blue" : "green");
@@ -54,7 +57,6 @@ export function TablaGiros({
       }} >
       <b>{params.value}</b>
     </span>
-
   };
 
   const editarComprobante = async (id) => {
@@ -75,8 +77,6 @@ export function TablaGiros({
       });
     });
   };
-
-  const handleDescargarComprobante = (value) => descargar(value);
 
   const generar = (giro) => {
     const factura = generarFactura(giro);
@@ -195,6 +195,7 @@ export function TablaGiros({
     },
   ];
 
+  // MANEJADORES
   const handlerEliminar = async (id) => {
     dobleConfirmacionEliminacion(async (error, data) => {
       if (data) {
@@ -211,8 +212,10 @@ export function TablaGiros({
     });
   };
 
-  if (editarGiroInfo.loading) return <CircularProgressAnimation />;
+  const handleDescargarComprobante = (value) => descargar(value);
 
+  if (editarGiroInfo.loading) return <CircularProgressAnimation />;
+  console.log("giros: ", giros);
   return (
     <div className="container-fluid px-0">
       <DataGrid
@@ -225,12 +228,8 @@ export function TablaGiros({
           Toolbar: () =>
             CustomToolbar({
               navegarTo,
-              showSlider,
-              setShowSlider,
               refetch,
-              handleShow,
-              rowHeight,
-              setRowHeight,
+              handleShow
             }),
           ColumnMenu: GridColumnMenu,
           LoadingOverlay: LinearProgress,

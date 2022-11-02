@@ -4,10 +4,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
 
-export function Clave({ value, onChange, md }) {
-
+export function Clave({ value, onChange, md, disabled }) {
     const [visibilidad, setVisibilidad] = useState(false);
-
     return <Form.Group as={Col} md={md} className="mb-3" controlId="label_clave">
         <Form.Label>Contraseña</Form.Label>
         <InputGroup >
@@ -17,9 +15,11 @@ export function Clave({ value, onChange, md }) {
                 onChange={event => onChange(event, "clave")}
                 value={value}
                 type={visibilidad ? "text" : "password"}
-                placeholder="Ingrese la contraseña" />
+                placeholder="Ingrese la contraseña"
+                disabled={disabled ? true : false} />
             <Button
-                id="button-addon2"
+                id="button-addon1"
+                style={{borderTopRightRadius: "5px", borderBottomRightRadius: "5px"}}
                 onClick={() => setVisibilidad(!visibilidad)}>
                 {(visibilidad) ? (<VisibilityOffIcon color="light" />) : (<VisibilityIcon color="light" />)}
             </Button>

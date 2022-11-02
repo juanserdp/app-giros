@@ -1,16 +1,16 @@
 import { Col, Form } from "react-bootstrap";
 import { FeedBack } from "../Feedback";
 
-export function TasaVenta({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_tasaVenta" md={md}>
-        <Form.Label>Tasa Venta</Form.Label>
+export function NumeroCuenta({ value, onChange, md, disabled }) {
+    return <Form.Group as={Col} className="mb-3" controlId="label_numeroCuenta" md={md}>
+        <Form.Label >Numero de Documento</Form.Label>
         <Form.Control
             required
-            name="tasaVenta"
+            name="numeroCuenta"
             onChange={event => onChange(event)}
             value={value}
             type="number"
-            placeholder="Ingrese el valor..."
+            placeholder="Ingrese el numero..."
             disabled={disabled ? true : false} />
         <FeedBack />
     </Form.Group>

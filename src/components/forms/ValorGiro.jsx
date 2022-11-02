@@ -3,7 +3,7 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber";
 import { FeedBack } from "../Feedback";
 
-export function ValorGiro({ value, onChange, md }) {
+export function ValorGiro({ value, onChange, md, disabled }) {
     return <Form.Group as={Col} className="mb-3" controlId="label_valorGiro" md={md}>
         <Form.Label style={{ textAlign: "initial", width: "100%" }}>Valor Giro</Form.Label>
         <Form.Control
@@ -15,7 +15,8 @@ export function ValorGiro({ value, onChange, md }) {
             }}
             value={(value == "") ? "" : currencyFormatter.format(value)}
             type="text"
-            placeholder="Ingrese el valor..." />
+            placeholder="Ingrese el valor..."
+            disabled={disabled ? true : false} />
         <FeedBack />
     </Form.Group>
 };

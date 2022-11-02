@@ -7,8 +7,11 @@ import { handleError } from "../../util/handleError";
 import { modificarInputValue } from "../../util/modificarInputValue";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { Acordion } from "../Acordion";
+import { Cargando } from "../Cargando";
+import { NumeroDocumento } from "./NumeroDocumento";
+import { ValorRecarga } from "./ValorRecarga";
 
-export function FormRecargar({ recargar, refetch }) {
+export function FormRecargar({ recargar, refetch, recargarMutation }) {
     // ESTILOS
     const textStyleH2 = {
         fontWeight: "500",
@@ -34,8 +37,8 @@ export function FormRecargar({ recargar, refetch }) {
     const [form, setForm] = useState(initialState);
 
     // MANEJADORES
-    const handleInputChange = (event, name) => {
-        setForm({ ...form, [name]: event.target.value });
+    const handleInputChange = ({ target: { name, value } }) => {
+        setForm({ ...form, [name]: value });
     };
     const handleRecargar = async (event) => {
         // LOGICA DE REACT BOOTSTRAP PARA CONTROL DE CAMPOS
@@ -63,10 +66,8 @@ export function FormRecargar({ recargar, refetch }) {
             });
         }
         else {
-            // EN CASO DE QUE ESTE VACIO EL FORMULARIO ME MUESTRA UN MODAL CON UN MENSAJE DE ERROR
-            swal("Error!", "Todos los campos son obligatorios!", "error");
-            // CAMBIAMOS EL ESTADO DE VALIDATE A TRUE PARA QUE MUESTRE CUALES CAMPOS SON OBLIGATORIOS
-            setValidated(true);
+            swal("Error!", "Todos los campos son obligatorios!", "error"); // EN CASO DE QUE ESTE VACIO EL FORMULARIO ME MUESTRA UN MODAL CON UN MENSAJE DE ERROR
+            setValidated(true); // CAMBIAMOS EL ESTADO DE VALIDATE A TRUE PARA QUE MUESTRE CUALES CAMPOS SON OBLIGATORIOS
         }
     };
     return (
@@ -79,65 +80,30 @@ export function FormRecargar({ recargar, refetch }) {
                     el monto que va a recargar.
                 </Acordion>
 
-                <Row
-                    as={Form}
-                    className="mb-2 px-3 justify-content-center"
-                    validated={validated}
-                >
-                    <Form.Group
-                        as={Col}
-                        className="mb-3"
-                        md="10"
-                        controlId="validationSaldo">
-                        <Form.Control
-                            required
-                            type="number"
-                            placeholder="Numero de documento"
+                <Form validated={validated}>
+                    <Row className="mb-2 px-3 justify-content-center" >
+                        <NumeroDocumento
                             value={form.numeroDocumento}
-                            onChange={(e) => handleInputChange(e, "numeroDocumento")}
+                            onChange={(e) => handleInputChange(e)}
+                            md={10} />
+                    </Row>
 
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Este campo es obligatorio
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                    </Form.Group>
-                </Row>
-                <Row
-                    as={Form}
-                    className="mb-2 px-3 justify-content-center"
-                    validated={validated}>
-                    <Form.Group
-                        as={Col}
-                        md="10"
-                        className="mb-3"
-                        controlId="validationSaldo">
-                        <Form.Control
-                            required
-                            type="text"
-                            placeholder="Monto"
-                            value={(form.valorRecarga) ? currencyFormatter.format(form.valorRecarga) : ""}
-                            onChange={(e) => {
-                                handleInputChange({
-                                    target: {
-                                        value: modificarInputValue(e.target.value)
-                                    }
-                                }, "valorRecarga");
-                            }}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Este campo es obligatorio
-                        </Form.Control.Feedback>
-                        <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-                    </Form.Group>
-                </Row>
+                    <Row className="mb-2 px-3 justify-content-center" >
+                        <ValorRecarga
+                            value={form.valorRecarga}
+                            onChange={(e) => handleInputChange(e)}
+                            md={10} />
+                    </Row>
+                </Form>
+
                 <Row >
                     <Col md="12">
                         <Button
                             onClick={handleRecargar}
                             style={botonStyle}
-                            className="btn btn-primary  px-3">
-                            Recargar
+                            className="btn btn-primary  px-3"
+                            disabled={recargarMutation.loading}>
+                            {recargarMutation.loading ? <Cargando /> : "Recargar"}
                         </Button>
                     </Col>
                 </Row>

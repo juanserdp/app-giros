@@ -60,7 +60,7 @@ export function InicioAsesor() {
 
     // MUTACIONES
     const [editarTasaVenta] = useMutation(EDITAR_ASESOR);
-    const [recargarUsuario] = useMutation(RECARGAR_USUARIO);
+    const [recargarUsuario, recargarMutation] = useMutation(RECARGAR_USUARIO);
 
     // MANEJADORES
     const handleEditarTasa = async () => {
@@ -99,7 +99,7 @@ export function InicioAsesor() {
                         <FormRecargar
                             recargar={recargarUsuario}
                             refetch={refetch}
-                        />
+                            recargarMutation={recargarMutation} />
                     </Col>
                 </Row>
 

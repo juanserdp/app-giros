@@ -1,230 +1,100 @@
 import { useState } from "react";
-import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import { currencyFormatter } from "../../util/currencyFormatter";
-// import { parseNumberFormatToNumber } from '../../util/parseNumberFormatToNumber';
-import { modificarInputValue } from "../../util/modificarInputValue";
-import { bancos } from "../../assets/constants/bancos";
-import { Sesion } from "../../util/Sesion";
+import { Nombres } from "../forms/Nombres";
+import { Apellidos } from "../forms/Apellidos";
+import { useSesionContext } from "../../providers/SesionProvider";
+import { TipoDocumento } from "../forms/TipoDocumento";
+import { NumeroDocumento } from "../forms/NumeroDocumento";
+import { Banco } from "../forms/Banco";
+import { TipoCuenta } from "../forms/TipoCuenta";
+import { NumeroCuenta } from "../forms/NumeroCuenta";
+import { ValorGiro } from "../forms/ValorGiro";
+import { EstadoGiro } from "../forms/EstadoGiro";
+
 export function FormGiro({
   validated,
   giro,
   isNotAllowedChangeInput,
   setGiro,
 }) {
-  const sesion = new Sesion();
-  const rol = sesion.getRol();
+  // CONSTANTES
+  const { sesionData: { rol } } = useSesionContext();
 
   // ESTADOS
   const [form, setForm] = useState(giro);
 
   // MANEJADORES
-  const handleInputChange = (event, name) => {
-    setForm({ ...form, [name]: event.target.value });
-    setGiro({ ...form, [name]: event.target.value });
+  const handleInputChange = ({ target: { name, value } }) => {
+    setForm({ ...form, [name]: value });
+    setGiro({ ...form, [name]: value });
   };
+
+  const desactivado = form?.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput;
+
   return (
     <Form noValidate validated={validated}>
       <Row className="mb-3">
-        <Form.Group as={Col} md="5" controlId="validationNombres">
-          <Form.Label>Nombres</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Ingrese sus nombres..."
-            autoFocus
-            onChange={(e) => handleInputChange(e, "nombres")}
-            value={form.nombres}
-            disabled={
-              form.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
+        <Nombres
+          md={6}
+          onChange={(e) => handleInputChange(e)}
+          value={form?.nombres}
+          disabled={desactivado} />
 
-        <Form.Group as={Col} md="5" controlId="validationApellidos">
-          <Form.Label>Apellidos</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Ingrese sus apellidos..."
-            onChange={(e) => handleInputChange(e, "apellidos")}
-            value={form.apellidos}
-            disabled={
-              form.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
-      </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="5" controlId="validationTipoDocumento">
-          <Form.Label>Tipo de Documento</Form.Label>
-          <Form.Select
-            required
-            aria-label="Elige tu tipo de documento..."
-            onChange={(e) => handleInputChange(e, "tipoDocumento")}
-            value={form.tipoDocumento}
-            disabled={
-              form.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput
-            }
-          >
-            <option value="">Elige el tipo de documento...</option>
-            <option value="Tarjeta de Identidad">Tarjeta de Identidad</option>
-            <option value="Cedula de Ciudadania">Cédula de Ciudadanía</option>
-          </Form.Select>
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="5" controlId="validationNumeroDocumento">
-          <Form.Label>Numero de Documento</Form.Label>
-          <InputGroup>
-            <Form.Control
-              required
-              type="number"
-              placeholder="Ingrese su numero de documento..."
-              onChange={(e) => handleInputChange(e, "numeroDocumento")}
-              value={form.numeroDocumento}
-              disabled={
-                form.estadoGiro === "PENDIENTE"
-                  ? false
-                  : isNotAllowedChangeInput
-              }
-            />
-            <Form.Control.Feedback type="invalid">
-              Este campo es obligatorio
-            </Form.Control.Feedback>
-            <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+        <Apellidos
+          md={6}
+          onChange={(e) => handleInputChange(e)}
+          value={form?.apellidos}
+          disabled={desactivado} />
       </Row>
 
       <Row className="mb-3">
-        <Form.Group as={Col} md="4" controlId="validationEstado">
-          <Form.Label>Banco</Form.Label>
-          <Form.Select
-            required
-            disabled={
-              form.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput
-            }
-            onChange={(e) => handleInputChange(e, "banco")}
-            value={form.banco}
-          >
-            <option value="">Elige el banco...</option>
-            {bancos.map((banco, indice) => {
-              return (
-                <option key={indice} value={banco}>
-                  {banco}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group as={Col} md="4" controlId="validationEstado">
-          <Form.Label>Tipo de Cuenta</Form.Label>
-          <Form.Select
-            required
-            disabled={
-              form.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput
-            }
-            onChange={(e) => handleInputChange(e, "tipoCuenta")}
-            value={form.tipoCuenta}
-          >
-            <option value="">Elige el tipo de cuenta...</option>
-            <option value="AHORROS">AHORROS</option>
-            <option value="CORRIENTE">CORRIENTE</option>
-          </Form.Select>
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
+        <TipoDocumento
+          value={form?.tipoDocumento}
+          onChange={(e) => handleInputChange(e)}
+          md={6}
+          disabled={desactivado} />
 
-        <Form.Group as={Col} md="4" controlId="validationSaldo">
-          <Form.Label>Numero de Cuenta</Form.Label>
-          <Form.Control
-            required
-            type="number"
-            placeholder="Ingrese su numero de cuenta..."
-            onChange={(e) => handleInputChange(e, "numeroCuenta")}
-            value={form.numeroCuenta}
-            disabled={
-              form.estadoGiro === "PENDIENTE" ? false : isNotAllowedChangeInput
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
+        <NumeroDocumento
+          value={form?.numeroDocumento}
+          onChange={(e) => handleInputChange(e)}
+          md={6}
+          disabled={desactivado} />
       </Row>
-      <Row className="mb-3">
-        <Form.Group as={Col} md="3" controlId="validationSaldo">
-          <Form.Label>Valor</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Ingrese el saldo"
-            onChange={(e) => {
-              handleInputChange(
-                {
-                  target: {
-                    value: modificarInputValue(e.target.value),
-                  },
-                },
-                "valorGiro"
-              );
-            }}
-            value={
-              form.valorGiro ? currencyFormatter.format(form.valorGiro) : ""
-            }
-            disabled={true}
-          />
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
 
-        {/** el estado depende si es operario y OOOOOOOJJJJJJJOOOOOOOO yap solo lo ve el operario y asesor */}
-        <Form.Group as={Col} md="3" controlId="validationEstado">
-          <Form.Label>Estado</Form.Label>
-          <Form.Select
-            required
-            disabled={
-              rol === "OPERARIO"
-                ? false
-                : form.estadoGiro === "PENDIENTE"
-                  ? false
-                  : isNotAllowedChangeInput
-            }
-            onChange={(e) => handleInputChange(e, "estadoGiro")}
-            value={form.estadoGiro}
-          >
-            <option value="">Elige estado...</option>
-            <option value="PENDIENTE">PENDIENTE</option>
-            <option value="EN PROCESO">EN PROCESO</option>
-            <option value="COMPLETADO">COMPLETADO</option>
-          </Form.Select>
-          <Form.Control.Feedback type="invalid">
-            Este campo es obligatorio
-          </Form.Control.Feedback>
-          <Form.Control.Feedback>Okey!</Form.Control.Feedback>
-        </Form.Group>
+      <Row className="mb-3">
+        <Banco
+          value={form?.banco}
+          onChange={(e) => handleInputChange(e)}
+          md={4}
+          disabled={desactivado} />
+
+        <TipoCuenta
+          value={form?.tipoCuenta}
+          onChange={(e) => handleInputChange(e)}
+          md={4}
+          disabled={desactivado} />
+
+        <NumeroCuenta
+          value={form?.numeroCuenta}
+          onChange={(e) => handleInputChange(e)}
+          md={4}
+          disabled={desactivado} />
+      </Row>
+
+      <Row className="mb-3">
+        <ValorGiro
+          value={form?.valorGiro}
+          onChange={(e) => handleInputChange(e)}
+          md={3}
+          disabled={true} />
+
+        {rol !== "USUARIO"
+          ? <EstadoGiro
+            value={form?.estadoGiro}
+            onChange={(e) => handleInputChange(e)}
+            md={3} />
+          : null}
       </Row>
     </Form>
   );

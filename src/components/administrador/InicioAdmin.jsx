@@ -26,7 +26,7 @@ export function InicioAdmin() {
     };
 
     // HOOKS
-    const [recargarAsesor] = useMutation(RECARGAR_ASESOR);
+    const [recargarAsesor, recargarMutation] = useMutation(RECARGAR_ASESOR);
     const [mensaje, setMensaje] = useState(initialStateMensaje);
     const [isNewMensaje, setIsNewMensaje] = useState(true);
     const [autoFocusMensaje, setAutoFocusMensaje] = useState(false);
@@ -40,7 +40,9 @@ export function InicioAdmin() {
             <Container {...containerProps}>
                 <Row className="mb-3 justify-content-center">
                     <Col md="4">
-                        <FormRecargar recargar={recargarAsesor} />
+                        <FormRecargar 
+                        recargar={recargarAsesor}
+                        recargarMutation={recargarMutation} />
                     </Col>
                 </Row>
 
