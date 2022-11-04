@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     DataGrid,
     GridActionsCellItem,
@@ -8,7 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ReplyIcon from '@mui/icons-material/Reply';
 import swal from "sweetalert";
-import { useState } from 'react';
 import { LinearProgress } from '@mui/material';
 import { CustomToolbar } from '../toolbar/CustomToolbar';
 import { CustomNoRowsOverlay } from '../toolbar/CustomNoRowsOverlay';
@@ -23,18 +22,16 @@ export function TablaUsuarios({
     usuarios,
     refetch,
     loading,
-    handleShow
+    handleShow,
+    setIds
 }) {
-
-    // CONSTANTES
-    const { asesor } = useParams();
-    const navegarTo = `/usuarios/${asesor}/crear`;
-
     // INSTANCIAS
     const apiRef = useGridApiRef();
     const navigate = useNavigate();
 
     const [eliminarUsuario, eliminarUsuarioMutation] = useMutation(ELIMINAR_USUARIO);
+
+    const loadingMutation = eliminarUsuarioMutation.loading;
 
     // FUNCIONES
     const estadoStyle = (params) => {
@@ -55,13 +52,16 @@ export function TablaUsuarios({
     const acciones = (params) => [
         <GridActionsCellItem
             icon={<DeleteIcon />}
-            disabled={eliminarUsuarioMutation.loading}
+            disabled={loadingMutation}
             onClick={() => handlerEliminar(params.id)}
             label="Eliminar" />,
         <GridActionsCellItem
             icon={<EditIcon />}
             onClick={() => {
-                navigate(`/usuarios/${params.row.asesor.id}/editar/${params.id}`);
+                setIds({
+                    usuario: params.id,
+                    asesor: params.row.asesor.id
+                });
                 handleShow();
             }}
             label="Editar" />,
@@ -182,7 +182,6 @@ export function TablaUsuarios({
                 columns={columnas}
                 components={{
                     Toolbar: () => CustomToolbar({
-                        navegarTo,
                         refetch,
                         handleShow,
                     }),
@@ -191,7 +190,7 @@ export function TablaUsuarios({
                     NoRowsOverlay: CustomNoRowsOverlay
                 }}
                 hideFooterSelectedRowCount={true}
-                loading={loading}
+                loading={loading || loadingMutation}
                 disableColumnMenu
                 autoPageSize={true}
                 sx={{

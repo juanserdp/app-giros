@@ -12,9 +12,10 @@ import { setContext } from "@apollo/client/link/context";
 import { Sesion } from "./util/Sesion";
 // import client from "./services/apollo/client";
 import { urlLocalHost } from "./services/apollo/client";
-import { urlServerHost } from "./services/apollo/client";
+// import { urlServerHost } from "./services/apollo/client";
 
 export const sesion = new Sesion();
+
 const httpLink = createHttpLink({
   uri: urlLocalHost,
 });
@@ -32,6 +33,10 @@ const authLink = setContext((_, { headers }) => {
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink),
+  onError: ({ networkError, graphQLErrors }) => {
+    console.log("graphQLError: ", graphQLErrors);
+    console.log("networkError: ", networkError);
+  }
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

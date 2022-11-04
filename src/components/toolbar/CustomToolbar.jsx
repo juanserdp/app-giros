@@ -1,16 +1,11 @@
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import UpdateIcon from '@mui/icons-material/Update';
 import ViewColumnIcon from '@mui/icons-material/ViewColumn';
-import TableRowsIcon from '@mui/icons-material/TableRows';
 import { GridToolbarContainer, GridToolbarColumnsButton } from '@mui/x-data-grid';
 import { Button as ButtonBootstrap } from 'react-bootstrap';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Slider } from '@mui/material';
-import { useState } from 'react';
-import { useSesionContext } from '../../providers/SesionProvider';
+import { useLocation } from 'react-router-dom';
 
 export function CustomToolbar({
-    navegarTo,
     refetch,
     handleShow,
 }) {
@@ -23,7 +18,6 @@ export function CustomToolbar({
 
     // INSTANCIAS
     const location = useLocation();
-    const navigate = useNavigate();
 
     // CONSTANTES
     const style = {
@@ -35,9 +29,6 @@ export function CustomToolbar({
         textAlign: "center",
     };
 
-    // HOOKS
-    const { sesionData: { rol } } = useSesionContext();
-
     return (
         <div id="contenedor-toolbar" >
             <GridToolbarContainer
@@ -47,22 +38,17 @@ export function CustomToolbar({
                     margin: "15px 0px 0px 0px",
                     padding: "5px 0px 20px 0px"
                 }}>
-                {(location.pathname.includes("/asesores") ||
-                    (location.pathname.includes("/usuarios") && rol === "ASESOR") ||
-                    (/\/usuarios\/\w+/.test(location.pathname) && rol === "ADMINISTRADOR") ||
-                    (location.pathname.includes("/giros/usuario") && rol === "USUARIO")) ? (<ButtonBootstrap
+                {(/\/asesores/.test(location.pathname) ||
+                    /\/usuarios\/\w+/.test(location.pathname)) ? (<ButtonBootstrap
                         className='mx-2'
-                        variant="primary" onClick={() => {
-                            navigate(navegarTo);
-                            handleShow();
-                        }}>
+                        variant="primary" onClick={handleShow}>
                         <PersonAddIcon />
                         &nbsp;CREAR
                     </ButtonBootstrap>) : null}
                 <ButtonBootstrap
                     variant='secondary'
                     className='mx-2'
-                    sx={fuente} size="small" onClick={() => refetch()}>
+                    sx={fuente} size="small" onClick={refetch}>
                     <UpdateIcon />
                     &nbsp;ACTUALIZAR
                 </ButtonBootstrap>

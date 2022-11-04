@@ -1,25 +1,33 @@
 import swal from "sweetalert";
-import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Row } from "react-bootstrap";
 import { handleError } from "../../util/handleError";
-import { validarCamposNotNull } from "../../util/validarCamposNotNull";
-import { FormGiro } from "./FormGiro";
 import { dateJSONupdate } from "../../util/dateJSONupdate";
 import { Cargando } from "../Cargando";
-import { CircularProgressAnimation } from "../CircularProgressAnimation";
+import { Nombres } from "../forms/Nombres";
+import { Apellidos } from "../forms/Apellidos";
+import { TipoDocumento } from "../forms/TipoDocumento";
+import { NumeroDocumento } from "../forms/NumeroDocumento";
+import { Banco } from "../forms/Banco";
+import { TipoCuenta } from "../forms/TipoCuenta";
+import { NumeroCuenta } from "../forms/NumeroCuenta";
+import { ValorGiro } from "../forms/ValorGiro";
+import { EstadoGiro } from "../forms/EstadoGiro";
+import { useSesionContext } from "../../providers/SesionProvider";
+import { useMutation } from "@apollo/client";
+import { EDITAR_GIRO } from "../../services/apollo/gql/giro/editarGiro";
 
 export function ModalGiro({
     giros,
-    show,
-    handleClose,
-    editarGiro,
     refetch,
-    editarGiroInfo,
-    loading
+    loading,
+    handleClose,
+    show,
+    ids,
+    borrarIds
 }) {
     // CONSTANTES
-    const initialStateGiro = {
+    const estadoInicialFomularioNuevoGiro = {
         nombres: "",
         apellidos: "",
         tipoDocumento: "",
@@ -31,43 +39,40 @@ export function ModalGiro({
         estadoGiro: "",
     };
 
-    // INTANCIAS DE CLASE
-    const navigate = useNavigate();
+    const voyAEditarUnGiro = ids.giro && ids.usuario ? true : false;
+
+    const giroSeleccionado = giros.find(giro => giro.id === ids.giro);
+
+    const estadoInicialGiro = giroSeleccionado || estadoInicialFomularioNuevoGiro;
+
+    const { sesionData: { rol } } = useSesionContext();
 
     // HOOKS
-    const { id, usuario } = useParams();
-
-    const giroSeleccionado = giros.find(giro => giro.id === id);
-
-    const [giro, setGiro] = useState(initialStateGiro);
+    const [editarGiro, editarGiroMutation] = useMutation(EDITAR_GIRO);
+    const [giro, setGiro] = useState(estadoInicialGiro);
     const [validated, setValidated] = useState(false);
-    const voyAEditarUnGiro = id && usuario;
 
-    // FUNCIONES
-    const reiniciarEstados = () => {
-        setValidated(false);
-        handleClose();
-        navigate(`/giros/usuario/${usuario}`);
-        setGiro(initialStateGiro);
-    };
+    const loadingMutation = editarGiroMutation.loading;
+
+    const desactivado = giro.estadoGiro !== "PENDIENTE";
 
     // MANEJADORES
     const handleSubmit = async (event) => {
-        const camposParaEditar = dateJSONupdate(giroSeleccionado, giro);
-        const tamanoObjeto = Object.keys(camposParaEditar).length;
-        if (tamanoObjeto > 0) {
+        event.preventDefault();
+        const camposDelGiroAEditar = dateJSONupdate(giroSeleccionado, giro);
+        const cantidadDeCamposAEditar = Object.keys(camposDelGiroAEditar).length;
+
+        if (cantidadDeCamposAEditar > 0) {
             if (voyAEditarUnGiro) {
                 await editarGiro({
                     variables: {
-                        id,
-                        giro: dateJSONupdate(giroSeleccionado, giro)
+                        id: ids.giro,
+                        giro: camposDelGiroAEditar
                     },
                     onCompleted: () => {
-                        refetch();
                         swal("Editado!", "El giro ha sido editado.", "success");
-                        setValidated(false);
-                        handleClose();
-                        navigate(`/giros/usuario/${usuario}`);
+                        handleCerrar();
+                        refetch();
                     },
                     onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
                 });
@@ -75,6 +80,17 @@ export function ModalGiro({
             else swal("Error!", "Seleccione un giro!", "error");
         }
         else swal("Error!", "No ha editado ningun campo!", "error");
+    };
+
+    // MANEJADORES
+    const handleCerrar = () => {
+        setValidated(false); // BORRA LA REVISION DE LOS CAMPOS DEL FORMULARIO
+        borrarIds();
+        handleClose(); // CIERRA EL MODAL - IMPORTANTE QUE CIERRE EL MODAL Y DEJE LA VAR SHOW EN FALSE PARA QUE CUANDO VUELVA A RENDERIZAR ASESORES.JSX NO RENDERICE ESTE COMPONENTE.
+    };
+
+    const handleInputChange = ({ target: { name, value } }) => {
+        setGiro({ ...giro, [name]: value });
     };
 
     return (
@@ -90,20 +106,85 @@ export function ModalGiro({
             </Modal.Header>
 
             <Modal.Body>
-                <FormGiro
-                    validated={validated}
-                    giro={giroSeleccionado}
-                    isNotAllowedChangeInput={true}
-                    setGiro={setGiro} />
+                <Form validated={validated}>
+                    <Row className="mb-3">
+                        <Nombres
+                            md={6}
+                            onChange={(e) => handleInputChange(e)}
+                            value={giro.nombres}
+                            disabled={desactivado} />
+
+                        <Apellidos
+                            md={6}
+                            onChange={(e) => handleInputChange(e)}
+                            value={giro.apellidos}
+                            disabled={desactivado} />
+                    </Row>
+
+                    <Row className="mb-3">
+                        <TipoDocumento
+                            value={giro.tipoDocumento}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6}
+                            disabled={desactivado} />
+
+                        <NumeroDocumento
+                            value={giro.numeroDocumento}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6}
+                            disabled={desactivado} />
+                    </Row>
+
+                    <Row className="mb-3">
+                        <Banco
+                            value={giro.banco}
+                            onChange={(e) => handleInputChange(e)}
+                            md={4}
+                            disabled={desactivado} />
+
+                        <TipoCuenta
+                            value={giro.tipoCuenta}
+                            onChange={(e) => handleInputChange(e)}
+                            md={4}
+                            disabled={desactivado} />
+
+                        <NumeroCuenta
+                            value={giro.numeroCuenta}
+                            onChange={(e) => handleInputChange(e)}
+                            md={4}
+                            disabled={desactivado} />
+                    </Row>
+
+                    <Row className="mb-3">
+                        <ValorGiro
+                            value={giro.valorGiro}
+                            onChange={(e) => handleInputChange(e)}
+                            md={3}
+                            disabled={true} />
+
+                        {rol !== "USUARIO"
+                            ? <EstadoGiro
+                                value={giro.estadoGiro}
+                                onChange={(e) => handleInputChange(e)}
+                                md={3} />
+                            : null}
+                    </Row>
+                </Form>
+
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => reiniciarEstados()}>
+                <Button
+                    variant="secondary"
+                    onClick={handleCerrar}>
                     Cerrar
                 </Button>
 
-                <Button variant="success" onClick={handleSubmit} disabled={editarGiroInfo.loading}>
-                    {editarGiroInfo.loading ? <Cargando /> : "Aceptar"}
+                <Button
+                    variant="success"
+                    onClick={handleSubmit}
+                    disabled={loadingMutation}>
+                    {loadingMutation ? <Cargando /> : "Aceptar"}
                 </Button>
             </Modal.Footer>
         </Modal>

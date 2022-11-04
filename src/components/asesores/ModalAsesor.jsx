@@ -1,6 +1,5 @@
 // HOOKS
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 // COMPONENTES
 import { Cargando } from "../Cargando";
 import { Nombres } from "../forms/Nombres";
@@ -26,7 +25,9 @@ export function ModalAsesor({
   refetch,
   loading,
   handleClose,
-  show
+  show,
+  ids,
+  borrarIds
 }) {
   // CONSTANTES
   const estadoInicialFormularioNuevoAsesor = { // ESTADO INICIAL DE FORMULARIO SI VOY A CREAR UN NUEVO ASESOR
@@ -40,16 +41,14 @@ export function ModalAsesor({
   };
 
   // CONSTANTES
-  const { id } = useParams(); // ES EL ID DEL ASESOR QUE SE VA A EDITAR
 
-  const voyAEditarUnAsesor = id ? true : false; // SI RECUPERO EL ID SIGNIFICA QUE VOY A EDITAR
+  const voyAEditarUnAsesor = ids.asesor ? true : false; // SI RECUPERO EL ID SIGNIFICA QUE VOY A EDITAR
 
-  const asesorSeleccionado = asesores.find(asesor => asesor.id === id) || null; // FILTRO DE ENTRE LOS ASESORES EL ASESOR CON EL ID
+  const asesorSeleccionado = asesores.find(asesor => asesor.id === ids.asesor) || null; // FILTRO DE ENTRE LOS ASESORES EL ASESOR CON EL ID
 
   const estadoInicialAsesor = asesorSeleccionado || estadoInicialFormularioNuevoAsesor; // EL ESTADO INICIAL SERA IGUAL AL ESTADO CORRESPONDIENTE A EDITAR O CREAR UN ASESOR CORRESPONDIENTEMENTE
 
   // HOOKS
-  const navigate = useNavigate();
   const [asesor, setAsesor] = useState(estadoInicialAsesor);
   const [validated, setValidated] = useState(false); // PARA MOSTRAR LA REVISION DE LOS CAMPOS VACIOS Y LLENOS
   const [crearAsesor, crearAsesorMutation] = useMutation(CREAR_ASESOR);
@@ -77,11 +76,15 @@ export function ModalAsesor({
   };
 
   const editar = async () => {
-    if (Object.keys(dateJSONupdate(asesorSeleccionado, asesor)).length > 0) {
+
+    const camposDelAsesorAEditar = dateJSONupdate(asesorSeleccionado, asesor);
+    const cantidadDeCamposAEditar = Object.keys(camposDelAsesorAEditar).length;
+
+    if (cantidadDeCamposAEditar > 0) {
       await editarAsesor({
         variables: {
-          id,
-          asesor: dateJSONupdate(asesorSeleccionado, asesor)
+          id: ids.asesor,
+          asesor: camposDelAsesorAEditar
         },
         onCompleted: () => {
           swal("Editado!", "El asesor ha sido editado.", "success");
@@ -97,8 +100,8 @@ export function ModalAsesor({
   // MANEJADORES
   const handleCerrar = () => {
     setValidated(false); // BORRA LA REVISION DE LOS CAMPOS DEL FORMULARIO
+    borrarIds();
     handleClose(); // CIERRA EL MODAL - IMPORTANTE QUE CIERRE EL MODAL Y DEJE LA VAR SHOW EN FALSE PARA QUE CUANDO VUELVA A RENDERIZAR ASESORES.JSX NO RENDERICE ESTE COMPONENTE.
-    navigate("/asesores"); // NAVEGA HACIA ATRAS Y RENDERIZA ASESORES.JSX
   };
 
   const handleSubmit = async (event) => {
@@ -119,7 +122,7 @@ export function ModalAsesor({
       keyboard={false}
       size="lg" >
       <Modal.Header >
-        <Modal.Title>{(id) ? "Editar Asesor" : "Crear Asesor"}</Modal.Title>
+        <Modal.Title>{(voyAEditarUnAsesor) ? "Editar Asesor" : "Crear Asesor"}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>

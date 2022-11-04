@@ -1,3 +1,4 @@
+import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Asesores from "./pages/Asesores";
 import Cuenta from "./pages/Cuenta";
@@ -10,8 +11,6 @@ import { PrivatizarPorRol } from "./routes/PrivatizarPorRol";
 import "./assets/styles/fonts.css";
 import "./assets/styles/scroll.css";
 import { Configuracion } from "./pages/Configuracion";
-import { Sesion } from "./util/Sesion";
-import React, { useState } from "react";
 import { SesionProvider } from "./providers/SesionProvider";
 import { NavigationBar } from "./components/NavigationBar";
 
@@ -80,6 +79,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
+          
           <Route
             path="/cuenta"
             element={
@@ -89,6 +89,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
+
           {/*
           ///////////////////
           /////ASESORES////// 
@@ -104,16 +105,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
-          {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
-          <Route
-            path="/giros/usuario/:usuario/editar/:id"
-            element={
-              <PrivatizarPorRol rolAccess="USUARIO">
-                <NavigationBar />
-                <Giros />
-              </PrivatizarPorRol>
-            }
-          />
+
           {/* USUARIOS POR ASESOR */}
           <Route
             path="/usuarios/:asesor"
@@ -124,26 +116,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
-          {/* USUARIOS POR ASESOR Y POR ID DE USUARIO PARA MODIFICAR */}
-          <Route
-            path="/usuarios/:asesor/editar/:id"
-            element={
-              <PrivatizarPorRol rolAccess="ASESOR">
-                <NavigationBar />
-                <Usuarios />
-              </PrivatizarPorRol>
-            }
-          />
-          {/* USUARIOS POR ASESOR Y PARA CREAR UN USUARIO POR ASESOR */}
-          <Route
-            path="/usuarios/:asesor/crear"
-            element={
-              <PrivatizarPorRol rolAccess="ASESOR">
-                <NavigationBar />
-                <Usuarios />
-              </PrivatizarPorRol>
-            }
-          />
+
           {/*
           ///////////////////
           //ADMINISTRADORES// 
@@ -160,6 +133,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
+
           {/* TODOS LOS ASESORES */}
           <Route
             path="/asesores"
@@ -168,28 +142,8 @@ export function App() {
                 <NavigationBar />
                 <Asesores />
               </PrivatizarPorRol>
-            }
-          />
-          {/* TODOS LOS ASESORES Y CREAR UN ASESOR */}
-          <Route
-            path="/asesores/crear"
-            element={
-              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-                <NavigationBar />
-                <Asesores />
-              </PrivatizarPorRol>
-            }
-          />
-          {/* TODOS LOS ASESORES Y EDITAR UN ASESOR CON SU ID*/}
-          <Route
-            path="/asesores/editar/:id"
-            element={
-              <PrivatizarPorRol rolAccess="ADMINISTRADOR">
-                <NavigationBar />
-                <Asesores />
-              </PrivatizarPorRol>
-            }
-          />
+            } />
+
           <Route
             path="/configuracion"
             element={
@@ -199,6 +153,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
+
           <Route
             path="/*"
             element={

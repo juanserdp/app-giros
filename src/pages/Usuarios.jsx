@@ -1,5 +1,5 @@
 // HOOKS
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import React, { useState } from "react";
 import { useParams } from 'react-router-dom';
 
@@ -9,9 +9,6 @@ import { TablaUsuarios } from "../components/usuarios/TablaUsuarios";
 
 // CONSULTAS
 import { OBTENER_USUARIOS } from "../services/apollo/gql/usuario/obtenerUsuarios";
-import { CREAR_USUARIO } from "../services/apollo/gql/usuario/crearUsuario";
-import { EDITAR_USUARIO } from "../services/apollo/gql/usuario/editarUsuario";
-import { ELIMINAR_USUARIO } from "../services/apollo/gql/usuario/eliminarUsuario";
 import { OBTENER_USUARIOS_POR_ID_ASESOR } from '../services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor';
 import { ErrorFetch } from '../components/errors/ErrorFetch';
 
@@ -30,6 +27,15 @@ export default function Usuarios() {
         { variables: { id: asesor } });
     const [show, setShow] = useState(false);
 
+    const estadoInicialIds = {
+        usuario: null,
+        asesor: asesor || null
+    };
+
+    const [ids, setIds] = useState(estadoInicialIds);
+
+    const borrarIds = () => setIds(estadoInicialIds);
+
     const usuarios = data || initialStateUsuarios;
 
     // MANEJADORES
@@ -45,13 +51,17 @@ export default function Usuarios() {
                 usuarios={usuarios.usuarios}
                 refetch={refetch}
                 loading={loading}
-                handleShow={handleShow} />
+                handleShow={handleShow}
+                setIds={setIds}
+            />
             {show && !loading ? <ModalUsuario // SE RENDERIZA EL MODAL CUANDO SHOW SEA TRUE Y CUANDO TERMINE DE CARGAR LOS DATOS
                 usuarios={usuarios.usuarios}
                 refetch={refetch}
                 loading={loading}
                 handleClose={handleClose}
                 show={show}
+                ids={ids}
+                borrarIds={borrarIds}
             /> : null}
         </React.Fragment>
     );

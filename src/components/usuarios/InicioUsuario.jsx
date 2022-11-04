@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
-import { Accordion, Button, Col, Container, Form, Row } from "react-bootstrap";
-import { currencyFormatter } from "../../util/currencyFormatter";
-import { modificarInputValue } from "../../util/modificarInputValue";
+import { useState } from "react";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Buzon } from "../inicio/Buzon";
 import { CardContent, Card } from "@mui/material";
 import { OBTENER_USUARIO_POR_ID } from "../../services/apollo/gql/usuario/obtenerUsuarioPorId";
@@ -9,22 +7,17 @@ import { useQuery } from '@apollo/client';
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
-import { OBTENER_BUZON } from "../../services/apollo/gql/buzon/obtenerBuzon";
-import { useCargarDataForm } from "../../hooks/useCargarDataForm";
 import { Deuda } from "../inicio/Deuda";
 import { Saldo } from "../inicio/Saldo";
 import { TasaVenta } from "../inicio/TasaVenta";
-import { accordionCollapsed } from "../../util/accordionCollapsed";
 import { CircularProgressAnimation } from "../CircularProgressAnimation";
 import { ErrorFetch } from "../errors/ErrorFetch";
-import { useContext } from "react";
-import { context } from "../../App";
 import { useSesionContext } from "../../providers/SesionProvider";
-import { FeedBack } from "../Feedback";
 import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
 import { Acordion } from "../Acordion";
 import { ValorGiro } from "../forms/ValorGiro";
 import { MontoBolivares } from "../forms/MontoBolivares";
+import { currencyFormatter } from "../../util/currencyFormatter";
 
 export function InicioUsuario() {
     // INSTANCIAS
@@ -41,18 +34,6 @@ export function InicioUsuario() {
             tasaVenta: 0
         }
     };
-    const textStyleH2 = {
-        fontWeight: "500",
-        fontSize: "1.5rem",
-        fontFamily: "'Roboto Slab', serif",
-        color: "white",
-        backgroundColor: "#0d6efd",
-    };
-    const accordionStyle = {
-        fontWeight: "300",
-        fontFamily: "'Roboto Slab', serif",
-        textAlign: "left"
-    };
     const bottonStyle = {
         borderTopLeftRadius: "0px",
         borderTopRightRadius: "0px",
@@ -64,11 +45,15 @@ export function InicioUsuario() {
 
     // HOOKS
     const { sesionData: { id } } = useSesionContext();
+
     const buzon = useQuery(OBTENER_MENSAJES);
-    const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
+
+    const mensajes = buzon.data?.mensajes || initialStateMensajes.mensajes;
+
     const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
         variables: { id },
     });
+
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
 
@@ -78,12 +63,16 @@ export function InicioUsuario() {
     const handleInputChange = ({ target: { name, value } }) => setForm({ ...form, [name]: value });
 
     const handleEnviar = (event) => {
+        event.preventDefault();
+
+        const valorMinimo = usuario.usuario?.asesor?.valorMinimoGiro;
+
         if (validarCamposNotNull(form)) {
-            if (form.valorGiro < usuario.usuario.asesor.valorMinimoGiro) swal("Error!", "No puede hacer un giro con ese valor!", "error");
-            else {
+            if (form.valorGiro >= valorMinimo) {
                 setValidated(false);
                 navigate(`/enviar-giro/${id}/${form.valorGiro}`);
             }
+            else swal("Error!", `El valor minimo para hacer un giro es: ${currencyFormatter.format(valorMinimo)}`, "error");
         }
         else setValidated(true);
     }
@@ -149,7 +138,7 @@ export function InicioUsuario() {
             <Row className="mb-3">
                 <Col md="4">
                     <TasaVenta
-                        tasa={usuario.usuario.tasaVenta}
+                        tasa={(usuario.usuario?.usarTasaDelAsesor) ? usuario.usuario?.asesor.tasaVenta : usuario.usuario?.tasaVenta}
                         loading={loading}
                         rol="USUARIO" />
                 </Col>

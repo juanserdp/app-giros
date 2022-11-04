@@ -1,5 +1,5 @@
 // HOOKS
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -10,9 +10,6 @@ import { ModalGiro } from "../components/giros/ModalGiro";
 // CONSULTAS
 import { OBTENER_GIROS_POR_ID_USUARIO } from "../services/apollo/gql/giro/obtenerGirosPorIdUsuario";
 import { OBTENER_GIROS } from "../services/apollo/gql/giro/obtenerGiros";
-import { CREAR_GIRO } from "../services/apollo/gql/giro/crearGiro";
-import { EDITAR_GIRO } from "../services/apollo/gql/giro/editarGiro";
-import { ELIMINAR_GIRO } from "../services/apollo/gql/giro/eliminarGiro";
 import { OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR } from "../services/apollo/gql/giro/obtenerGirosPorUsuariosPorIdAsesor";
 import { ErrorFetch } from "../components/errors/ErrorFetch";
 
@@ -32,11 +29,20 @@ export default function Giros() {
         : OBTENER_GIROS,
     { variables: { id: usuario || asesor } }
   );
+
   const giros = data || initialStateGiros;
-  const [crearGiro] = useMutation(CREAR_GIRO);
-  const [editarGiro, editarGiroInfo] = useMutation(EDITAR_GIRO);
-  const [eliminarGiro] = useMutation(ELIMINAR_GIRO);
+
+
   const [show, setShow] = useState(false);
+
+  const estadoInicialIds = {
+    giro: null,
+    usuario: null
+  };
+
+  const [ids, setIds] = useState(estadoInicialIds);
+
+  const borrarIds = () => setIds(estadoInicialIds);
 
   // MANEJADORES
   const handleClose = () => setShow(false);
@@ -49,22 +55,20 @@ export default function Giros() {
       <TablaGiros
         giros={giros.giros}
         refetch={refetch}
-        eliminar={eliminarGiro}
-        handleShow={handleShow}
         loading={loading}
-        editarGiro={editarGiro}
-        editarGiroInfo={editarGiroInfo}
+        handleShow={handleShow}
+        setIds={setIds}
       />
-      <ModalGiro
+      {show && !loading ? <ModalGiro
         giros={giros.giros}
         refetch={refetch}
-        show={show}
         loading={loading}
         handleClose={handleClose}
-        crearGiro={crearGiro}
-        editarGiro={editarGiro}
-        editarGiroInfo={editarGiroInfo}
-      />
+        show={show}
+        ids={ids}
+        borrarIds={borrarIds}
+      /> : null}
+
     </React.Fragment>
   );
 }

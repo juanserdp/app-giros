@@ -60,7 +60,6 @@ export function FormLogin() {
 
     // MANEJADORES
     const handleSubmit = () => {
-        console.log(recordarCredenciales);
         if (recordarCredenciales) guardarDatosSesion(formLogin.numeroDocumento, formLogin.clave);
         else borrarCredenciales();
         if (formLogin.numeroDocumento !== "" && formLogin.clave !== "") login();
@@ -78,7 +77,8 @@ export function FormLogin() {
                 <Row>
                     <img
                         src={logotipo}
-                        style={imgStyle} />
+                        style={imgStyle}
+                        alt="logotipo_empresarial" />
                     <NumeroDocumento
                         value={formLogin.numeroDocumento}
                         onChange={(e) => handleChange(e)}

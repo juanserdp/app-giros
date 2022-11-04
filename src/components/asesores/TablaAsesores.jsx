@@ -7,6 +7,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupIcon from '@mui/icons-material/Group';
+import ReplyIcon from '@mui/icons-material/Reply';
 import swal from "sweetalert";
 import { CustomToolbar } from '../toolbar/CustomToolbar';
 import { handleError } from '../../util/handleError';
@@ -22,7 +23,8 @@ export function TablaAsesores({
     asesores,
     refetch,
     loading,
-    handleShow
+    handleShow,
+    setIds
 }) {
 
     // INSTANCIAS
@@ -30,6 +32,8 @@ export function TablaAsesores({
     const apiRef = useGridApiRef();
 
     const [eliminarAsesor, eliminarAsesorMutation] = useMutation(ELIMINAR_ASESOR);
+
+    const loadingMutation = eliminarAsesorMutation.loading;
 
     // MANEJADORES
     const handleEliminar = async (id) => {
@@ -51,13 +55,15 @@ export function TablaAsesores({
     const acciones = (params) => [
         <GridActionsCellItem
             icon={<DeleteIcon />}
-            disabled={eliminarAsesorMutation.loading}
+            disabled={loadingMutation}
             onClick={() => handleEliminar(params.id)}
             label="Eliminar" />,
         <GridActionsCellItem
             icon={<EditIcon />}
             onClick={() => {
-                navigate(`/asesores/editar/${params.id}`); // NAVEGAR A ESTA RUTA PARA EDITAR UN USUARIO
+                setIds({
+                    asesor: params.id
+                })
                 handleShow();// ABRIR MODAL QUE EDITAR UN USUARIO
             }}
             label="Editar" />,
@@ -65,6 +71,11 @@ export function TablaAsesores({
             icon={<GroupIcon />}
             onClick={() => navigate(`/usuarios/${params.id}`)}
             label="Ver usuarios"
+            showInMenu />,
+        <GridActionsCellItem
+            icon={<ReplyIcon />}
+            onClick={() => navigate(`/giros/asesor/${params.id}`)}
+            label="Ver giros"
             showInMenu />
     ];
 
@@ -156,7 +167,6 @@ export function TablaAsesores({
             columns={columnas} // COLUMNAS
             components={{ // COMPONENTES
                 Toolbar: () => <CustomToolbar
-                    navegarTo="/asesores/crear" // RUTA PARA CREAR UN ASESOR
                     refetch={refetch} // RECARGAR
                     handleShow={handleShow} // MOSTRAR MODAL
                 />,
@@ -165,7 +175,7 @@ export function TablaAsesores({
                 NoRowsOverlay: CustomNoRowsOverlay // NO HAY DATOS PARA MOSTRAR
             }}
             hideFooterSelectedRowCount={true}
-            loading={loading}
+            loading={loading || loadingMutation}
             autoPageSize={true}
             sx={styleTablaAsesores} />
     );

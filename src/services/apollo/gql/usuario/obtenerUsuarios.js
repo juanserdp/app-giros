@@ -16,7 +16,8 @@ export const OBTENER_USUARIOS = gql`
             deuda,
             capacidadPrestamo,
             estado,
-            tasaVenta
+            tasaVenta,
+            usarTasaDelAsesor
         }
     }
 `;

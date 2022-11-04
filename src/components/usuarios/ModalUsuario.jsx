@@ -1,7 +1,6 @@
 import swal from "sweetalert";
-import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Button, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { Button, Form, Modal, Row } from "react-bootstrap";
 import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { dateJSONupdate } from "../../util/dateJSONupdate";
@@ -19,6 +18,7 @@ import { CapacidadPrestamo } from "../forms/CapacidadPrestamo";
 import { useMutation } from "@apollo/client";
 import { CREAR_USUARIO } from "../../services/apollo/gql/usuario/crearUsuario";
 import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
+import { UsarTasaDelAsesor } from "../forms/UsarTasaDelAsesor";
 
 export function ModalUsuario({
     usuarios,
@@ -26,6 +26,8 @@ export function ModalUsuario({
     loading,
     handleClose,
     show,
+    ids,
+    borrarIds
 }) {
     // CONSTANTES
     const estadoInicialFormularioNuevoUsuario = {
@@ -40,21 +42,19 @@ export function ModalUsuario({
     };
 
     // CONSTANTES
-    const { id, asesor } = useParams(); // ES EL ID DEL USUARIO QUE SE VA A EDITAR Y EL ID DEL ASESOR
 
-    const voyAEditarUnUsuario = (id && asesor) ? true : false;
+    const voyAEditarUnUsuario = (ids.usuario && ids.asesor) ? true : false; //(id && asesor) ? true : false;
 
-    const usuarioSeleccionado = usuarios.find(usuario => usuario.id === id);
-
+    const usuarioSeleccionado = usuarios.find(usuario => usuario.id === ids.usuario);
+    console.log("usuarioSeleccionado:: ", usuarioSeleccionado);
     const estadoInicialUsuario = usuarioSeleccionado || estadoInicialFormularioNuevoUsuario;
 
     // HOOKS
-    const navigate = useNavigate();
     const [usuario, setUsuario] = useState(estadoInicialUsuario);
     const [validated, setValidated] = useState(false);
     const [crearUsuario, crearUsuarioMutation] = useMutation(CREAR_USUARIO);
     const [editarUsuario, editarUsuarioMutation] = useMutation(EDITAR_USUARIO);
-
+    console.log(usuario);
     const loadingMutation = crearUsuarioMutation.loading || editarUsuarioMutation.loading;
 
     // FUNCIONES
@@ -63,7 +63,7 @@ export function ModalUsuario({
             await crearUsuario({
                 variables: {
                     ...usuario,
-                    asesor: asesor
+                    asesor: ids.asesor
                 },
                 onCompleted: () => {
                     swal("Creado!", "El usuario ha sido creado.", "success");
@@ -80,11 +80,15 @@ export function ModalUsuario({
     };
 
     const editar = async () => {
-        if (Object.keys(dateJSONupdate(usuarioSeleccionado, usuario)).length > 0) {
+
+        const camposDelUsuarioAEditar = dateJSONupdate(usuarioSeleccionado, usuario);
+        const cantidadDeCamposAEditar = Object.keys(camposDelUsuarioAEditar).length;
+
+        if (cantidadDeCamposAEditar > 0) {
             await editarUsuario({
                 variables: {
-                    id,
-                    usuario: dateJSONupdate(usuarioSeleccionado, usuario)
+                    id: ids.usuario,
+                    usuario: camposDelUsuarioAEditar
                 },
                 onCompleted: () => {
                     swal("Editado!", "El usuario ha sido editado.", "success");
@@ -100,8 +104,8 @@ export function ModalUsuario({
     // MANEJADORES
     const handleCerrar = () => {
         setValidated(false); // BORRA LA REVISION DE LOS CAMPOS DEL FORMULARIO
+        borrarIds();
         handleClose(); // CIERRA EL MODAL - IMPORTANTE QUE CIERRE EL MODAL Y DEJE LA VAR SHOW EN FALSE PARA QUE CUANDO VUELVA A RENDERIZAR ASESORES.JSX NO RENDERICE ESTE COMPONENTE.
-        navigate(`/usuarios/${asesor}`); // NAVEGA HACIA ATRAS Y RENDERIZA ASESORES.JSX
     };
 
     const handleSubmit = async (event) => {
@@ -123,7 +127,7 @@ export function ModalUsuario({
             size="lg">
 
             <Modal.Header>
-                <Modal.Title>{(id) ? "Editar Usuario" : "Crear Usuario"}</Modal.Title>
+                <Modal.Title>{(voyAEditarUnUsuario) ? "Editar Usuario" : "Crear Usuario"}</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
@@ -161,6 +165,9 @@ export function ModalUsuario({
                                 onChange={(e) => handleInputChange(e)}
                                 md={6} />
                         ) : null}
+
+
+
                     </Row>
 
                     <Row className="mb-3 mx-5">
@@ -185,6 +192,18 @@ export function ModalUsuario({
                             value={usuario.capacidadPrestamo}
                             onChange={(e) => handleInputChange(e)}
                             md={3} />
+
+                    </Row>
+
+                    <Row className="mb-3 mx-5">
+                        {(voyAEditarUnUsuario) ? (
+                            <UsarTasaDelAsesor
+                                value={usuario.usarTasaDelAsesor}
+                                onChange={(e) => handleInputChange(e)}
+                                md={6}>
+                                Usar tasa general
+                            </UsarTasaDelAsesor>
+                        ) : null}
                     </Row>
                 </Form>
             </Modal.Body>

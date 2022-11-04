@@ -1,6 +1,4 @@
 // HOOKS
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useSesionContext } from "../../providers/SesionProvider";
 // ICONOS
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,7 +10,6 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import { CustomToolbar } from "../toolbar/CustomToolbar";
 import { CustomNoRowsOverlay } from "../toolbar/CustomNoRowsOverlay";
 import { GridColumnMenu } from "../toolbar/GridColumnMenu";
-import { CircularProgressAnimation } from "../CircularProgressAnimation";
 import { DataGrid, GridActionsCellItem, useGridApiRef } from "@mui/x-data-grid";
 import { LinearProgress } from "@mui/material";
 // UTILIDADES
@@ -23,23 +20,20 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { descargar } from "../../util/descargar";
 import { transformarImagenABinaryString } from "../../util/transformarImagenABinaryString";
 import swal from "sweetalert";
+import { useMutation } from "@apollo/client";
+import { EDITAR_GIRO } from "../../services/apollo/gql/giro/editarGiro";
+import { ELIMINAR_GIRO } from "../../services/apollo/gql/giro/eliminarGiro";
 
 export function TablaGiros({
   giros,
   refetch,
   loading,
   handleShow,
-  eliminar,
-  editarGiro,
-  editarGiroInfo,
+  setIds
 }) {
-  // CONSTANTES
-  const navegarTo = "/enviar-giro";
-
   // HOOKS
   const { sesionData: { rol } } = useSesionContext();
   const apiRef = useGridApiRef();
-  const navigate = useNavigate();
 
   // FUNCIONES
   const estadoStyle = (params) => {
@@ -56,6 +50,11 @@ export function TablaGiros({
       {params.value}
     </span>
   };
+
+  const [editarGiro, editarGiroMutation] = useMutation(EDITAR_GIRO);
+  const [eliminarGiro, eliminarGiroMutation] = useMutation(ELIMINAR_GIRO);
+
+  const loadingMutation = editarGiroMutation.loading || eliminarGiroMutation.loading;
 
   const editarComprobante = async (id) => {
     transformarImagenABinaryString(id, async (binaryString) => {
@@ -90,17 +89,42 @@ export function TablaGiros({
 
   const acciones = (params) => [
     (rol === "USUARIO" || rol === "OPERARIO") ? <></> : (
-      <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(params.id)} label="Eliminar" />
+      <GridActionsCellItem
+        disabled={loadingMutation}
+        icon={<DeleteIcon />}
+        onClick={() => handlerEliminar(params.id)}
+        label="Eliminar" />
     ),
-    <GridActionsCellItem icon={<EditIcon />} onClick={() => {
-      navigate(`/giros/usuario/${params.row.usuario}/editar/${params.id}`);
-      handleShow();
-    }} label="Editar" />,
+    <GridActionsCellItem
+      disabled={loadingMutation}
+      icon={<EditIcon />}
+      onClick={() => {
+        setIds({
+          giro: params.id,
+          usuario: params.row.usuario
+        });
+        handleShow();
+      }} label="Editar" />,
     (rol === "USUARIO") ? <></> : (
-      <GridActionsCellItem icon={<UploadIcon />} onClick={() => editarComprobante(params.id)} label="Cargar comprobante" showInMenu />
+      <GridActionsCellItem
+        disabled={loadingMutation}
+        icon={<UploadIcon />}
+        onClick={() => editarComprobante(params.id)}
+        label="Cargar comprobante"
+        showInMenu />
     ),
-    <GridActionsCellItem icon={<DownloadIcon />} disabled={params.row.comprobantePago ? false : true} onClick={() => handleDescargarComprobante(params.row.comprobantePago)} label="Descargar comprobante" showInMenu />,
-    <GridActionsCellItem icon={<DescriptionIcon />} disabled={params.row.estadoGiro === "COMPLETADO" ? false : true} onClick={() => generar(params.row)} label="Generar factura" showInMenu />,
+    <GridActionsCellItem
+      icon={<DownloadIcon />}
+      disabled={loadingMutation ? true : params.row.comprobantePago ? false : true}
+      onClick={() => handleDescargarComprobante(params.row.comprobantePago)}
+      label="Descargar comprobante"
+      showInMenu />,
+    <GridActionsCellItem
+      icon={<DescriptionIcon />}
+      disabled={loadingMutation ? true : params.row.estadoGiro === "COMPLETADO" ? false : true}
+      onClick={() => generar(params.row)}
+      label="Generar factura"
+      showInMenu />,
   ];
 
   const columnas = [
@@ -197,7 +221,7 @@ export function TablaGiros({
   const handlerEliminar = async (id) => {
     dobleConfirmacionEliminacion(async (error, data) => {
       if (data) {
-        await eliminar({
+        await eliminarGiro({
           variables: { id },
           onCompleted: () => {
             swal("Eliminado!", "El giro ha sido eliminado.", "success");
@@ -212,8 +236,6 @@ export function TablaGiros({
 
   const handleDescargarComprobante = (value) => descargar(value);
 
-  if (editarGiroInfo.loading) return <CircularProgressAnimation />;
-
   return (
     <div className="container-fluid px-0">
       <DataGrid
@@ -225,7 +247,6 @@ export function TablaGiros({
         components={{
           Toolbar: () =>
             CustomToolbar({
-              navegarTo,
               refetch,
               handleShow
             }),
@@ -234,7 +255,7 @@ export function TablaGiros({
           NoRowsOverlay: CustomNoRowsOverlay,
         }}
         hideFooterSelectedRowCount={true}
-        loading={loading}
+        loading={loading || loadingMutation}
         disableColumnMenu
         autoPageSize={true}
         sx={{

@@ -3,7 +3,7 @@ import { FeedBack } from "../Feedback";
 
 export function TasaVenta({ value, onChange, md, disabled }) {
     return <Form.Group as={Col} className="mb-3" controlId="label_tasaVenta" md={md}>
-        <Form.Label>Tasa de Venta</Form.Label>
+        <Form.Label>Tasa Preferencial</Form.Label>
         <Form.Control
             required
             name="tasaVenta"

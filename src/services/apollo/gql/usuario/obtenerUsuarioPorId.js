@@ -5,7 +5,7 @@ query obtenerUsuarioPorId($id: ID!){
     usuario: obtenerUsuarioPorId(id: $id){
         id,
         asesor{
-            tasaVenta
+            tasaVenta,
             valorMinimoGiro
         }
         nombres,
@@ -20,7 +20,8 @@ query obtenerUsuarioPorId($id: ID!){
         giros{
             id
         },
-        tasaVenta
+        tasaVenta,
+        usarTasaDelAsesor
     }
 }
 `;
