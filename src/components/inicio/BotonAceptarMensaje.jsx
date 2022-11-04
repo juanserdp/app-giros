@@ -24,9 +24,11 @@ export function BotonAceptarMensaje({
     initialStateMensaje
 }) {
 
+    // HOOKS
     const [crearMensaje, crearMensajeMutation] = useMutation(CREAR_MENSAJE);
     const [editarMensaje, editarMensajeMutation] = useMutation(EDITAR_MENSAJE);
 
+    // MANEJADORES
     const handleSubmitMensaje = async () => {
         if (isNewMensaje) {
             if (validarCamposNotNull(mensaje)) {
@@ -58,7 +60,7 @@ export function BotonAceptarMensaje({
         };
         setAutoFocusMensaje(false);
         refetch();
-    }
+    };
 
     return (
         <Col md="12">

@@ -16,8 +16,15 @@ import { GridColumnMenu } from '../toolbar/GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 import { handleError } from '../../util/handleError';
 import { currencyFormatter } from '../../util/currencyFormatter';
+import { useMutation } from '@apollo/client';
+import { ELIMINAR_USUARIO } from '../../services/apollo/gql/usuario/eliminarUsuario';
 
-export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminarUsuario }) {
+export function TablaUsuarios({
+    usuarios,
+    refetch,
+    loading,
+    handleShow
+}) {
 
     // CONSTANTES
     const { asesor } = useParams();
@@ -27,29 +34,42 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
     const apiRef = useGridApiRef();
     const navigate = useNavigate();
 
+    const [eliminarUsuario, eliminarUsuarioMutation] = useMutation(ELIMINAR_USUARIO);
+
     // FUNCIONES
     const estadoStyle = (params) => {
-        return (params.value === "ACTIVO")
-            ? (<span style={{
-                color: "green",
-                borderRadius: "5px",
-                padding: "2px 10px",
-                border: "2px solid green"
-            }}><b>{params.value}</b></span>)
-            : (<span style={{
-                color: "red",
-                borderRadius: "5px",
-                padding: "2px 10px",
-                border: "2px solid red"
-            }}><b>{params.value}</b></span>)
+        const color = params.value === "ACTIVO" ? "green" : "red";
+        const styleSpan = {
+            color: color,
+            borderRadius: "5px",
+            padding: "2px 10px",
+            border: `2px solid ${color}`
+        };
+        return (
+            <span style={styleSpan}>
+                {params.value}
+            </span>
+        );
     };
+
     const acciones = (params) => [
-        <GridActionsCellItem icon={<DeleteIcon />} onClick={() => handlerEliminar(params.id)} label="Eliminar" />,
-        <GridActionsCellItem icon={<EditIcon />} onClick={() => {
-            navigate(`/usuarios/${params.row.asesor.id}/editar/${params.id}`);
-            handleShow();
-        }} label="Editar" />,
-        <GridActionsCellItem icon={<ReplyIcon />} onClick={() => navigate(`/giros/usuario/${params.id}`)} label="Ver giros" showInMenu />
+        <GridActionsCellItem
+            icon={<DeleteIcon />}
+            disabled={eliminarUsuarioMutation.loading}
+            onClick={() => handlerEliminar(params.id)}
+            label="Eliminar" />,
+        <GridActionsCellItem
+            icon={<EditIcon />}
+            onClick={() => {
+                navigate(`/usuarios/${params.row.asesor.id}/editar/${params.id}`);
+                handleShow();
+            }}
+            label="Editar" />,
+        <GridActionsCellItem
+            icon={<ReplyIcon />}
+            onClick={() => navigate(`/giros/usuario/${params.id}`)}
+            label="Ver giros"
+            showInMenu />
     ];
 
     const columnas = [
@@ -132,10 +152,10 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
             width: "150",
             type: 'actions',
             align: "center",
-            getActions:  (params) => acciones(params)
+            getActions: (params) => acciones(params)
         }
     ];
-    
+
     // MANEJADORES
     const handlerEliminar = async (id) => {
         dobleConfirmacionEliminacion(async (error, data) => {
@@ -161,10 +181,10 @@ export function TablaUsuarios({ usuarios, refetch, loading, handleShow, eliminar
                 rows={usuarios}
                 columns={columnas}
                 components={{
-                    Toolbar: () => CustomToolbar({ 
-                        navegarTo, 
-                        refetch, 
-                        handleShow, 
+                    Toolbar: () => CustomToolbar({
+                        navegarTo,
+                        refetch,
+                        handleShow,
                     }),
                     ColumnMenu: GridColumnMenu,
                     LoadingOverlay: LinearProgress,

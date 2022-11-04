@@ -12,10 +12,10 @@ export function Clave({ value, onChange, md, disabled }) {
             <Form.Control
                 required
                 name="clave"
-                onChange={event => onChange(event, "clave")}
+                onChange={event => onChange(event)}
                 value={value}
                 type={visibilidad ? "text" : "password"}
-                placeholder="Ingrese la contraseña"
+                placeholder="Ingrese la contraseña..."
                 disabled={disabled ? true : false} />
             <Button
                 id="button-addon1"

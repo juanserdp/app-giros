@@ -32,8 +32,7 @@ export function CustomNoRowsOverlay() {
                 height="100"
                 viewBox="0 0 184 152"
                 aria-hidden
-                focusable="false"
-            >
+                focusable="false">
                 <g fill="none" fillRule="evenodd">
                     <g transform="translate(24 31.67)">
                         <ellipse

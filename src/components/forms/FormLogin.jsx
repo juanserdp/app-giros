@@ -14,6 +14,8 @@ import logotipo from "../../assets/images/logotipo_login.png"
 import { Cargando } from '../Cargando';
 import { useSesionContext } from '../../providers/SesionProvider';
 import { Row } from 'react-bootstrap';
+import { guardarDatosSesion } from '../../util/guardarDatosSesion';
+import { ErrorFetch } from '../errors/ErrorFetch';
 export function FormLogin() {
     // INSTANCIAS
     const navigate = useNavigate();
@@ -58,7 +60,8 @@ export function FormLogin() {
 
     // MANEJADORES
     const handleSubmit = () => {
-        if (recordarCredenciales) guardarCredenciales(formLogin.numeroDocumento, formLogin.clave);
+        console.log(recordarCredenciales);
+        if (recordarCredenciales) guardarDatosSesion(formLogin.numeroDocumento, formLogin.clave);
         else borrarCredenciales();
         if (formLogin.numeroDocumento !== "" && formLogin.clave !== "") login();
         else swal("Error", "¡Todos los campos son obligatorios!", "error");
@@ -67,7 +70,7 @@ export function FormLogin() {
         setFormLogin({ ...formLogin, [name]: value })
     };
 
-    if (error) return `Error! ${error}`;
+    if (error) return <ErrorFetch />;
 
     return (
         <Container fluid="md">

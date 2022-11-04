@@ -12,17 +12,17 @@ export function SesionProvider({ children, uid, urol }) {
     const sesion = new Sesion();
 
     const valorInicialCredenciales = {
-        id: sesion.getUid(),
-        rol: sesion.getRol()
+        id: sesion.getUid() || uid,
+        rol: sesion.getRol() || urol
     };
-    
+
     const [sesionData, setSesionData] = useState(valorInicialCredenciales);
 
     const guardarCredenciales = () => {
         const sesion = new Sesion();
         setSesionData({
-            id: sesion.getUid(),
-            rol: sesion.getRol()
+            id: sesion.getUid() || uid,
+            rol: sesion.getRol() || urol
         });
     }
 

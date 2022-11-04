@@ -15,7 +15,6 @@ import { EDITAR_GIRO } from "../services/apollo/gql/giro/editarGiro";
 import { ELIMINAR_GIRO } from "../services/apollo/gql/giro/eliminarGiro";
 import { OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR } from "../services/apollo/gql/giro/obtenerGirosPorUsuariosPorIdAsesor";
 import { ErrorFetch } from "../components/errors/ErrorFetch";
-import { CircularProgressAnimation } from "../components/CircularProgressAnimation";
 
 export default function Giros() {
   // CONSTANTES
@@ -34,8 +33,6 @@ export default function Giros() {
     { variables: { id: usuario || asesor } }
   );
   const giros = data || initialStateGiros;
-
-  // HOOKS
   const [crearGiro] = useMutation(CREAR_GIRO);
   const [editarGiro, editarGiroInfo] = useMutation(EDITAR_GIRO);
   const [eliminarGiro] = useMutation(ELIMINAR_GIRO);

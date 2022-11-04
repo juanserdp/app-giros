@@ -30,17 +30,16 @@ export function NavigationBar() {
   const navigate = useNavigate();
 
   // CONSTANTES
-  const {
-    sesionData: { id, rol },
-    borrarCredenciales,
-    guardarCredenciales
-  } = useSesionContext();
-
-
   const imgStyle = {
     width: "100px",
     height: "45px",
-  }
+  };
+
+  // HOOKS
+  const {
+    sesionData: { id, rol },
+    borrarCredenciales
+  } = useSesionContext();
 
   return (
     <Navbar

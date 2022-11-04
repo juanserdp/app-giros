@@ -5,7 +5,7 @@ export function Apellidos({ value, onChange, md, disabled }) {
     return <Form.Group as={Col} className="mb-3" controlId="label_apellidos" md={md}>
         <Form.Label>Apellidos</Form.Label>
         <Form.Control
-        required
+            required
             name="apellidos"
             onChange={event => onChange(event)}
             value={value}

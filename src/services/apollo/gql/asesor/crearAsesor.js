@@ -8,17 +8,22 @@ export const CREAR_ASESOR = gql`
         $numeroDocumento: String!
         $clave: String!
         $saldo: Float!
-        #$estado: String!
     ){
-        crearAsesor(
+        asesor: crearAsesor(
             nombres: $nombres,
             apellidos: $apellidos,
             tipoDocumento: $tipoDocumento,
             numeroDocumento: $numeroDocumento,
             clave: $clave,
             saldo: $saldo,
-            #estado: $estado
             ){
+                id
+                nombres
+                apellidos
+                tipoDocumento
+                numeroDocumento
+                clave
+                saldo
                 estado
         }
     }

@@ -34,6 +34,7 @@ export function Mensaje({
     idMensajeEditar
 }) {
 
+    // MANEJADORES
     const handleChange = (e) => setMensaje({ ...mensaje, mensaje: e.target.value });
 
     return (

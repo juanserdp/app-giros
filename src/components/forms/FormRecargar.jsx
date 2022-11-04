@@ -1,10 +1,9 @@
 import { Card, CardContent } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Accordion, Button, Col, Form, Row } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import swal from "sweetalert";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { handleError } from "../../util/handleError";
-import { modificarInputValue } from "../../util/modificarInputValue";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
 import { Acordion } from "../Acordion";
 import { Cargando } from "../Cargando";
@@ -12,27 +11,18 @@ import { NumeroDocumento } from "./NumeroDocumento";
 import { ValorRecarga } from "./ValorRecarga";
 
 export function FormRecargar({ recargar, refetch, recargarMutation }) {
-    // ESTILOS
-    const textStyleH2 = {
-        fontWeight: "500",
-        fontSize: "1.5rem",
-        fontFamily: "'Roboto Slab', serif",
-        color: "white",
-        backgroundColor: "#0d6efd",
-    };
+    // CONSTANTES
     const botonStyle = {
         borderTopLeftRadius: "0px",
         borderTopRightRadius: "0px",
         width: "100%"
     };
-
-    // CONSTANTES
     const initialState = {
         numeroDocumento: "",
         valorRecarga: ""
     };
 
-    // ESTADOS
+    // HOOKS
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
 
@@ -70,13 +60,14 @@ export function FormRecargar({ recargar, refetch, recargarMutation }) {
             setValidated(true); // CAMBIAMOS EL ESTADO DE VALIDATE A TRUE PARA QUE MUESTRE CUALES CAMPOS SON OBLIGATORIOS
         }
     };
+
     return (
         <Card className="card-container-inicio rounded">
             <CardContent className="p-0 ">
 
                 <Acordion titulo="Recargar">
                     Aquí puedes recargar el saldo de tus usuarios.
-                    Ingresa el numero su documento y
+                    Ingresa el numero de su documento y
                     el monto que va a recargar.
                 </Acordion>
 

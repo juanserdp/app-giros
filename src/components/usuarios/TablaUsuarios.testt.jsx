@@ -18,9 +18,7 @@ describe("TablaUsuarios", () => {
                                     refetch
                                     loading
                                     handleShow
-                                    eliminarUsuario
-                                />
-                            } />
+                                    eliminarUsuario />} />
                         </Routes>
                     </BrowserRouter>
                 </SesionProvider>

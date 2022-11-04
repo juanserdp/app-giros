@@ -10,10 +10,10 @@ export function Saldo({ value, onChange, md, disabled }) {
             required
             name="saldo"
             onChange={event => {
-                const valor = parseNumberFormatToNumber(event.target.value);
+                const valor = Number(parseNumberFormatToNumber(event.target.value));
                 onChange({ target: { value: valor, name: "saldo" } });
             }}
-            value={(value == "") ? "" : currencyFormatter.format(value)}
+            value={(value === "") ? "" : currencyFormatter.format(value)}
             type="text"
             placeholder="Ingrese el valor..."
             disabled={disabled ? true : false} />

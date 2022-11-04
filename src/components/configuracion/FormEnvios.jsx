@@ -14,11 +14,12 @@ export function FormEnvios({
     datosPersonalesUsuario,
     refetch
 }) {
-
+    // CONSTANTES
     const estadoInicialUsuario = {
         valorMinimoGiro: ""
     };
 
+    // HOOKS
     const [usuario, setUsuario] = useState(datosPersonalesUsuario);
     const [editarAsesor, editarAsesorInfo] = useMutation(EDITAR_ASESOR);
     const [editarUsuario, editarUsuarioInfo] = useMutation(EDITAR_USUARIO);

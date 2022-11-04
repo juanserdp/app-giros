@@ -10,7 +10,7 @@ export function NumeroDocumento({ value, onChange, md, disabled }) {
             onChange={event => onChange(event, "numeroDocumento")}
             value={value}
             type="text"
-            placeholder="Ingrese el numero"
+            placeholder="Ingrese el numero..."
             disabled={disabled ? true : false} />
         <FeedBack />
     </Form.Group>

@@ -1,10 +1,12 @@
 import { GraphQLError } from "graphql";
+import { CREAR_ASESOR } from "../services/apollo/gql/asesor/crearAsesor";
+import { EDITAR_ASESOR } from "../services/apollo/gql/asesor/editarAsesor";
 import { LOGIN } from "../services/apollo/gql/login";
 import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUsuarioPorId";
 import { OBTENER_USUARIOS } from "../services/apollo/gql/usuario/obtenerUsuarios";
 export const mocks = [
     {
-        request: {
+        request: { // 0
             query: LOGIN,
             variables: {
                 numeroDocumento: "usuario",
@@ -22,7 +24,7 @@ export const mocks = [
         },
     },
     {
-        request: {
+        request: { // 1
             query: LOGIN,
             variables: {
                 numeroDocumento: "usuario",
@@ -39,7 +41,7 @@ export const mocks = [
         }
     },
     {
-        request: {
+        request: { // 2
             query: OBTENER_USUARIO_POR_ID,
             variables: {
                 id: "632d2a171a96e5c8aec71f47"
@@ -71,7 +73,7 @@ export const mocks = [
         }
     },
     {
-        request: {
+        request: { // 3
             query: OBTENER_USUARIOS,
             variables: {
                 id: undefined
@@ -241,6 +243,64 @@ export const mocks = [
                         "tasaVenta": 1
                     }
                 ]
+            }
+        }
+    },
+    {
+        request: { // 4
+            query: CREAR_ASESOR,
+            variables: {
+                nombres: "Falcao",
+                apellidos: "Garcia",
+                tipoDocumento: "Tarjeta de Identidad",
+                numeroDocumento: "10951095",
+                clave: "Tequieromicolombiaquerida12345",
+                saldo: 100000
+            }
+        },
+        result: {
+            "data": {
+                "asesor": {
+                    "id": "63327c60a5a3ec9c7dafded8",
+                    "nombres": "Falcao",
+                    "apellidos": "Garcia",
+                    "tipoDocumento": "Tarjeta de Identidad",
+                    "numeroDocumento": "10951095",
+                    "clave": "Tequieromicolombiaquerida12345",
+                    "saldo": 100000,
+                    "estado": "ACTIVO"
+                }
+            }
+        }
+    },
+    {
+        request: { // 5
+            query: EDITAR_ASESOR,
+            variables: {
+                id: "63327c60a5a3ec9c7dafded8",
+                asesor: {
+                    nombres: "Mario",
+                    apellidos: "Bros",
+                    tipoDocumento: "Cedula de Ciudadania",
+                    numeroDocumento: "154636345345",
+                    clave: "Tequier12341252ida12345",
+                    saldo: 12345,
+                    estado: "INACTIVO"
+                }
+            }
+        },
+        result: { // 5
+            "data": {
+                "asesor": {
+                    "id": "63327c60a5a3ec9c7dafded8",
+                    "nombres": "Mario",
+                    "apellidos": "Bros",
+                    "tipoDocumento": "Tarjeta de Identidad",
+                    "numeroDocumento": "154636345345",
+                    "clave": "Tequier12341252ida12345",
+                    "saldo": 12345,
+                    "estado": "ACTIVO"
+                }
             }
         }
     }

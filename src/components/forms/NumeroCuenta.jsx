@@ -3,7 +3,7 @@ import { FeedBack } from "../Feedback";
 
 export function NumeroCuenta({ value, onChange, md, disabled }) {
     return <Form.Group as={Col} className="mb-3" controlId="label_numeroCuenta" md={md}>
-        <Form.Label >Numero de Documento</Form.Label>
+        <Form.Label >Numero de Cuenta</Form.Label>
         <Form.Control
             required
             name="numeroCuenta"

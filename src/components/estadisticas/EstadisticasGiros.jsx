@@ -65,11 +65,9 @@ export function EstadisticasGiros() {
   };
 
   const enviosHoy = () => {
-
     let numeroGirosHoy = 0;
     let valorTotalGirosHoy = 0;
     const giros = datos.giros;
-
     for (const giro of giros) {
       giro.fechaEnvio.replace(/\b(\d+)\/(\d+)\/(\d+)\b/, (coincidencia) => {
         if (new Date().toLocaleDateString() === coincidencia) {
@@ -78,12 +76,10 @@ export function EstadisticasGiros() {
         }
       });
     };
-
     return {
       longitud: numeroGirosHoy,
       total: currencyFormatter.format(valorTotalGirosHoy),
     };
-
   };
 
   if (loading) return <CircularProgressAnimation />
@@ -104,7 +100,7 @@ export function EstadisticasGiros() {
             <div
               style={styleH3}
               className="p-3">
-              Numero de Giros del dia de hoy:
+              Cantidad de giros:
               <br />
               {enviosHoy().longitud}
             </div>
@@ -121,7 +117,7 @@ export function EstadisticasGiros() {
             <div
               style={styleH3}
               className="p-3">
-              Valor Total de los giros de hoy:
+              Valor total de giros:
               <br />
               {enviosHoy().total}
             </div>
@@ -129,7 +125,7 @@ export function EstadisticasGiros() {
         </Col>
 
       </Row>
-
+      <p style={styleParrafo}>En esta seccion podras ver las estadisticas de tu aplicación sobre los giros realizados el año presente.</p>
       <Row className="justify-content-center mb-3">
         <Col
           md="12"

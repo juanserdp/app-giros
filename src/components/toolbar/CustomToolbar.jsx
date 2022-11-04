@@ -14,6 +14,12 @@ export function CustomToolbar({
     refetch,
     handleShow,
 }) {
+    // CONSTANTES
+    const fuente = {
+        fontFamily: "'Roboto Condensed', sans-serif",
+        color: "black",
+        fontSize: "20px",
+    };
 
     // INSTANCIAS
     const location = useLocation();
@@ -28,12 +34,9 @@ export function CustomToolbar({
         overflowY: "hidden",
         textAlign: "center",
     };
+
+    // HOOKS
     const { sesionData: { rol } } = useSesionContext();
-    const fuente = {
-        fontFamily: "'Roboto Condensed', sans-serif",
-        color: "black",
-        fontSize: "20px",
-    };
 
     return (
         <div id="contenedor-toolbar" >

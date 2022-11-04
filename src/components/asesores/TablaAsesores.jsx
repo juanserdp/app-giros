@@ -15,20 +15,24 @@ import { CustomNoRowsOverlay } from '../toolbar/CustomNoRowsOverlay';
 import { GridColumnMenu } from '../toolbar/GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 import { currencyFormatter } from '../../util/currencyFormatter';
+import { ELIMINAR_ASESOR } from '../../services/apollo/gql/asesor/eliminarAsesor';
+import { useMutation } from '@apollo/client';
 
 export function TablaAsesores({
-    loading,
     asesores,
-    eliminarAsesor,
     refetch,
-    handleShow }) {
+    loading,
+    handleShow
+}) {
 
     // INSTANCIAS
     const navigate = useNavigate();
     const apiRef = useGridApiRef();
 
+    const [eliminarAsesor, eliminarAsesorMutation] = useMutation(ELIMINAR_ASESOR);
+
     // MANEJADORES
-    const handlerEliminar = async (id) => {
+    const handleEliminar = async (id) => {
         dobleConfirmacionEliminacion(async (error, data) => {
             if (data) {
                 await eliminarAsesor({
@@ -47,7 +51,8 @@ export function TablaAsesores({
     const acciones = (params) => [
         <GridActionsCellItem
             icon={<DeleteIcon />}
-            onClick={() => handlerEliminar(params.id)}
+            disabled={eliminarAsesorMutation.loading}
+            onClick={() => handleEliminar(params.id)}
             label="Eliminar" />,
         <GridActionsCellItem
             icon={<EditIcon />}
@@ -135,34 +140,33 @@ export function TablaAsesores({
         }
     ];
 
+    const styleTablaAsesores = {
+        height: 'calc(100vh - 60px)',
+        borderRadius: "0px",
+        backgroundColor: "white",
+        fontSize: "20px"
+    };
+
     return (
-        <div className='container-fluid px-0' >
-            <DataGrid
-                headerHeight={50} // ALTURA TITULOS
-                apiRef={apiRef}
-                rowHeight={50} // ALTURA FILA
-                rows={asesores.filter(a => a.numeroDocumento !== "admin")} // FILAS
-                columns={columnas} // COLUMNAS
-                components={{ // COMPONENTES
-                    Toolbar: () => <CustomToolbar
-                        navegarTo="/asesores/crear" // RUTA PARA CREAR UN ASESOR
-                        refetch={refetch} // RECARGAR
-                        handleShow={handleShow} // MOSTRAR MODAL
-                    />,
-                    ColumnMenu: GridColumnMenu,
-                    LoadingOverlay: LinearProgress, // CARGANDO DATOS
-                    NoRowsOverlay: CustomNoRowsOverlay // NO HAY DATOS PARA MOSTRAR
-                }}
-                hideFooterSelectedRowCount={true}
-                loading={loading}
-                autoPageSize={true}
-                sx={{
-                    height: 'calc(100vh - 60px)',
-                    borderRadius: "0px",
-                    backgroundColor: "white",
-                    fontSize: "20px"
-                }}
-            />
-        </div>
+        <DataGrid
+            headerHeight={50} // ALTURA TITULOS
+            apiRef={apiRef}
+            rowHeight={50} // ALTURA FILA
+            rows={asesores.filter(a => a.numeroDocumento !== "admin")} // FILAS
+            columns={columnas} // COLUMNAS
+            components={{ // COMPONENTES
+                Toolbar: () => <CustomToolbar
+                    navegarTo="/asesores/crear" // RUTA PARA CREAR UN ASESOR
+                    refetch={refetch} // RECARGAR
+                    handleShow={handleShow} // MOSTRAR MODAL
+                />,
+                ColumnMenu: GridColumnMenu,
+                LoadingOverlay: LinearProgress, // CARGANDO DATOS
+                NoRowsOverlay: CustomNoRowsOverlay // NO HAY DATOS PARA MOSTRAR
+            }}
+            hideFooterSelectedRowCount={true}
+            loading={loading}
+            autoPageSize={true}
+            sx={styleTablaAsesores} />
     );
 };

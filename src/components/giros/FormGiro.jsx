@@ -18,10 +18,8 @@ export function FormGiro({
   isNotAllowedChangeInput,
   setGiro,
 }) {
-  // CONSTANTES
+  // HOOKS
   const { sesionData: { rol } } = useSesionContext();
-
-  // ESTADOS
   const [form, setForm] = useState(giro);
 
   // MANEJADORES

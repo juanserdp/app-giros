@@ -82,4 +82,4 @@ export function InicioAdmin() {
             </Container>
         </React.Fragment>
     )
-}
+};

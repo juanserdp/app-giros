@@ -18,16 +18,7 @@ export function ModalGiro({
     editarGiroInfo,
     loading
 }) {
-
-    // INTANCIAS DE CLASE
-    const navigate = useNavigate();
-
     // CONSTANTES
-    const { id, usuario } = useParams();
-    const voyAEditarUnGiro = id && usuario;
-
-    const giroSeleccionado = giros.find(giro => giro.id === id);
-    console.log("giro: ", giroSeleccionado);
     const initialStateGiro = {
         nombres: "",
         apellidos: "",
@@ -40,9 +31,17 @@ export function ModalGiro({
         estadoGiro: "",
     };
 
-    // ESTADOS
+    // INTANCIAS DE CLASE
+    const navigate = useNavigate();
+
+    // HOOKS
+    const { id, usuario } = useParams();
+
+    const giroSeleccionado = giros.find(giro => giro.id === id);
+
     const [giro, setGiro] = useState(initialStateGiro);
     const [validated, setValidated] = useState(false);
+    const voyAEditarUnGiro = id && usuario;
 
     // FUNCIONES
     const reiniciarEstados = () => {
@@ -54,10 +53,8 @@ export function ModalGiro({
 
     // MANEJADORES
     const handleSubmit = async (event) => {
-
         const camposParaEditar = dateJSONupdate(giroSeleccionado, giro);
         const tamanoObjeto = Object.keys(camposParaEditar).length;
-
         if (tamanoObjeto > 0) {
             if (voyAEditarUnGiro) {
                 await editarGiro({

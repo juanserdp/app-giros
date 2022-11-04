@@ -10,7 +10,7 @@ export function CapacidadPrestamo({ value, onChange, md, disabled }) {
             required
             name="capacidadPrestamo"
             onChange={event => {
-                const valor = parseNumberFormatToNumber(event.target.value);
+                const valor = Number(parseNumberFormatToNumber(event.target.value));
                 onChange({ target: { value: valor, name: "capacidadPrestamo" } });
             }}
             value={(value == "") ? "" : currencyFormatter.format(value)}

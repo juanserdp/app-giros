@@ -60,9 +60,9 @@ describe("InicioUsuario", () => {
 
         userEvent.click(enviar);
 
-        expect(await screen.findByText(/Este campo es obligatorio/)).toBeInTheDocument();
+        expect(await screen.findByText(/Este campo es obligatorio/i)).toBeInTheDocument();
 
-        userEvent.type(screen.findByPlaceholderText("Monto"), "12000");
+        userEvent.type(screen.findByPlaceholderText("Ingrese el valor..."), "12000");
 
         expect(screen.getByText(/Okey!/)).toBeInTheDocument();
 
@@ -85,7 +85,7 @@ describe("InicioUsuario", () => {
         );
         const enviar = await screen.findByRole('button', { name: "Enviar" });
 
-        userEvent.type(await screen.findByPlaceholderText("Monto"), "10100");
+        userEvent.type(await screen.findByPlaceholderText("Ingrese el valor..."), "10100");
 
         userEvent.click(enviar);
 
@@ -115,9 +115,10 @@ describe("InicioUsuario", () => {
 
         const enviar = await screen.findByRole('button', { name: "Enviar" });
 
-        userEvent.type(await screen.findByPlaceholderText("Monto"), "12000");
+        const input = await screen.findByPlaceholderText("Monto en bolivares...");
 
-        const input = await screen.findByPlaceholderText("Monto en bolivares")
+        userEvent.type(await screen.findByPlaceholderText("Ingrese el valor..."), "12000");
+
 
         expect(input.value).toBe(currencyFormatter.format(monto / mocks[2].result.data.usuario.tasaVenta))
 
@@ -128,5 +129,5 @@ describe("InicioUsuario", () => {
 
     });
 
-    
+
 })

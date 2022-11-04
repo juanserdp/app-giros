@@ -30,6 +30,7 @@ export function InicioUsuario() {
     // INSTANCIAS
     const navigate = useNavigate();
 
+    // CONSTANTES
     const initialState = {
         valorGiro: "",
     };
@@ -63,19 +64,15 @@ export function InicioUsuario() {
 
     // HOOKS
     const { sesionData: { id } } = useSesionContext();
-
-    // CONSULTAS
     const buzon = useQuery(OBTENER_MENSAJES);
     const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
     const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
         variables: { id },
     });
-
-    const usuario = data || initialStateUsuario;
-
-    const [configuracion] = useCargarDataForm({ buzon: [] }, buzon.data);
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
+
+    const usuario = data || initialStateUsuario;
 
     // MANEJADORES
     const handleInputChange = ({ target: { name, value } }) => setForm({ ...form, [name]: value });

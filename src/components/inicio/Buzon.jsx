@@ -49,6 +49,7 @@ export function Buzon({
             onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
         })
     };
+
     const agregaUnNuevoMensaje = (mensajeStyle) => {
         return (
             <React.Fragment>
@@ -63,6 +64,7 @@ export function Buzon({
             </React.Fragment>
         )
     };
+    
     const noHayMensajes = (rol, mensajeStyle) => {
         return (
             <Carousel.Item className="py-5">

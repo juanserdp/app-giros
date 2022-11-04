@@ -33,29 +33,27 @@ export function TablaGiros({
   editarGiro,
   editarGiroInfo,
 }) {
-
   // CONSTANTES
   const navegarTo = "/enviar-giro";
 
-  // INSTANCIAS
-  const apiRef = useGridApiRef();
-  const navigate = useNavigate();
-
   // HOOKS
   const { sesionData: { rol } } = useSesionContext();
+  const apiRef = useGridApiRef();
+  const navigate = useNavigate();
 
   // FUNCIONES
   const estadoStyle = (params) => {
     const color = (params.value === "PENDIENTE") ? "red" :
       ((params.value === "EN PROCESO") ? "blue" : "green");
+    const styleSpan = {
+      color: color,
+      borderRadius: "5px",
+      padding: "2px 10px",
+      border: `2px solid ${color}`,
+    };
     return <span
-      style={{
-        color: color,
-        borderRadius: "5px",
-        padding: "2px 10px",
-        border: `2px solid ${color}`,
-      }} >
-      <b>{params.value}</b>
+      style={styleSpan}>
+      {params.value}
     </span>
   };
 
@@ -215,7 +213,7 @@ export function TablaGiros({
   const handleDescargarComprobante = (value) => descargar(value);
 
   if (editarGiroInfo.loading) return <CircularProgressAnimation />;
-  console.log("giros: ", giros);
+
   return (
     <div className="container-fluid px-0">
       <DataGrid

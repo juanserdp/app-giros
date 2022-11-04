@@ -3,7 +3,7 @@ import { FeedBack } from "../Feedback";
 
 export function TipoCuenta({ value, onChange, md, disabled }) {
     return <Form.Group as={Col} className="mb-3" controlId="label_tipoCuenta" md={md}>
-        <Form.Label>Tipo Cuenta</Form.Label>
+        <Form.Label>Tipo de Cuenta</Form.Label>
         <Form.Select
             required
             name="tipoCuenta"

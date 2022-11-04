@@ -23,8 +23,7 @@ function InicioPorRol({ rol }) {
 
 export default function Inicio() {
 
-    const { sesionData: { id, rol } } = useSesionContext();
-
+    const { sesionData: {  rol } } = useSesionContext();
     return (
         <React.Fragment>
             <InicioPorRol rol={rol} />

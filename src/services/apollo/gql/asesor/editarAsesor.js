@@ -5,11 +5,18 @@ export const EDITAR_ASESOR = gql`
         $id: ID!
         $asesor: AsesorForUpdateInput!
     ){
-        editarAsesor(
+        asesor: editarAsesor(
             id: $id,
             asesor: $asesor
             ){
                 id
+                nombres
+                apellidos
+                tipoDocumento
+                numeroDocumento
+                clave
+                saldo
+                estado
         }
     }
 `;

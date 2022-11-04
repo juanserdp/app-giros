@@ -68,6 +68,7 @@ export function FormDatosPersonales({
         else swal("Error!", "No ha editado ningun campo!", "error");
     };
 
+    // MANEJADORES
     const handleInputChange = ({ target: { name, value } }, nombres) => {
         setUsuario({ ...usuario, [name]: value });
     };

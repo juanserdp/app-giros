@@ -9,6 +9,8 @@ import { useSesionContext } from "../../providers/SesionProvider";
 import { OBTENER_DATOS } from "../../services/apollo/gql/obtenerDatos";
 import { OBTENER_DATOS_POR_ASESOR } from "../../services/apollo/gql/obtenerDatosPorAsesor";
 import { Sesion } from "../../util/Sesion";
+import { CircularProgressAnimation } from "../CircularProgressAnimation";
+import { ErrorFetch } from "../errors/ErrorFetch";
 
 export function EstadisticasUsuarios() {
 
@@ -26,13 +28,10 @@ export function EstadisticasUsuarios() {
 
   // HOOKS
   const { sesionData: { id, rol } } = useSesionContext();
-
   const { loading, data, error } = useQuery(
     rol === "ADMINISTRADOR" ? OBTENER_DATOS : OBTENER_DATOS_POR_ASESOR,
     { variables: { id } }
   );
-
-  // ESTADOS
   const [datos] = useCargarDataChart(initialStateAsesorData, data);
 
   // FUNCIONES
@@ -75,17 +74,11 @@ export function EstadisticasUsuarios() {
   }, 1000);
 
   // LO QUE MUESTRA CUANDO CARGA
-  if (loading)
-    return (
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={true}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
+  if (loading) return <CircularProgressAnimation />
+
   // LO QUE MUESTRA EN CASO DE ERROR
-  if (error) return `Error! ${error}`;
+  if (error) return <ErrorFetch error={error} />;
+
   return (
     <React.Fragment>
       <p style={styleParrafo}>En esta seccion podras ver las estadisticas de tu aplicación sobre los usuarios.</p>

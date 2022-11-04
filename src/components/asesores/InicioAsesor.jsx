@@ -7,14 +7,12 @@ import { useCargarDataForm } from "../../hooks/useCargarDataForm";
 // COMPONENTES 
 import { Col, Container, Row } from "react-bootstrap";
 
-import { Backdrop, CircularProgress } from "@mui/material";
 import { useMutation, useQuery } from '@apollo/client';
 import swal from "sweetalert";
 // COMPONENTES
 import { Saldo } from "../inicio/Saldo";
 import { TasaVenta } from "../inicio/TasaVenta";
 import { Buzon } from "../inicio/Buzon";
-
 import { FormRecargar } from "../forms/FormRecargar";
 
 // MUTATIONS / QUERYS
@@ -45,22 +43,17 @@ export function InicioAsesor() {
         mensajes: []
     };
 
-    // OBTENGO LO DATOS DE SESION DEL USUARIO
+    // HOOKS
     const { sesionData: { id } } = useSesionContext();
-
-    // CONSULTAS
+    const [editarTasaVenta] = useMutation(EDITAR_ASESOR);
+    const [recargarUsuario, recargarMutation] = useMutation(RECARGAR_USUARIO);
     const buzon = useQuery(OBTENER_MENSAJES);
-    const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
-
     const { loading, data, error, refetch } = useQuery(OBTENER_ASESOR_POR_ID, {
         variables: { id }
     });
 
     const asesor = data || initialStateAsesor;
-
-    // MUTACIONES
-    const [editarTasaVenta] = useMutation(EDITAR_ASESOR);
-    const [recargarUsuario, recargarMutation] = useMutation(RECARGAR_USUARIO);
+    const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
 
     // MANEJADORES
     const handleEditarTasa = async () => {
@@ -91,41 +84,36 @@ export function InicioAsesor() {
     if (error) return <ErrorFetch error={error} />
 
     return (
-        <>
-            <Container className="my-4" style={{ textAlign: "center" }}>
+        <Container className="my-4" style={{ textAlign: "center" }}>
+            <Row className="mb-3 justify-content-center">
+                <Col md="4">
+                    <FormRecargar
+                        recargar={recargarUsuario}
+                        refetch={refetch}
+                        recargarMutation={recargarMutation} />
+                </Col>
+            </Row>
 
-                <Row className="mb-3 justify-content-center">
-                    <Col md="4">
-                        <FormRecargar
-                            recargar={recargarUsuario}
-                            refetch={refetch}
-                            recargarMutation={recargarMutation} />
-                    </Col>
-                </Row>
+            <Row className="mb-3">
+                <Col md="12">
+                    <Buzon mensajes={mensajes} />
+                </Col>
+            </Row>
 
-                <Row className="mb-3">
-                    <Col md="12">
-                        <Buzon mensajes={mensajes} />
-                    </Col>
-                </Row>
-
-                <Row className="mb-3 justify-content-center">
-                    <Col md="4">
-                        <TasaVenta
-                            tasa={asesor.asesor.tasaVenta}
-                            handleEditarTasa={handleEditarTasa}
-                            loading={loading}
-                            rol="ASESOR" />
-                    </Col>
-                    <Col md="4">
-                        <Saldo
-                            saldo={asesor.asesor.saldo}
-                            loading={loading} />
-                    </Col>
-                </Row>
-
-            </Container>
-
-        </>
+            <Row className="mb-3 justify-content-center">
+                <Col md="4">
+                    <TasaVenta
+                        tasa={asesor.asesor.tasaVenta}
+                        handleEditarTasa={handleEditarTasa}
+                        loading={loading}
+                        rol="ASESOR" />
+                </Col>
+                <Col md="4">
+                    <Saldo
+                        saldo={asesor.asesor.saldo}
+                        loading={loading} />
+                </Col>
+            </Row>
+        </Container>
     );
 }

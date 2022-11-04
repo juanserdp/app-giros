@@ -1,45 +1,34 @@
 import swal from "sweetalert";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { Button, Modal, Spinner } from "react-bootstrap";
+import { Button, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
-import { FormUsuario } from "./FormUsuario";
 import { dateJSONupdate } from "../../util/dateJSONupdate";
 import { Cargando } from "../Cargando";
+import { Nombres } from "../forms/Nombres";
+import { Apellidos } from "../forms/Apellidos";
+import { TipoDocumento } from "../forms/TipoDocumento";
+import { NumeroDocumento } from "../forms/NumeroDocumento";
+import { Clave } from "../forms/Clave";
+import { Estado } from "../forms/Estado";
+import { Saldo } from "../forms/Saldo";
+import { Deuda } from "../forms/Deuda";
+import { TasaVenta } from "../forms/TasaVenta";
+import { CapacidadPrestamo } from "../forms/CapacidadPrestamo";
+import { useMutation } from "@apollo/client";
+import { CREAR_USUARIO } from "../../services/apollo/gql/usuario/crearUsuario";
+import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
 
 export function ModalUsuario({
     usuarios,
-    show,
+    refetch,
+    loading,
     handleClose,
-    crearUsuario,
-    crearUsuarioData,
-    editarUsuario,
-    editarUsuarioData,
-    refetch
+    show,
 }) {
-
-    // INSTANCIAS
-    const navigate = useNavigate();
-
     // CONSTANTES
-    const { id, asesor } = useParams();
-    const voyAeditarUnUsuario = (id && asesor) ? true : false;
-    const loading = crearUsuarioData.loading || editarUsuarioData.loading;
-    const usuarioSeleccionado = usuarios.find(usuario => usuario.id === id);
-    const initialStateUsuario = {
-        nombres: "",
-        apellidos: "",
-        tipoDocumento: "",
-        numeroDocumento: "",
-        clave: "",
-        saldo: "",
-        deuda: "",
-        capacidadPrestamo: "",
-        estado: ""
-    };
-
-    const initialStateUsuarioFormCrear = {
+    const estadoInicialFormularioNuevoUsuario = {
         nombres: "",
         apellidos: "",
         tipoDocumento: "",
@@ -50,90 +39,168 @@ export function ModalUsuario({
         tasaVenta: ""
     };
 
-    const estadoInicialUsuario = (voyAeditarUnUsuario) ? initialStateUsuario : initialStateUsuarioFormCrear;
+    // CONSTANTES
+    const { id, asesor } = useParams(); // ES EL ID DEL USUARIO QUE SE VA A EDITAR Y EL ID DEL ASESOR
+
+    const voyAEditarUnUsuario = (id && asesor) ? true : false;
+
+    const usuarioSeleccionado = usuarios.find(usuario => usuario.id === id);
+
+    const estadoInicialUsuario = usuarioSeleccionado || estadoInicialFormularioNuevoUsuario;
 
     // HOOKS
+    const navigate = useNavigate();
     const [usuario, setUsuario] = useState(estadoInicialUsuario);
     const [validated, setValidated] = useState(false);
+    const [crearUsuario, crearUsuarioMutation] = useMutation(CREAR_USUARIO);
+    const [editarUsuario, editarUsuarioMutation] = useMutation(EDITAR_USUARIO);
+
+    const loadingMutation = crearUsuarioMutation.loading || editarUsuarioMutation.loading;
 
     // FUNCIONES
-    const reiniciarEstados = () => {
-        setValidated(false);
-        handleClose();
-        navigate(`/usuarios/${asesor}`);
-        setUsuario(estadoInicialUsuario);
+    const crear = async () => {
+        if (validarCamposNotNull(usuario)) {
+            await crearUsuario({
+                variables: {
+                    ...usuario,
+                    asesor: asesor
+                },
+                onCompleted: () => {
+                    swal("Creado!", "El usuario ha sido creado.", "success");
+                    handleCerrar();
+                },
+                onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
+            });
+        }
+        else {
+            setValidated(true); // MUESTRA LAS ADVERTENCIAS EN LOS CAMPOS SIN LLENAR
+            swal("Error!", "Todos los campos son obligatorios!", "error");
+        }
+        refetch();
+    };
+
+    const editar = async () => {
+        if (Object.keys(dateJSONupdate(usuarioSeleccionado, usuario)).length > 0) {
+            await editarUsuario({
+                variables: {
+                    id,
+                    usuario: dateJSONupdate(usuarioSeleccionado, usuario)
+                },
+                onCompleted: () => {
+                    swal("Editado!", "El usuario ha sido editado.", "success");
+                    handleCerrar();
+                },
+                onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
+            });
+        }
+        else swal("Error!", "No ha editado ningun campo!", "error");
+        refetch();
     };
 
     // MANEJADORES
+    const handleCerrar = () => {
+        setValidated(false); // BORRA LA REVISION DE LOS CAMPOS DEL FORMULARIO
+        handleClose(); // CIERRA EL MODAL - IMPORTANTE QUE CIERRE EL MODAL Y DEJE LA VAR SHOW EN FALSE PARA QUE CUANDO VUELVA A RENDERIZAR ASESORES.JSX NO RENDERICE ESTE COMPONENTE.
+        navigate(`/usuarios/${asesor}`); // NAVEGA HACIA ATRAS Y RENDERIZA ASESORES.JSX
+    };
+
     const handleSubmit = async (event) => {
-        if (id && asesor) {
-            if (validarCamposNotNull(usuario)) {
-                await editarUsuario({
-                    variables: {
-                        id,
-                        usuario: dateJSONupdate(usuarioSeleccionado, usuario)
-                    },
-                    onCompleted: () => {
-                        swal("Editado!", "El usuario ha sido editado.", "success");
-                        reiniciarEstados();
-                    },
-                    onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
-                });
-            }
-            else swal("Error!", "No ha editado ningun campo!", "error");
-        }
-        else if (asesor) {
-            if (validarCamposNotNull(usuario)) {
-                await crearUsuario({
-                    variables: {
-                        ...usuario,
-                        saldo: Number(usuario.saldo),
-                        deuda: Number(usuario.deuda),
-                        capacidadPrestamo: Number(usuario.capacidadPrestamo),
-                        tasaVenta: Number(usuario.tasaVenta),
-                        asesor: asesor
-                    },
-                    onCompleted: () => {
-                        swal("Creado!", "El usuario ha sido creado.", "success");
-                        reiniciarEstados();
-                    },
-                    onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
-                });
-            }
-            else {
-                setValidated(true);
-                swal("Error!", "Todos los campos son obligatorios!", "error");
-            }
-        }
-        refetch();
-    }
+        event.preventDefault(); // PREVIENE UN REINICIO DE PAGINA
+        if (voyAEditarUnUsuario) editar();
+        else crear();
+    };
+
+    const handleInputChange = ({ target: { name, value } }) => {
+        setUsuario({ ...usuario, [name]: value });
+    };
 
     return (
         <Modal
-            show={show}
+            show={loading ? false : show}
             onHide={handleClose}
             backdrop="static"
             keyboard={false}
             size="lg">
+
             <Modal.Header>
                 <Modal.Title>{(id) ? "Editar Usuario" : "Crear Usuario"}</Modal.Title>
             </Modal.Header>
+
             <Modal.Body>
-                <FormUsuario
-                    handleSubmit={handleSubmit}
-                    validated={validated}
-                    usuario={usuarioSeleccionado || estadoInicialUsuario}
-                    setUsuario={setUsuario}
-                    isNotAllowedChangeInputBalance={false}
-                    isEditing={voyAeditarUnUsuario} />
+                <Form validated={validated}>
+                    <Row className="mb-3 mx-5" >
+                        <Nombres
+                            md={6}
+                            onChange={(e) => handleInputChange(e)}
+                            value={usuario.nombres} />
+                        <Apellidos
+                            md={6}
+                            onChange={(e) => handleInputChange(e)}
+                            value={usuario.apellidos} />
+                    </Row>
+
+                    <Row className="mb-3 mx-5">
+                        <TipoDocumento
+                            value={usuario.tipoDocumento}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6} />
+                        <NumeroDocumento
+                            value={usuario.numeroDocumento}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6} />
+                    </Row>
+
+                    <Row className="mb-3 mx-5">
+                        <Clave
+                            value={usuario.clave}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6} />
+                        {(voyAEditarUnUsuario) ? (
+                            <Estado
+                                value={usuario.estado}
+                                onChange={(e) => handleInputChange(e)}
+                                md={6} />
+                        ) : null}
+                    </Row>
+
+                    <Row className="mb-3 mx-5">
+                        <Saldo
+                            value={usuario.saldo}
+                            onChange={(e) => handleInputChange(e)}
+                            md={3} />
+
+                        {(voyAEditarUnUsuario) ? (
+                            <Deuda
+                                value={usuario.deuda}
+                                onChange={(e) => handleInputChange(e)}
+                                md={3} />
+                        ) : null}
+
+                        <TasaVenta
+                            value={usuario.tasaVenta}
+                            onChange={(e) => handleInputChange(e)}
+                            md={3} />
+
+                        <CapacidadPrestamo
+                            value={usuario.capacidadPrestamo}
+                            onChange={(e) => handleInputChange(e)}
+                            md={3} />
+                    </Row>
+                </Form>
             </Modal.Body>
+
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => reiniciarEstados()}>
+                <Button
+                    variant="secondary"
+                    onClick={handleCerrar}>
                     Cerrar
                 </Button>
 
-                <Button variant="success" disabled={loading} onClick={handleSubmit}>
-                    {(loading) ? <Cargando /> : "Aceptar"}
+                <Button
+                    variant="success"
+                    disabled={loadingMutation}
+                    onClick={handleSubmit}>
+                    {(loadingMutation) ? <Cargando /> : "Aceptar"}
                 </Button>
             </Modal.Footer>
         </Modal>

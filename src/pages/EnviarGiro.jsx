@@ -9,17 +9,14 @@ import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUs
 
 // COMPONENTES
 import { FormEnviarGiros } from "../components/forms/FormEnviarGiros";
-import { NavigationBar } from "../components/NavigationBar";
 
 // COMPONENTES LIBRERIAS
-import { Backdrop, CircularProgress } from "@mui/material";
-import { Button, Container, Form, InputGroup, Row, Spinner } from "react-bootstrap";
+import { Button, Container} from "react-bootstrap";
 import swal from "sweetalert";
 
 // FUNCIONES
 import { validarCamposNotNull } from "../util/validarCamposNotNull";
 import { handleError } from "../util/handleError";
-import { Sesion } from "../util/Sesion";
 import { CircularProgressAnimation } from "../components/CircularProgressAnimation";
 import { ErrorFetch } from "../components/errors/ErrorFetch";
 import { Cargando } from "../components/Cargando";
@@ -33,7 +30,6 @@ export default function EnviarGiro() {
 
     // CONSTANTES
     const { valorGiro } = useParams();
-
     const initialState = {
         nombres: "",
         apellidos: "",
@@ -51,7 +47,7 @@ export default function EnviarGiro() {
     };
 
     // HOOKS
-    const { sesionData: { id, rol } } = useSesionContext();
+    const { sesionData: { id } } = useSesionContext();
     const { loading, data, error, refetch } = useQuery(OBTENER_USUARIO_POR_ID, {
         variables: { id: id },
     });
