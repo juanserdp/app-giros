@@ -11,13 +11,12 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { Sesion } from "./util/Sesion";
 // import client from "./services/apollo/client";
-import { urlLocalHost } from "./services/apollo/client";
-// import { urlServerHost } from "./services/apollo/client";
+import { urlLocalHost, urlHerokuHost } from "./services/apollo/client";
 
 export const sesion = new Sesion();
 
 const httpLink = createHttpLink({
-  uri: urlLocalHost,
+  uri: urlHerokuHost,
 });
 
 const authLink = setContext((_, { headers }) => {
