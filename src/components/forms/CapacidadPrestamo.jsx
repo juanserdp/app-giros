@@ -13,7 +13,7 @@ export function CapacidadPrestamo({ value, onChange, md, disabled }) {
                 const valor = Number(parseNumberFormatToNumber(event.target.value));
                 onChange({ target: { value: valor, name: "capacidadPrestamo" } });
             }}
-            value={(value == "") ? "" : currencyFormatter.format(value)}
+            value={(value === "") ? "" : currencyFormatter.format(value)}
             type="text"
             placeholder="Ingrese el valor..."
             disabled={disabled ? true : false} />

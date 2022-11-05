@@ -1,6 +1,5 @@
 import { Col, Form } from "react-bootstrap";
 import { currencyFormatter } from "../../util/currencyFormatter";
-import { FeedBack } from "../Feedback";
 
 export function MontoBolivares({ value, md }) {
     return <Form.Group as={Col} className="mb-3" controlId="label_montoBolivares" md={md}>

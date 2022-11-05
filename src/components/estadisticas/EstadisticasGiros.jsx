@@ -9,7 +9,6 @@ import { useSesionContext } from "../../providers/SesionProvider";
 import { OBTENER_DATOS } from "../../services/apollo/gql/obtenerDatos";
 import { OBTENER_DATOS_POR_ASESOR } from "../../services/apollo/gql/obtenerDatosPorAsesor";
 import { currencyFormatter } from "../../util/currencyFormatter";
-import { Sesion } from "../../util/Sesion";
 import { CircularProgressAnimation } from "../CircularProgressAnimation";
 import { ErrorFetch } from "../errors/ErrorFetch";
 
@@ -68,14 +67,14 @@ export function EstadisticasGiros() {
     let numeroGirosHoy = 0;
     let valorTotalGirosHoy = 0;
     const giros = datos.giros;
-    for (const giro of giros) {
+    giros.forEach((giro) => {
       giro.fechaEnvio.replace(/\b(\d+)\/(\d+)\/(\d+)\b/, (coincidencia) => {
         if (new Date().toLocaleDateString() === coincidencia) {
-          numeroGirosHoy++;
-          valorTotalGirosHoy += giro.valorGiro;
+          numeroGirosHoy = numeroGirosHoy + 1;
+          valorTotalGirosHoy = valorTotalGirosHoy + giro.valorGiro;
         }
       });
-    };
+    })
     return {
       longitud: numeroGirosHoy,
       total: currencyFormatter.format(valorTotalGirosHoy),

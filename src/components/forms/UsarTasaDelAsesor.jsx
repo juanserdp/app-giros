@@ -1,5 +1,4 @@
 import { Form } from "react-bootstrap";
-import { FeedBack } from "../Feedback";
 
 
 export function UsarTasaDelAsesor({ value, onChange, md, disabled, children }) {

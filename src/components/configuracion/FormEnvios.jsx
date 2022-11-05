@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
-import { useEffect, useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Form, Row } from "react-bootstrap";
 import swal from "sweetalert";
 import { useSesionContext } from "../../providers/SesionProvider";
 import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
@@ -14,10 +14,6 @@ export function FormEnvios({
     datosPersonalesUsuario,
     refetch
 }) {
-    // CONSTANTES
-    const estadoInicialUsuario = {
-        valorMinimoGiro: ""
-    };
 
     // HOOKS
     const [usuario, setUsuario] = useState(datosPersonalesUsuario);

@@ -1,11 +1,5 @@
 const family = "'Roboto Slab', serif";
 
-const mensajeStyle = {
-    fontWeight: "300",
-    fontSize: "1.2rem",
-    fontFamily: "'Roboto Slab', serif",
-}
-
 export const styleParrafo = {
     fontFamily: family,
     fontSize: "1.2rem",

@@ -1,26 +1,8 @@
-import { Card, CardContent, Skeleton } from "@mui/material";
-import { Accordion, Button, Col, FloatingLabel, Form, Row } from "react-bootstrap";
+import { Card, CardContent} from "@mui/material";
+import { Col, Row } from "react-bootstrap";
 import { Acordion } from "../Acordion";
-import { FeedBack } from "../Feedback";
 import { MensajeCampo } from "../forms/MensajeCampo";
 import { BotonAceptarMensaje } from "./BotonAceptarMensaje";
-
-const textStyleH2 = {
-    fontWeight: "500",
-    fontSize: "1.5rem",
-    fontFamily: "'Roboto Slab', serif",
-    color: "white",
-    backgroundColor: "#0d6efd",
-};
-
-const textStyleH3 = {
-    fontWeight: "400",
-    fontSize: "2rem",
-    fontFamily: "'Roboto Slab', serif",
-    color: "white",
-    verticalAlign: "center"
-};
-
 
 export function Mensaje({
     autoFocusMensaje,

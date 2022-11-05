@@ -1,14 +1,13 @@
-import { Carousel, Spinner } from "react-bootstrap"
+import { Carousel } from "react-bootstrap"
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import "../../assets/styles/buzon.css";
 import { useSesionContext } from "../../providers/SesionProvider";
-import React, { useEffect } from "react";
-import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
+import React from "react";
 import { CircularProgressAnimation } from "../CircularProgressAnimation";
 import { ErrorFetch } from "../errors/ErrorFetch";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { ELIMINAR_MENSAJE } from "../../services/apollo/gql/mensaje/eliminarMensaje";
 import { handleError } from "../../util/handleError";
 import swal from "sweetalert";
@@ -64,7 +63,7 @@ export function Buzon({
             </React.Fragment>
         )
     };
-    
+
     const noHayMensajes = (rol, mensajeStyle) => {
         return (
             <Carousel.Item className="py-5">

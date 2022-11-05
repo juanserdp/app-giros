@@ -1,9 +1,3 @@
-// REACT
-import { useEffect } from "react";
-
-// HOOKS
-import { useCargarDataForm } from "../../hooks/useCargarDataForm";
-
 // COMPONENTES 
 import { Col, Container, Row } from "react-bootstrap";
 
@@ -19,7 +13,6 @@ import { FormRecargar } from "../forms/FormRecargar";
 import { RECARGAR_USUARIO } from "../../services/apollo/gql/usuario/recargarUsuario";
 import { OBTENER_ASESOR_POR_ID } from "../../services/apollo/gql/asesor/obtenerAsesorPorId";
 // UTIL
-import { Sesion } from "../../util/Sesion";
 import { handleError } from "../../util/handleError";
 // ESTILOS
 import "../../assets/styles/inicio.css";

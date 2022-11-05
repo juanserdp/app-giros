@@ -17,12 +17,6 @@ export function FormDatosPersonales({
     datosPersonalesUsuario,
     refetch
 }) {
-    const estadoInicialFormulario = {
-        nombres: "",
-        apellidos: "",
-        numeroDocumento: "",
-        tipoDocumento: ""
-    };
 
     // HOOKS
     const [editarAsesor, editarAsesorInfo] = useMutation(EDITAR_ASESOR);
