@@ -29,6 +29,7 @@ export function TablaGiros({
   refetch,
   loading,
   handleShow,
+  ids,
   setIds
 }) {
   // HOOKS
@@ -99,10 +100,7 @@ export function TablaGiros({
       disabled={loadingMutation}
       icon={<EditIcon />}
       onClick={() => {
-        setIds({
-          giro: params.id,
-          usuario: params.row.usuario
-        });
+        setIds({ ...ids, giro: params.id });
         handleShow();
       }} label="Editar" />,
     (rol === "USUARIO") ? <></> : (

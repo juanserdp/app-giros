@@ -39,7 +39,7 @@ export function ModalGiro({
         estadoGiro: "",
     };
 
-    const voyAEditarUnGiro = ids.giro && ids.usuario ? true : false;
+    const voyAEditarUnGiro = ids.giro ? true : false;
 
     const giroSeleccionado = giros.find(giro => giro.id === ids.giro);
 

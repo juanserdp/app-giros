@@ -13,6 +13,11 @@ import "./assets/styles/scroll.css";
 import { Configuracion } from "./pages/Configuracion";
 import { SesionProvider } from "./providers/SesionProvider";
 import { NavigationBar } from "./components/NavigationBar";
+import { OBTENER_USUARIOS } from "./services/apollo/gql/usuario/obtenerUsuarios";
+import { OBTENER_USUARIOS_POR_ID_ASESOR } from "./services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor";
+import { OBTENER_GIROS } from "./services/apollo/gql/giro/obtenerGiros";
+import { OBTENER_GIROS_POR_ID_USUARIO } from "./services/apollo/gql/giro/obtenerGirosPorIdUsuario";
+import { OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR } from "./services/apollo/gql/giro/obtenerGirosPorUsuariosPorIdAsesor";
 
 export const context = React.createContext();
 
@@ -43,17 +48,20 @@ export function App() {
             element={
               <PrivatizarPorRol rolAccess="OPERARIO">
                 <NavigationBar />
-                <Giros />
+                <Giros
+                consulta={OBTENER_GIROS} />
               </PrivatizarPorRol>
             }
           />
+
           {/* TODOS LOS GIROS POR USUARIO*/}
           <Route
             path="/giros/usuario/:usuario"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
                 <NavigationBar />
-                <Giros />
+                <Giros
+                  consulta={OBTENER_GIROS_POR_ID_USUARIO} />
               </PrivatizarPorRol>
             }
           />
@@ -79,7 +87,7 @@ export function App() {
               </PrivatizarPorRol>
             }
           />
-          
+
           <Route
             path="/cuenta"
             element={
@@ -101,7 +109,8 @@ export function App() {
             element={
               <PrivatizarPorRol rolAccess="OPERARIO">
                 <NavigationBar />
-                <Giros />
+                <Giros
+                  consulta={OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR} />
               </PrivatizarPorRol>
             }
           />
@@ -112,7 +121,8 @@ export function App() {
             element={
               <PrivatizarPorRol rolAccess="ASESOR">
                 <NavigationBar />
-                <Usuarios />
+                <Usuarios
+                  consulta={OBTENER_USUARIOS_POR_ID_ASESOR} />
               </PrivatizarPorRol>
             }
           />
@@ -129,7 +139,8 @@ export function App() {
             element={
               <PrivatizarPorRol rolAccess="ADMINISTRADOR">
                 <NavigationBar />
-                <Usuarios />
+                <Usuarios
+                  consulta={OBTENER_USUARIOS} />
               </PrivatizarPorRol>
             }
           />

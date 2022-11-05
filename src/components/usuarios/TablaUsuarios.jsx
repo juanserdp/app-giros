@@ -23,6 +23,7 @@ export function TablaUsuarios({
     refetch,
     loading,
     handleShow,
+    ids,
     setIds
 }) {
     // INSTANCIAS
@@ -58,10 +59,7 @@ export function TablaUsuarios({
         <GridActionsCellItem
             icon={<EditIcon />}
             onClick={() => {
-                setIds({
-                    usuario: params.id,
-                    asesor: params.row.asesor.id
-                });
+                setIds({ ...ids, usuario: params.id });
                 handleShow();
             }}
             label="Editar" />,

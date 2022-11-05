@@ -43,10 +43,9 @@ export function ModalUsuario({
 
     // CONSTANTES
 
-    const voyAEditarUnUsuario = (ids.usuario && ids.asesor) ? true : false; //(id && asesor) ? true : false;
+    const voyAEditarUnUsuario = (ids.usuario) ? true : false; //(id && asesor) ? true : false;
 
     const usuarioSeleccionado = usuarios.find(usuario => usuario.id === ids.usuario);
-    console.log("usuarioSeleccionado:: ", usuarioSeleccionado);
     const estadoInicialUsuario = usuarioSeleccionado || estadoInicialFormularioNuevoUsuario;
 
     // HOOKS
@@ -54,7 +53,7 @@ export function ModalUsuario({
     const [validated, setValidated] = useState(false);
     const [crearUsuario, crearUsuarioMutation] = useMutation(CREAR_USUARIO);
     const [editarUsuario, editarUsuarioMutation] = useMutation(EDITAR_USUARIO);
-    console.log(usuario);
+
     const loadingMutation = crearUsuarioMutation.loading || editarUsuarioMutation.loading;
 
     // FUNCIONES
@@ -68,6 +67,7 @@ export function ModalUsuario({
                 onCompleted: () => {
                     swal("Creado!", "El usuario ha sido creado.", "success");
                     handleCerrar();
+                    refetch();
                 },
                 onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
             });
@@ -76,7 +76,6 @@ export function ModalUsuario({
             setValidated(true); // MUESTRA LAS ADVERTENCIAS EN LOS CAMPOS SIN LLENAR
             swal("Error!", "Todos los campos son obligatorios!", "error");
         }
-        refetch();
     };
 
     const editar = async () => {
@@ -93,12 +92,13 @@ export function ModalUsuario({
                 onCompleted: () => {
                     swal("Editado!", "El usuario ha sido editado.", "success");
                     handleCerrar();
+                    refetch();
                 },
                 onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
             });
         }
         else swal("Error!", "No ha editado ningun campo!", "error");
-        refetch();
+
     };
 
     // MANEJADORES
@@ -165,8 +165,6 @@ export function ModalUsuario({
                                 onChange={(e) => handleInputChange(e)}
                                 md={6} />
                         ) : null}
-
-
 
                     </Row>
 

@@ -8,11 +8,9 @@ import { ModalUsuario } from "../components/usuarios/ModalUsuario";
 import { TablaUsuarios } from "../components/usuarios/TablaUsuarios";
 
 // CONSULTAS
-import { OBTENER_USUARIOS } from "../services/apollo/gql/usuario/obtenerUsuarios";
-import { OBTENER_USUARIOS_POR_ID_ASESOR } from '../services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor';
 import { ErrorFetch } from '../components/errors/ErrorFetch';
 
-export default function Usuarios() {
+export default function Usuarios({ consulta }) {
 
     // CONSTANTES
     const initialStateUsuarios = {
@@ -20,11 +18,10 @@ export default function Usuarios() {
     };
     const { asesor } = useParams();
 
-    // CONSULTAS
-    const { loading, error, data, refetch } = useQuery((asesor) ?
-        OBTENER_USUARIOS_POR_ID_ASESOR :
-        OBTENER_USUARIOS,
-        { variables: { id: asesor } });
+    const { loading, error, data, refetch } = useQuery(consulta, { variables: { id: asesor } });
+
+    const usuarios = data || initialStateUsuarios;
+
     const [show, setShow] = useState(false);
 
     const estadoInicialIds = {
@@ -35,8 +32,6 @@ export default function Usuarios() {
     const [ids, setIds] = useState(estadoInicialIds);
 
     const borrarIds = () => setIds(estadoInicialIds);
-
-    const usuarios = data || initialStateUsuarios;
 
     // MANEJADORES
     const handleClose = () => setShow(false);
@@ -52,8 +47,8 @@ export default function Usuarios() {
                 refetch={refetch}
                 loading={loading}
                 handleShow={handleShow}
-                setIds={setIds}
-            />
+                ids={ids}
+                setIds={setIds} />
             {show && !loading ? <ModalUsuario // SE RENDERIZA EL MODAL CUANDO SHOW SEA TRUE Y CUANDO TERMINE DE CARGAR LOS DATOS
                 usuarios={usuarios.usuarios}
                 refetch={refetch}

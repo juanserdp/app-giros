@@ -28,6 +28,16 @@ export const CREAR_USUARIO= gql`
             tasaVenta: $tasaVenta
             ){
                 id
+                nombres
+                apellidos
+                tipoDocumento
+                numeroDocumento
+                clave
+                saldo
+                deuda
+                capacidadPrestamo
+                estado
+                tasaVenta
         }
     }
 `;

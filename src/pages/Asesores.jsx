@@ -19,6 +19,7 @@ export default function Asesores() {
 
     // HOOKS
     const { loading, error, data, refetch } = useQuery(OBTENER_ASESORES);
+
     const [show, setShow] = useState(false);
 
     const estadoInicialIds = {
