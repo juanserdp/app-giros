@@ -63,7 +63,11 @@ export function EstadisticasUsuarios() {
                   rol === "ADMINISTRADOR"
                     ? [
                       ["", "Asesores", "Usuarios"],
-                      ["Actual", datos.asesores.length, datos.usuarios.length],
+                      ["Actual", (datos.asesores.filter(asesor => {
+                        if (asesor.numeroDocumento !== "admin" && asesor.numeroDocumento !== "operario") {
+                          return asesor;
+                        }
+                      })).length, datos.usuarios.length],
                     ]
                     : [
                       ["", "Usuarios"],

@@ -7,7 +7,7 @@ export const OBTENER_DATOS = gql`
             #nombres
             #apellidos
             #tipoDocumento
-            #numeroDocumento
+            numeroDocumento
             #clave
             #saldo
             #estado

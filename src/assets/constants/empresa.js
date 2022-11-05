@@ -1,1 +1,1 @@
-export const NOMBRE_EMPRESA = "Nombre de empresa";
+export const NOMBRE_EMPRESA = "APP GIROS";
