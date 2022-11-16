@@ -82,6 +82,7 @@ export default function EnviarGiro() {
                 await crearGiro({
                     variables: {
                         ...giro,
+                        valorGiro: Number(giro.valorGiro),
                         usuario: id,
                         tasaCompra: tasa
                     },
