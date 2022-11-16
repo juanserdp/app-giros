@@ -54,7 +54,7 @@ export function EstadisticasGiros() {
     for (let giro of giros) {
       giro.fechaEnvio.replace(
         /\b(\d+)\/(\d+)\/(\d+)\b/,
-        (coincidencia, dia, mes, ano) => {
+        (coincidencia, mes, dia, ano) => {
           if (new Date().getFullYear().toString() === ano) {
             dataChart[Number(mes)][1] += giro.valorGiro;
           }
