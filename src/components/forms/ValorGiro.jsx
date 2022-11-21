@@ -4,8 +4,8 @@ import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber"
 import { FeedBack } from "../Feedback";
 
 export function ValorGiro({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_valorGiro" md={md}>
-        <Form.Label style={{ textAlign: "initial", width: "100%" }}>Valor del Giro</Form.Label>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_valorGiro" md={md}>
+        <Form.Label style={{ textAlign: "initial", width: "100%"}}>Valor del Giro (VES)</Form.Label>
         <Form.Control
             required
             name="valorGiro"

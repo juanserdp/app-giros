@@ -37,7 +37,7 @@ export function EstadisticasGiros() {
   // FUNCIONES
   const totalGirosPorMes = (giros) => {
     const dataChart = [
-      ["Year", "Valor"],
+      ["Año", "Valor"],
       ["Ene", 0],
       ["Feb", 0],
       ["Mar", 0],
@@ -54,7 +54,7 @@ export function EstadisticasGiros() {
     for (let giro of giros) {
       giro.fechaEnvio.replace(
         /\b(\d+)\/(\d+)\/(\d+)\b/,
-        (coincidencia, mes, dia, ano) => {
+        (coincidencia, dia, mes, ano) => {
           if (new Date().getFullYear().toString() === ano) {
             dataChart[Number(mes)][1] += giro.valorGiro;
           }
@@ -85,16 +85,23 @@ export function EstadisticasGiros() {
 
   if (error) return <ErrorFetch />
 
+  const chartOptions = {
+    title: "Valor en Pesos COP",
+    hAxis: { title: "Mes", titleTextStyle: { color: "#333" } },
+    vAxis: { minValue: 0 },
+    chartArea: { width: "70%", height: "70%" },
+  };
+
   return (
     <React.Fragment>
+
       <p style={styleParrafo}>En esta seccion podras ver las estadisticas de tu aplicación sobre los giros realizados el dia de hoy.</p>
+
       <Row className="justify-content-center mb-3 text-center">
         <Col
           md="6"
           className="d-flex mb-3"
-          style={{
-            justifyContent: "center",
-          }}>
+          style={{ justifyContent: "center" }}>
           <Paper elevation={3}>
             <div
               style={styleH3}
@@ -109,9 +116,7 @@ export function EstadisticasGiros() {
         <Col
           className="d-flex mb-3"
           md="6"
-          style={{
-            justifyContent: "center",
-          }}>
+          style={{ justifyContent: "center", }}>
           <Paper elevation={3}>
             <div
               style={styleH3}
@@ -122,9 +127,10 @@ export function EstadisticasGiros() {
             </div>
           </Paper>
         </Col>
-
       </Row>
+
       <p style={styleParrafo}>En esta seccion podras ver las estadisticas de tu aplicación sobre los giros realizados el año presente.</p>
+
       <Row className="justify-content-center mb-3">
         <Col
           md="12"
@@ -134,20 +140,14 @@ export function EstadisticasGiros() {
             whiteSpace: "nowrap",
             overflowX: "auto",
             overflowY: "hidden",
-          }}
-        >
+          }}>
           <Paper elevation={3} className="p-3">
             <Chart
               chartType="AreaChart"
               width="100%"
               height="400px"
               data={totalGirosPorMes(data.giros)}
-              options={{
-                title: "Valor en Pesos COP",
-                hAxis: { title: "Mes", titleTextStyle: { color: "#333" } },
-                vAxis: { minValue: 0 },
-                chartArea: { width: "70%", height: "70%" },
-              }} />
+              options={chartOptions} />
           </Paper>
           <br />
         </Col>

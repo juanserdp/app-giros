@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export function Clave({ value, onChange, md, disabled }) {
     const [visibilidad, setVisibilidad] = useState(false);
-    return <Form.Group as={Col} md={md} className="mb-3" controlId="label_clave">
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} md={md} className="mb-3" controlId="label_clave">
         <Form.Label>Contraseña</Form.Label>
         <InputGroup >
             <Form.Control

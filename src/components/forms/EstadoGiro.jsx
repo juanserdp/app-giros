@@ -2,7 +2,7 @@ import { Col, Form } from "react-bootstrap";
 import { FeedBack } from "../Feedback";
 
 export function EstadoGiro({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_estadoGiro" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_estadoGiro" md={md}>
         <Form.Label>Estado del Giro</Form.Label>
         <Form.Select
             required

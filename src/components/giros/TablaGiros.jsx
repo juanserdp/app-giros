@@ -20,9 +20,10 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { descargar } from "../../util/descargar";
 import { transformarImagenABinaryString } from "../../util/transformarImagenABinaryString";
 import swal from "sweetalert";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { EDITAR_GIRO } from "../../services/apollo/gql/giro/editarGiro";
 import { ELIMINAR_GIRO } from "../../services/apollo/gql/giro/eliminarGiro";
+import { OBTENER_USUARIO_POR_ID } from "../../services/apollo/gql/usuario/obtenerUsuarioPorId";
 
 export function TablaGiros({
   giros,
@@ -33,9 +34,11 @@ export function TablaGiros({
   setIds
 }) {
   // HOOKS
-  const { sesionData: { rol } } = useSesionContext();
+  const { sesionData: { id, rol } } = useSesionContext();
   const apiRef = useGridApiRef();
-
+  const { data } = useQuery(OBTENER_USUARIO_POR_ID,
+    { variables: { id } }
+  );
   // FUNCIONES
   const estadoStyle = (params) => {
     const color = (params.value === "PENDIENTE") ? "red" :
@@ -58,7 +61,7 @@ export function TablaGiros({
   const loadingMutation = editarGiroMutation.loading || eliminarGiroMutation.loading;
 
   const editarComprobante = async (id) => {
-    transformarImagenABinaryString(id, async (binaryString) => {
+    transformarImagenABinaryString(async (binaryString) => {
       await editarGiro({
         variables: {
           id,
@@ -77,7 +80,13 @@ export function TablaGiros({
   };
 
   const generar = (giro) => {
-    const factura = generarFactura(giro);
+    const factura = generarFactura({
+      ...giro, ...{
+        nombresUsuario: data?.usuario.nombres,
+        apellidosUsuario: data?.usuario.apellidos,
+        numeroDocumentoUsuario: data?.usuario.numeroDocumento
+      }
+    });
     const blob = new Blob([factura], { type: "text/html" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -119,13 +128,14 @@ export function TablaGiros({
       showInMenu />,
     <GridActionsCellItem
       icon={<DescriptionIcon />}
-      disabled={loadingMutation ? true : params.row.estadoGiro === "COMPLETADO" ? false : true}
+      disabled={loadingMutation}
       onClick={() => generar(params.row)}
       label="Generar factura"
       showInMenu />,
   ];
 
   const columnas = [
+
     {
       field: "nombres",
       headerName: "NOMBRES",
@@ -190,13 +200,13 @@ export function TablaGiros({
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "tasaCompra",
-      headerName: "TASA COMPRA",
-      width: "150",
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "tasaCompra",
+    //   headerName: "TASA COMPRA",
+    //   width: "150",
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
     {
       field: "estadoGiro",
       headerName: "ESTADO",
@@ -204,6 +214,12 @@ export function TablaGiros({
       align: "center",
       headerAlign: "center",
       renderCell: (params) => estadoStyle(params),
+    },
+    {
+      field: "id",
+      headerName: "ID",
+      width: "280",
+      headerAlign: "center",
     },
     {
       field: "actions",

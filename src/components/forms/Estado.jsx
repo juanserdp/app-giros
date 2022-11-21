@@ -2,7 +2,7 @@ import { Col, Form } from "react-bootstrap";
 import { FeedBack } from "../Feedback";
 
 export function Estado({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_estado" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_estado" md={md}>
         <Form.Label>Estado</Form.Label>
         <Form.Select
             required

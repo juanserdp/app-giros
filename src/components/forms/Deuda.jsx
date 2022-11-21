@@ -4,7 +4,7 @@ import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber"
 import { FeedBack } from "../Feedback";
 
 export function Deuda({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_deuda" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_deuda" md={md}>
         <Form.Label>Deuda</Form.Label>
         <Form.Control
             required

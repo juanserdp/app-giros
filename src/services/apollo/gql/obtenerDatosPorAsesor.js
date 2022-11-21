@@ -16,7 +16,7 @@ export const OBTENER_DATOS_POR_ASESOR = gql`
             deuda,
             capacidadPrestamo,
             estado,
-            tasaVenta
+            #tasaVenta
         }
     giros: obtenerGirosPorUsuariosPorIdAsesor(id: $id){
                 id,
@@ -31,7 +31,7 @@ export const OBTENER_DATOS_POR_ASESOR = gql`
                 valorGiro,
                 comprobantePago,
                 fechaEnvio,
-                tasaCompra,
+                #tasaCompra,
                 estadoGiro
         }
   }

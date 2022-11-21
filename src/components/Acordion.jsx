@@ -8,15 +8,14 @@ export function Acordion({ children, titulo }) {
         for (let boton of button) {
             boton.style.backgroundColor = "#0d6efd";
             boton.style.color = "white";
-            boton.style.fontFamily = "'Roboto Slab', serif";
+            boton.style.fontFamily = "'Roboto', sans-serif";
             boton.style.fontWeight = "500";
             boton.style.fontSize = "1.5rem";
         }
     });
-
     const styleAcordion = {
         fontWeight: "300",
-        fontFamily: "'Roboto Slab', serif",
+        fontFamily: "'Roboto', sans-serif",
         textAlign: "left"
     };
 

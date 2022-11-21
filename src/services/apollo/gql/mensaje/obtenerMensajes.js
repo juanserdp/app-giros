@@ -5,6 +5,7 @@ export const OBTENER_MENSAJES = gql`
         mensajes: obtenerMensajes{
             id
             mensaje
+            imagen
             fechaCreacion
             fechaUltimaModificacion
         }

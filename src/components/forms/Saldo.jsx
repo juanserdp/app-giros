@@ -4,7 +4,7 @@ import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber"
 import { FeedBack } from "../Feedback";
 
 export function Saldo({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_saldo" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_saldo" md={md}>
         <Form.Label>Saldo</Form.Label>
         <Form.Control
             required

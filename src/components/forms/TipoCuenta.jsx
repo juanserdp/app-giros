@@ -2,7 +2,7 @@ import { Col, Form } from "react-bootstrap";
 import { FeedBack } from "../Feedback";
 
 export function TipoCuenta({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_tipoCuenta" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_tipoCuenta" md={md}>
         <Form.Label>Tipo de Cuenta</Form.Label>
         <Form.Select
             required

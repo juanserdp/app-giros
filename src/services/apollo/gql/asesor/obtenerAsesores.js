@@ -12,6 +12,9 @@ export const OBTENER_ASESORES = gql`
             saldo
             estado
             tasaVenta
+            valorMinimoGiro
+            tasaPreferencial
+            usarTasaPreferencial
         }
     }
 `;

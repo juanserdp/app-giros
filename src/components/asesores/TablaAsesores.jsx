@@ -125,7 +125,7 @@ export function TablaAsesores({
         },
         {
             field: 'saldo',
-            headerName: 'SALDO',
+            headerName: 'SALDO (VES)',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',

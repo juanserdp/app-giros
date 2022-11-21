@@ -2,7 +2,7 @@ import { Col, Form } from "react-bootstrap";
 import { FeedBack } from "../Feedback";
 
 export function TipoDocumento({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_tipoDocumento" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_tipoDocumento" md={md}>
         <Form.Label>Tipo de Documento</Form.Label>
         <Form.Select
             required

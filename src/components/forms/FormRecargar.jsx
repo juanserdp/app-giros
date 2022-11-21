@@ -2,6 +2,7 @@ import { Card, CardContent } from "@mui/material";
 import { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import swal from "sweetalert";
+import { useSesionContext } from "../../providers/SesionProvider";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
@@ -10,7 +11,7 @@ import { Cargando } from "../Cargando";
 import { NumeroDocumento } from "./NumeroDocumento";
 import { ValorRecarga } from "./ValorRecarga";
 
-export function FormRecargar({ recargar, refetch, recargarMutation }) {
+export function FormRecargar({ recargar, refetch, recargarMutation}) {
     // CONSTANTES
     const botonStyle = {
         borderTopLeftRadius: "0px",
@@ -23,6 +24,7 @@ export function FormRecargar({ recargar, refetch, recargarMutation }) {
     };
 
     // HOOKS
+    const { sesionData: { rol } } = useSesionContext();
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
 
@@ -42,13 +44,10 @@ export function FormRecargar({ recargar, refetch, recargarMutation }) {
 
             // EJECUTAMOS LA MUTACION PARA RECARGAR UN ASESOR
             await recargar({
-                // LE PASAMOS EL FORMULARIO MAS EL CASTEO DEL VALOR DE LA RECARGA A NUMERO
-                variables: { ...form, valorRecarga: Number(form.valorRecarga) },
+                variables: { ...form, valorRecarga: Number(form.valorRecarga)}, // LE PASAMOS EL FORMULARIO MAS EL CASTEO DEL VALOR DE LA RECARGA A NUMERO
                 onCompleted: ({ usuario }) => {
-                    // EN CASO DE EXISTO MUESTRA UN MODAL CON UN MENSAJE EXITOSO Y EL NUEVO SALDO DEL ASESOR
-                    swal("Completado!", `El nuevo saldo de ${usuario.nombres} es: ${currencyFormatter.format(usuario.saldo)}`, "success");
-                    // REINICIAMOS EL ESTADO VALIDATE PARA EL CONTROL DEL FORMULARIO DE REACTBOOT
-                    setValidated(false);
+                    swal("Completado!", `El nuevo saldo de ${usuario.nombres} es: ${currencyFormatter.format(usuario.saldo)}`, "success");// EN CASO DE EXISTO MUESTRA UN MODAL CON UN MENSAJE EXITOSO Y EL NUEVO SALDO DEL ASESOR
+                    setValidated(false);// REINICIAMOS EL ESTADO VALIDATE PARA EL CONTROL DEL FORMULARIO DE REACTBOOT
                     setForm(initialState);
                     refetch();
                 },

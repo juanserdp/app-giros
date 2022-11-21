@@ -11,7 +11,7 @@ export const CREAR_GIRO = gql`
         $tipoCuenta: String!
         $numeroCuenta: String!
         $valorGiro: Float!
-        $tasaCompra: Float!
+        #$tasaCompra: Float!
     ){
         crearGiro(
             usuario: $usuario,
@@ -23,7 +23,7 @@ export const CREAR_GIRO = gql`
             tipoCuenta: $tipoCuenta,
             numeroCuenta: $numeroCuenta,
             valorGiro: $valorGiro,
-            tasaCompra: $tasaCompra
+            #tasaCompra: $tasaCompra
             ){
                 id
             }

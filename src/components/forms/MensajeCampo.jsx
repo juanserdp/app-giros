@@ -9,12 +9,14 @@ export function MensajeCampo({
 }) {
 
     const styleMensaje = {
-        textAlign: "left"
+        textAlign: "left",
+        fontFamily: "'Roboto', sans-serif"
     };
     const labelTextArea = (isNewMensaje) ? "Nuevo Mensaje" : "Editar Mensaje";
     
     return (
         <Form.Group
+        
             as={Col}
             className="mb-3"
             md="12"

@@ -4,8 +4,8 @@ import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber"
 import { FeedBack } from "../Feedback";
 
 export function ValorRecarga({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_valorRecarga" md={md}>
-        <Form.Label style={{ textAlign: "initial", width: "100%" }}>Valor de la Recarga</Form.Label>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_valorRecarga" md={md}>
+        <Form.Label style={{ textAlign: "initial", width: "100%" }}>Valor de la Recarga (COP)</Form.Label>
         <Form.Control
             required
             name="valorRecarga"

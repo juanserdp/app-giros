@@ -58,7 +58,7 @@ export default function EnviarGiro() {
     // HOOKS
     const { sesionData: { id } } = useSesionContext();
     const { loading, data, error, refetch } = useQuery(OBTENER_USUARIO_POR_ID, {
-        variables: { id: id },
+        variables: { id },
     });
 
     const usuario = data || initialStateUsuario;
@@ -114,13 +114,13 @@ export default function EnviarGiro() {
     return (
         <Container className="my-3 p-0 rounded" >
 
-            <h2 className="mb-3 p-3 rounded" style={styleH2}>Datos de la persona que recibe el dinero</h2>
+            <h2 className="mb-3 p-3" >Datos de la persona que recibe el dinero</h2>
 
             <Form
                 className="mx-5 "
                 validated={validated}>
                 <Row className="mb-3" >
-                    <h3 className="mb-3 p-3 rounded" style={styleH3}>
+                    <h3 className="mb-3 p-3 rounded">
                         Datos personales
                     </h3>
                     <Nombres
@@ -147,7 +147,7 @@ export default function EnviarGiro() {
                 </Row>
 
                 <Row className="mb-3">
-                    <h3 className="mb-3 p-3 rounded" style={styleH3}>
+                    <h3 className="mb-3 p-3 rounded">
                         Datos Bancarios
                     </h3>
 
@@ -170,7 +170,7 @@ export default function EnviarGiro() {
                 </Row>
 
                 <Row className="mb-3">
-                    <h3 className="mb-3 p-3 rounded" style={styleH3}>
+                    <h3 className="mb-3 p-3 rounded">
                         Datos de Envio
                     </h3>
 
@@ -179,10 +179,6 @@ export default function EnviarGiro() {
                         onChange={(e) => handleInputChange(e)}
                         md={4} />
 
-                    <MontoBolivares
-                        value={(giro.valorGiro * 1) / usuario.usuario.tasaVenta}
-                        onChange={(e) => handleInputChange(e)}
-                        md={4} />
                 </Row>
             </Form >
 

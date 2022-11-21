@@ -101,7 +101,7 @@ export function TablaUsuarios({
         },
         {
             field: 'saldo',
-            headerName: 'SALDO',
+            headerName: 'SALDO (VES)',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
@@ -111,7 +111,7 @@ export function TablaUsuarios({
         },
         {
             field: 'deuda',
-            headerName: 'DEUDA',
+            headerName: 'DEUDA (VES)',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
             cellClassName: 'font-tabular-nums',
@@ -120,7 +120,7 @@ export function TablaUsuarios({
             headerAlign: 'center',
         },
         {
-            field: 'capacidadPrestamo',
+            field: 'capacidadPrestamo (VES)',
             headerName: 'CAPACIDAD PRESTAMO',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatter.format(value),
@@ -138,8 +138,8 @@ export function TablaUsuarios({
             renderCell: (params) => estadoStyle(params)
         },
         {
-            field: 'tasaVenta',
-            headerName: 'TASA VENTA',
+            field: 'tasaPreferencial',
+            headerName: 'TASA PREFERENCIAL',
             width: "150",
             align: "center",
             headerAlign: 'center'

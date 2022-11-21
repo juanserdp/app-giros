@@ -12,8 +12,8 @@ export function SesionProvider({ children, uid, urol }) {
     const sesion = new Sesion();
 
     const valorInicialCredenciales = {
-        id: sesion.getUid() || uid,
-        rol: sesion.getRol() || urol
+        id: sesion.getUid(),
+        rol: sesion.getRol()
     };
 
     const [sesionData, setSesionData] = useState(valorInicialCredenciales);
@@ -21,8 +21,8 @@ export function SesionProvider({ children, uid, urol }) {
     const guardarCredenciales = () => {
         const sesion = new Sesion();
         setSesionData({
-            id: sesion.getUid() || uid,
-            rol: sesion.getRol() || urol
+            id: sesion.getUid(),
+            rol: sesion.getRol()
         });
     }
 

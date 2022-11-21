@@ -1,6 +1,6 @@
 import swal from "sweetalert";
 
-export function transformarImagenABinaryString(id, accion) {
+export function transformarImagenABinaryString(accion) {
     const inputFile = document.createElement("input");
     inputFile.type = "file";
     inputFile.accept = "image/*";

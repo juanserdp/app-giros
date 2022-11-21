@@ -15,7 +15,7 @@ export const OBTENER_GIROS = gql`
             valorGiro
             comprobantePago
             fechaEnvio,
-            tasaCompra,
+            #tasaCompra,
             estadoGiro
         }
     }

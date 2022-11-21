@@ -3,7 +3,7 @@ import { bancos } from "../../assets/constants/bancos";
 import { FeedBack } from "../Feedback";
 
 export function Banco({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_banco" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_banco" md={md}>
         <Form.Label>Banco</Form.Label>
         <Form.Select
             required

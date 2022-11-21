@@ -12,6 +12,7 @@ export const EDITAR_MENSAJE = gql`
                 ){
                     id
                     mensaje
+                    imagen
                     fechaCreacion
                     fechaUltimaModificacion
                 }

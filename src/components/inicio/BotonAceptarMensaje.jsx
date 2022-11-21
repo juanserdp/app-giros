@@ -10,7 +10,8 @@ import { Cargando } from "../Cargando";
 
 const style = {
     borderRadius: "0px",
-    width: "100%"
+    width: "100%",
+    height: "100%"
 }
 
 export function BotonAceptarMensaje({
@@ -27,11 +28,11 @@ export function BotonAceptarMensaje({
     // HOOKS
     const [crearMensaje, crearMensajeMutation] = useMutation(CREAR_MENSAJE);
     const [editarMensaje, editarMensajeMutation] = useMutation(EDITAR_MENSAJE);
-
+    const loading = crearMensajeMutation.loading || editarMensajeMutation.loading;
     // MANEJADORES
     const handleSubmitMensaje = async () => {
         if (isNewMensaje) {
-            if (validarCamposNotNull(mensaje)) {
+            if (mensaje.mensaje !== "" || mensaje.imagen !== "") {
                 await crearMensaje({
                     variables: mensaje,
                     onCompleted: () => {
@@ -42,7 +43,7 @@ export function BotonAceptarMensaje({
                     onError: ({ graphQLErrors, networkError, error }) => handleError({ graphQLErrors, networkError })
                 });
             }
-            else swal("Error", "El mensaje debe contener algun texto", "error");
+            else swal("Error", "El mensaje debe contener algun texto o imagen", "error");
         }
         else {
             if (validarCamposNotNull(mensaje)) {
@@ -63,15 +64,13 @@ export function BotonAceptarMensaje({
     };
 
     return (
-        <Col md="12">
-            <Button
-                onClick={handleSubmitMensaje}
-                style={style}
-                className="btn btn-primary m-0 px-3">
-                {(crearMensajeMutation.loading || editarMensajeMutation.loading) ? (
-                    <Cargando />
-                ) : "Aceptar"}
-            </Button>
-        </Col >
+        <Button
+            onClick={handleSubmitMensaje}
+            style={style}
+            disabled={loading}>
+            {(loading) ? (
+                <Cargando />
+            ) : "Aceptar"}
+        </Button>
     )
 }

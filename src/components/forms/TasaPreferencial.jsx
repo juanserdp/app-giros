@@ -1,7 +1,7 @@
 import { Col, Form } from "react-bootstrap";
 import { FeedBack } from "../Feedback";
 
-export function TasaVenta({ value, onChange, md, disabled }) {
+export function TasaPreferencial({ value, onChange, md, disabled }) {
     return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_tasaVenta" md={md}>
         <Form.Label>Tasa Preferencial</Form.Label>
         <Form.Control
@@ -9,7 +9,7 @@ export function TasaVenta({ value, onChange, md, disabled }) {
             name="tasaVenta"
             onChange={event => {
                 const valor = Number(event.target.value);
-                onChange({ target: { value: valor, name: "tasaVenta" } });
+                onChange({ target: { value: valor, name: "tasaPreferencial" } });
             }}
             value={value}
             type="number"

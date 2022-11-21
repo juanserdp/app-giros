@@ -4,7 +4,7 @@ import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber"
 import { FeedBack } from "../Feedback";
 
 export function ValorMinimoGiro({ value, onChange, md, disabled }) {
-    return <Form.Group as={Col} className="mb-3" controlId="label_valorMinimoGiro" md={md}>
+    return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_valorMinimoGiro" md={md}>
         <Form.Label>Valor Minimo del Giro</Form.Label>
         <Form.Control
             required

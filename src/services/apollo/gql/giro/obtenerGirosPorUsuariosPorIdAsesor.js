@@ -15,7 +15,7 @@ export const OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR = gql`
                 valorGiro,
                 comprobantePago,
                 fechaEnvio,
-                tasaCompra,
+                #tasaCompra,
                 estadoGiro
         }
     }

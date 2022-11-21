@@ -17,6 +17,10 @@ export const EDITAR_ASESOR = gql`
                 clave
                 saldo
                 estado
+                tasaVenta
+                valorMinimoGiro
+                tasaPreferencial
+                usarTasaPreferencial
         }
     }
 `;

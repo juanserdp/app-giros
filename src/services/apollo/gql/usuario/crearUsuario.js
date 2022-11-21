@@ -12,7 +12,7 @@ export const CREAR_USUARIO= gql`
         #$deuda: Float!
         $capacidadPrestamo: Float!
         #$estado: String!
-        $tasaVenta: Float!
+        #$tasaVenta: Float!
     ){
         crearUsuario(
             asesor: $asesor,
@@ -25,7 +25,7 @@ export const CREAR_USUARIO= gql`
             #deuda: $deuda,
             capacidadPrestamo: $capacidadPrestamo,
             #estado: $estado
-            tasaVenta: $tasaVenta
+            #tasaVenta: $tasaVenta
             ){
                 id
                 nombres
@@ -37,7 +37,8 @@ export const CREAR_USUARIO= gql`
                 deuda
                 capacidadPrestamo
                 estado
-                tasaVenta
+                tasaPreferencial
+                usarTasaPreferencial
         }
     }
 `;

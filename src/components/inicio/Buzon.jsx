@@ -25,13 +25,40 @@ export function Buzon({
     setIdMensajeEditar,
     initialStateMensaje
 }) {
+    console.log(mensajes);
+    let mensajesOrdenados = [];
+    if(mensajes.length > 0){
+        mensajesOrdenados = [...mensajes];
+        mensajesOrdenados.reverse();
+        mensajesOrdenados.sort(function (a, b) {
+            const fechaA = a.fechaUltimaModificacion.replace(
+                /\b(\d+)\/(\d+)\/(\d+)\b/,
+                (coincidencia, dia, mes, ano) => {
+                    return mes + "/" + dia + "/" + ano;
+                });
+            // const fechaA = a.fechaUltimaModificacion;
+            // const fechaB = b.fechaUltimaModificacion;
+            const fechaB = b.fechaUltimaModificacion.replace(
+                /\b(\d+)\/(\d+)\/(\d+)\b/,
+                (coincidencia, dia, mes, ano) => {
+                    return mes + "/" + dia + "/" + ano;
+                });
+            const dateA = new Date(fechaA);
+            const numberA = Number(dateA);
+            const dateB = new Date(fechaB);
+            const numberB = Number(dateB);
+            if (numberA < numberB) return 1;
+            if (numberA > numberB) return -1;
+            return 0;
+        })
+    }
 
     // CONSTANTES
     const mensajeStyle = {
         fontWeight: "300",
-        fontSize: "1.2rem",
-        fontFamily: "'Roboto Slab', serif",
-    }
+        fontSize: "1.4rem",
+        fontFamily: "'Roboto Slab', serif"
+    };
 
     // HOOKS
     const { sesionData: { rol } } = useSesionContext();
@@ -76,17 +103,21 @@ export function Buzon({
 
     if (loading) return <CircularProgressAnimation />;
 
+
     if (error) return <ErrorFetch error={error} />;
 
     return (
         <React.Fragment>
             {(eliminarMensajeMutation.loading) ? (
-                <Cargando />
+                <Carousel variant="dark" style={{ height: "280px" }}>
+                    <br /><br /><br /><br />
+                    <Cargando />
+                </Carousel>
             ) : (
-                <Carousel variant="dark">
+                <Carousel variant="dark" style={{ height: "280px" }}>
                     {(mensajes.length > 0) ? (
-                        mensajes.map((mensaje, index) => {
-                            if (mensaje.mensaje !== "") return (
+                        mensajesOrdenados.map((mensaje, index) => {
+                            if (mensaje.mensaje !== "" && (mensaje.imagen === "" || mensaje.imagen === null)) return (
                                 <Carousel.Item key={index} interval={3000} className="py-5">
                                     <h5 style={mensajeStyle}>{mensaje.mensaje}</h5>
                                     {(rol === "ADMINISTRADOR") ?
@@ -109,6 +140,31 @@ export function Buzon({
                                         null}
                                 </Carousel.Item>
                             );
+                            else if (mensaje.imagen) {
+                                const binaryString = mensaje.imagen;
+                                const length = binaryString.length;
+                                const array = new Uint8Array(length);
+
+                                for (let i = 0; i < length; i++) {
+                                    array[i] = binaryString.charCodeAt(i);
+                                };
+                                const blob = new Blob([array], { type: "image/jpeg" });
+                                return (
+                                    <Carousel.Item key={index} interval={3000} className="pb-5">
+                                        <img src={URL.createObjectURL(blob)} height="200px" /><br />
+                                        {(rol === "ADMINISTRADOR") ?
+                                            (
+                                                <React.Fragment>
+                                                    <IconButton onClick={() => handleDeleteIconButton(mensaje.id)} >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                    <br />
+                                                </React.Fragment>
+                                            ) :
+                                            null}
+                                    </Carousel.Item>
+                                )
+                            }
                             else return null;
                         })) : (noHayMensajes(rol, mensajeStyle))}
                     {(rol === "ADMINISTRADOR") ? (

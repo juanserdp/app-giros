@@ -20,8 +20,8 @@ query obtenerUsuarioPorId($id: ID!){
         giros{
             id
         },
-        tasaVenta,
-        usarTasaDelAsesor
+        tasaPreferencial,
+        usarTasaPreferencial
     }
 }
 `;

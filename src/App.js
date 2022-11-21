@@ -79,7 +79,7 @@ export function App() {
 
           {/* GIROS POR USUARIO Y POR ID DE GIRO PARA MODIFICAR */}
           <Route
-            path="/enviar-giro/:id/:valorGiro"
+            path="/enviar-giro/:valorGiro"
             element={
               <PrivatizarPorRol rolAccess="USUARIO">
                 <NavigationBar />

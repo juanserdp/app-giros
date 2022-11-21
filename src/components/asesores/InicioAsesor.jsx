@@ -83,7 +83,8 @@ export function InicioAsesor() {
                     <FormRecargar
                         recargar={recargarUsuario}
                         refetch={refetch}
-                        recargarMutation={recargarMutation} />
+                        recargarMutation={recargarMutation}
+                        tasa={asesor.asesor?.tasaVenta} />
                 </Col>
             </Row>
 
@@ -104,7 +105,8 @@ export function InicioAsesor() {
                 <Col md="4">
                     <Saldo
                         saldo={asesor.asesor.saldo}
-                        loading={loading} />
+                        loading={loading}
+                        tasa={asesor.asesor.tasaVenta} />
                 </Col>
             </Row>
         </Container>

@@ -1,3 +1,3 @@
-export function ErrorFetch({error}){
-    return `Error! ${error}`;
+export function ErrorFetch({ error }) {
+    return <div > `Error! ${error}`</div>;
 }

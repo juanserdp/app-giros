@@ -37,7 +37,7 @@ export function TasaVenta({
                 <h2 className="mb-4 py-2" style={textStyleH2}>Tasa de Venta</h2>
                 <br />
                 <h3 className="mb-4" style={textStyleH3}>{tasa}</h3>
-                {(rol === "ASESOR") ? (
+                {(rol === "ASESOR" || rol === "ADMINISTRADOR") ? (
                     <Row >
                         <Col md="12">
                             <Button style={buttonStyle} onClick={handleEditarTasa}>Editar</Button>

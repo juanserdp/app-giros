@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { NOMBRE_EMPRESA } from "../assets/constants/empresa";
 
 export function Footer() {
     return (
@@ -20,7 +21,7 @@ export function Footer() {
                     </Link>
                 </li>
             </ul>
-            <p className="text-center text-muted">&copy; 2021 Company, Inc</p>
+            <p className="text-center text-muted">&copy; 2022 {NOMBRE_EMPRESA}</p>
         </footer>
     )
 }

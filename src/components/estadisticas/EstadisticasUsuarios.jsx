@@ -56,31 +56,24 @@ export function EstadisticasUsuarios() {
             }}>
             <Paper elevation={3} className="p-3">
               <Chart
-                chartType="Bar"
+                chartType="PieChart"
                 width={rol === "ADMINISTRADOR" ? "80%" : "80%"}
                 height="400px"
-                data={
-                  rol === "ADMINISTRADOR"
-                    ? [
-                      ["", "Asesores", "Usuarios"],
-                      ["Actual", (datos.asesores.filter(asesor => {
-                        if (asesor.numeroDocumento !== "admin" && asesor.numeroDocumento !== "operario") {
-                          return asesor;
-                        }
-                      })).length, datos.usuarios.length],
-                    ]
-                    : [
-                      ["", "Usuarios"],
-                      ["Actual", datos.usuarios.length],
-                    ]
-                }
+                data={[
+                  ["Task", "Hours per Day"],
+                  ["Usuarios", datos.usuarios.length],
+                  ["Asesores", (rol === "ADMINISTRADOR") ? (datos.asesores.filter(asesor => {
+                    if (asesor.numeroDocumento !== "admin" && asesor.numeroDocumento !== "operario") {
+                      return asesor;
+                    }
+                  })).length : 0]]}
                 options={{
-                  chart: {
-                    title: "Numero de Usuarios",
-                  },
+                  title: "Numero de Usuarios"
                 }}
               />
             </Paper>
+
+
             <br />
           </Col>
         </Row>

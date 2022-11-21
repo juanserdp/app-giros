@@ -13,12 +13,12 @@ import { Clave } from "../forms/Clave";
 import { Estado } from "../forms/Estado";
 import { Saldo } from "../forms/Saldo";
 import { Deuda } from "../forms/Deuda";
-import { TasaVenta } from "../forms/TasaVenta";
+import { TasaPreferencial } from "../forms/TasaPreferencial";
 import { CapacidadPrestamo } from "../forms/CapacidadPrestamo";
 import { useMutation } from "@apollo/client";
 import { CREAR_USUARIO } from "../../services/apollo/gql/usuario/crearUsuario";
 import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
-import { UsarTasaDelAsesor } from "../forms/UsarTasaDelAsesor";
+import { UsarTasaPreferencial } from "../forms/UsarTasaPreferencial";
 
 export function ModalUsuario({
     usuarios,
@@ -37,8 +37,7 @@ export function ModalUsuario({
         numeroDocumento: "",
         clave: "",
         saldo: "",
-        capacidadPrestamo: "",
-        tasaVenta: ""
+        capacidadPrestamo: ""
     };
 
     // CONSTANTES
@@ -159,20 +158,26 @@ export function ModalUsuario({
                             value={usuario.clave}
                             onChange={(e) => handleInputChange(e)}
                             md={6} />
-                        {(voyAEditarUnUsuario) ? (
+
+                        <Saldo
+                            value={usuario.saldo}
+                            onChange={(e) => handleInputChange(e)}
+                            md={3} />
+                        <CapacidadPrestamo
+                            value={usuario.capacidadPrestamo}
+                            onChange={(e) => handleInputChange(e)}
+                            md={3} />
+                     
+
+                    </Row>
+
+                    <Row className="mb-3 mx-5">
+                    {(voyAEditarUnUsuario) ? (
                             <Estado
                                 value={usuario.estado}
                                 onChange={(e) => handleInputChange(e)}
                                 md={6} />
                         ) : null}
-
-                    </Row>
-
-                    <Row className="mb-3 mx-5">
-                        <Saldo
-                            value={usuario.saldo}
-                            onChange={(e) => handleInputChange(e)}
-                            md={3} />
 
                         {(voyAEditarUnUsuario) ? (
                             <Deuda
@@ -181,26 +186,23 @@ export function ModalUsuario({
                                 md={3} />
                         ) : null}
 
-                        <TasaVenta
-                            value={usuario.tasaVenta}
-                            onChange={(e) => handleInputChange(e)}
-                            md={3} />
+                        {(usuario.usarTasaPreferencial) ? (
+                            <TasaPreferencial
+                                value={usuario.tasaPreferencial}
+                                onChange={(e) => handleInputChange(e)}
+                                md={3} />) : null}
 
-                        <CapacidadPrestamo
-                            value={usuario.capacidadPrestamo}
-                            onChange={(e) => handleInputChange(e)}
-                            md={3} />
 
                     </Row>
 
                     <Row className="mb-3 mx-5">
                         {(voyAEditarUnUsuario) ? (
-                            <UsarTasaDelAsesor
-                                value={usuario.usarTasaDelAsesor}
+                            <UsarTasaPreferencial
+                                value={usuario.usarTasaPreferencial}
                                 onChange={(e) => handleInputChange(e)}
                                 md={6}>
-                                Usar tasa general
-                            </UsarTasaDelAsesor>
+                                Usar Tasa Preferencial
+                            </UsarTasaPreferencial>
                         ) : null}
                     </Row>
                 </Form>

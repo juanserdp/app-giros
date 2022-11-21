@@ -19,6 +19,8 @@ import swal from "sweetalert";
 import { useMutation } from "@apollo/client";
 import { CREAR_ASESOR } from "../../services/apollo/gql/asesor/crearAsesor";
 import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
+import { TasaPreferencial } from "../forms/TasaPreferencial";
+import { UsarTasaPreferencial } from "../forms/UsarTasaPreferencial";
 
 export function ModalAsesor({
   asesores,
@@ -162,13 +164,29 @@ export function ModalAsesor({
               onChange={(e) => handleInputChange(e)}
               md={6} />
           </Row>
-
+          {/* UsarTasaPreferencial */}
           <Row className="mb-3 mx-5">
             {(voyAEditarUnAsesor) ? (
               <Estado
                 value={asesor.estado}
                 onChange={(e) => handleInputChange(e)}
                 md={6} />
+            ) : null}
+            {(asesor.usarTasaPreferencial) ? (
+              <TasaPreferencial
+                value={asesor.tasaPreferencial}
+                onChange={(e) => handleInputChange(e)}
+                md={6} />) : null}
+          </Row>
+
+          <Row className="mb-3 mx-5">
+            {(voyAEditarUnAsesor) ? (
+              <UsarTasaPreferencial
+                value={asesor.usarTasaPreferencial}
+                onChange={(e) => handleInputChange(e)}
+                md={6}>
+                Usar Tasa Preferencial
+              </UsarTasaPreferencial>
             ) : null}
           </Row>
         </Form>

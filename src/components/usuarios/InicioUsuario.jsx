@@ -37,7 +37,8 @@ export function InicioUsuario() {
     const bottonStyle = {
         borderTopLeftRadius: "0px",
         borderTopRightRadius: "0px",
-        width: "100%"
+        width: "100%",
+        fontFamily:"'Roboto', sans-serif"
     };
     const initialStateMensajes = {
         mensajes: []
@@ -70,7 +71,7 @@ export function InicioUsuario() {
         if (validarCamposNotNull(form)) {
             if (form.valorGiro >= valorMinimo) {
                 setValidated(false);
-                navigate(`/enviar-giro/${id}/${form.valorGiro}`);
+                navigate(`/enviar-giro/${form.valorGiro}`);
             }
             else swal("Error!", `El valor minimo para hacer un giro es: ${currencyFormatter.format(valorMinimo)}`, "error");
         }
@@ -87,7 +88,7 @@ export function InicioUsuario() {
                 <Col md="4">
                     <Card className="card-container-inicio mb-3 rounded">
                         <CardContent className="p-0">
-                            <Acordion titulo="Enviar Giro">
+                            <Acordion titulo={<span style={{fontFamily:"'Roboto', sans-serif", fontSize:"1.2rem"}}>Enviar Giro</span>}>
                                 Aquí puedes enviar giros a las personas.
                                 Ingrese el valor del monto que va a enviar.
                             </Acordion>
@@ -100,12 +101,6 @@ export function InicioUsuario() {
                                 <ValorGiro
                                     onChange={(e) => handleInputChange(e)}
                                     value={form.valorGiro}
-                                    md={10} />
-                            </Row>
-
-                            <Row className="mb-1 px-3 justify-content-center">
-                                <MontoBolivares
-                                    value={form.valorGiro * (1 / usuario.usuario.tasaVenta)}
                                     md={10} />
                             </Row>
 
@@ -138,7 +133,7 @@ export function InicioUsuario() {
             <Row className="mb-3">
                 <Col md="4">
                     <TasaVenta
-                        tasa={(usuario.usuario?.usarTasaDelAsesor) ? usuario.usuario?.asesor.tasaVenta : usuario.usuario?.tasaVenta}
+                        tasa={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : usuario.usuario?.asesor.tasaVenta}
                         loading={loading}
                         rol="USUARIO" />
                 </Col>
