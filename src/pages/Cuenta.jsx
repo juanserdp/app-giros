@@ -26,7 +26,6 @@ import PasswordIcon from "@mui/icons-material/Password";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import ReplyIcon from "@mui/icons-material/Reply";
 import PeopleIcon from "@mui/icons-material/People";
-import { blue } from "@mui/material/colors";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { CircularProgressAnimation } from "../components/CircularProgressAnimation";
 import { ErrorFetch } from "../components/errors/ErrorFetch";
@@ -44,7 +43,6 @@ export default function Cuenta() {
   const styleList = {
     width: "100%",
     maxWidth: 360,
-    bgcolor: "background.paper",
   };
 
   const initial = {
@@ -79,13 +77,13 @@ export default function Cuenta() {
   if (error) return <ErrorFetch />
 
   return (
-    <Container className="my-3">
-      <Row className="mb-3">
-        <Col md="3">
+    <Container className="shadow my-3 card-container-inicio rounded ">
+      <Row className="p-3">
+        <Col md="3 ">
 
           <Row className="my-3 justify-content-center">
             <Avatar
-              sx={{ bgcolor: blue[600] }}
+              sx={{ bgcolor: "#0d6efd" }}
               style={styleAvatar}>
               {(datosPersonales) ?
                 datosPersonales?.[atributoNombreRol]?.nombres["0"]?.toUpperCase() +
@@ -117,7 +115,7 @@ export default function Cuenta() {
                         sx={{ pl: 4 }}
                         onClick={() => setOption(<EstadisticasGiros />)}>
 
-                        <ListItemIcon>
+                        <ListItemIcon >
                           <ReplyIcon />
                         </ListItemIcon>
                         <ListItemText primary="Giros" />
@@ -127,7 +125,7 @@ export default function Cuenta() {
                         onClick={() => setOption(<EstadisticasUsuarios />)}>
 
                         <ListItemIcon>
-                          <PeopleIcon />
+                          <PeopleIcon  />
                         </ListItemIcon>
                         <ListItemText primary="Usuarios" />
                       </ListItemButton>

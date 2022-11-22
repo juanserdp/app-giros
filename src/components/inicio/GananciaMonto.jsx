@@ -6,7 +6,7 @@ const textStyleH2 = {
     fontSize: "1.5rem",
     fontFamily: "'Roboto Slab', serif",
     color: "white",
-    backgroundColor: "#198754",
+    backgroundColor: "#0d6efd",
 };
 
 const textStyleH3 = {
@@ -21,14 +21,17 @@ const cardStyle = {
     height: "220px"
 };
 
-export function Ganancia({ saldo, tasa }) {
+export function GananciaMonto({ valor, tasaVenta, tasaCompra }) {
+
+    const ganancia = (tasaVenta - tasaCompra) / tasaVenta;
+
     return (
         <Card className="mb-3 card-container-saldo rounded" style={cardStyle}>
             <CardContent className="p-0 ">
-                <h2 className="mb-3 py-2" style={textStyleH2}>Saldo</h2>
+                <h2 className="mb-3 py-2" style={textStyleH2}>Ganancia</h2>
                 <br />
-                <h3 style={textStyleH3} >{currencyFormatter.format(saldo)} VES</h3>
-                <h3 style={textStyleH3} >({currencyFormatter.format(saldo / tasa)} COP)</h3>
+                <h3 style={textStyleH3} >{currencyFormatter.format(valor * ganancia) } COP</h3>
+                <h3 style={textStyleH3} >({currencyFormatter.format(valor / tasaVenta * ganancia)} VES)</h3>
             </CardContent>
         </Card>
     )

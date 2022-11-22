@@ -20,7 +20,7 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { descargar } from "../../util/descargar";
 import { transformarImagenABinaryString } from "../../util/transformarImagenABinaryString";
 import swal from "sweetalert";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation} from "@apollo/client";
 import { EDITAR_GIRO } from "../../services/apollo/gql/giro/editarGiro";
 import { ELIMINAR_GIRO } from "../../services/apollo/gql/giro/eliminarGiro";
 import { OBTENER_USUARIO_POR_ID } from "../../services/apollo/gql/usuario/obtenerUsuarioPorId";
@@ -34,11 +34,12 @@ export function TablaGiros({
   setIds
 }) {
   // HOOKS
-  const { sesionData: { id, rol } } = useSesionContext();
+  const { sesionData: { rol } } = useSesionContext();
   const apiRef = useGridApiRef();
-  const { data } = useQuery(OBTENER_USUARIO_POR_ID,
-    { variables: { id } }
+  const [buscarUsuario] = useLazyQuery(
+    OBTENER_USUARIO_POR_ID
   );
+
   // FUNCIONES
   const estadoStyle = (params) => {
     const color = (params.value === "PENDIENTE") ? "red" :
@@ -79,12 +80,14 @@ export function TablaGiros({
     });
   };
 
-  const generar = (giro) => {
+  const generar = async (giro, id) => {
+    const result = await buscarUsuario({ variables: { id } });
+    console.log(result.data?.usuario);
     const factura = generarFactura({
       ...giro, ...{
-        nombresUsuario: data?.usuario.nombres,
-        apellidosUsuario: data?.usuario.apellidos,
-        numeroDocumentoUsuario: data?.usuario.numeroDocumento
+        nombresUsuario: result.data?.usuario.nombres,
+        apellidosUsuario: result.data?.usuario.apellidos,
+        numeroDocumentoUsuario: result.data?.usuario.numeroDocumento
       }
     });
     const blob = new Blob([factura], { type: "text/html" });
@@ -129,7 +132,7 @@ export function TablaGiros({
     <GridActionsCellItem
       icon={<DescriptionIcon />}
       disabled={loadingMutation}
-      onClick={() => generar(params.row)}
+      onClick={() => generar(params.row, params.row.usuario)}
       label="Generar factura"
       showInMenu />,
   ];

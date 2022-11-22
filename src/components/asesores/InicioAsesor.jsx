@@ -21,6 +21,10 @@ import { CircularProgressAnimation } from "../CircularProgressAnimation";
 import { ErrorFetch } from "../errors/ErrorFetch";
 import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
 import { useSesionContext } from "../../providers/SesionProvider";
+import { TasaCompra } from "../inicio/TasaCompra";
+import { GananciaPorcentaje } from "../inicio/GananciaPorcentaje";
+import { GananciaMonto } from "../inicio/GananciaMonto";
+import { useState } from "react";
 
 export function InicioAsesor() {
 
@@ -44,6 +48,9 @@ export function InicioAsesor() {
     const { loading, data, error, refetch } = useQuery(OBTENER_ASESOR_POR_ID, {
         variables: { id }
     });
+    const [valor, setValor] = useState(0);
+
+    const admin = useQuery(OBTENER_ASESOR_POR_ID, { variables: { id: "632d09bde690d71065208f78" } });
 
     const asesor = data || initialStateAsesor;
     const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
@@ -80,11 +87,23 @@ export function InicioAsesor() {
         <Container className="my-4" style={{ textAlign: "center" }}>
             <Row className="mb-3 justify-content-center">
                 <Col md="4">
+                    <GananciaPorcentaje
+                        tasaCompra={(asesor.asesor?.usarTasaPreferencial) ? asesor.asesor?.tasaPreferencial : admin.data?.asesor.tasaVenta}
+                        tasaVenta={asesor.asesor.tasaVenta} />
+                </Col>
+                <Col md="4">
                     <FormRecargar
                         recargar={recargarUsuario}
+                        setValor={setValor}
                         refetch={refetch}
                         recargarMutation={recargarMutation}
                         tasa={asesor.asesor?.tasaVenta} />
+                </Col>
+                <Col md="4">
+                    <GananciaMonto
+                        valor={valor}
+                        tasaCompra={(asesor.asesor?.usarTasaPreferencial) ? asesor.asesor?.tasaPreferencial : admin.data?.asesor.tasaVenta}
+                        tasaVenta={asesor.asesor.tasaVenta} />
                 </Col>
             </Row>
 
@@ -95,6 +114,10 @@ export function InicioAsesor() {
             </Row>
 
             <Row className="mb-3 justify-content-center">
+                <Col md="4">
+                    <TasaCompra
+                        tasa={(asesor.asesor?.usarTasaPreferencial) ? asesor.asesor?.tasaPreferencial : admin.data?.asesor.tasaVenta} />
+                </Col>
                 <Col md="4">
                     <TasaVenta
                         tasa={asesor.asesor.tasaVenta}
@@ -108,6 +131,7 @@ export function InicioAsesor() {
                         loading={loading}
                         tasa={asesor.asesor.tasaVenta} />
                 </Col>
+
             </Row>
         </Container>
     );

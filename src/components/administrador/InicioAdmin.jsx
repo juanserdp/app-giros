@@ -16,7 +16,7 @@ import { TasaVenta } from "../inicio/TasaVenta";
 import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
 import swal from "sweetalert";
 import { handleError } from "../../util/handleError";
-import { MensajeConImagen } from "../inicio/MensajeConImagen";
+import { ErrorFetch } from "../errors/ErrorFetch";
 
 export function InicioAdmin() {
 
@@ -42,7 +42,7 @@ export function InicioAdmin() {
     const [autoFocusMensaje, setAutoFocusMensaje] = useState(false);
     const buzon = useQuery(OBTENER_MENSAJES);
     const [idMensajeEditar, setIdMensajeEditar] = useState("");
-
+    const [valor, setValor] = useState(0);
     const { data, loading, error, refetch } = useQuery(OBTENER_ASESOR_POR_ID,
         { variables: { id } }
     );
@@ -72,6 +72,8 @@ export function InicioAdmin() {
         });
     };
 
+    if (error) return <ErrorFetch />
+
     return (
         <React.Fragment>
             <Container {...containerProps}>
@@ -80,6 +82,7 @@ export function InicioAdmin() {
                         <FormRecargar
                             recargar={recargarAsesor}
                             recargarMutation={recargarMutation}
+                            setValor={setValor}
                             tasa={data?.asesor.tasaVenta} />
                     </Col>
                 </Row>

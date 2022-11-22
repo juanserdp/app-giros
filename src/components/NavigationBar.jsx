@@ -20,7 +20,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 // UTIL
 import { Sesion } from "../util/Sesion";
 // ASSETS
-import logotipo from "../assets/images/logotipo_navbar.jpg";
+import logotipo from "../assets/images/logotipo_login.png";
 import { NOMBRE_EMPRESA } from "../assets/constants/empresa";
 import { useSesionContext } from "../providers/SesionProvider";
 
@@ -31,7 +31,7 @@ export function NavigationBar() {
 
   // CONSTANTES
   const imgStyle = {
-    width: "100px",
+    width: "45pxpx",
     height: "45px",
   };
 

@@ -2,7 +2,6 @@ import { Card, CardContent } from "@mui/material";
 import { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import swal from "sweetalert";
-import { useSesionContext } from "../../providers/SesionProvider";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { handleError } from "../../util/handleError";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
@@ -11,7 +10,7 @@ import { Cargando } from "../Cargando";
 import { NumeroDocumento } from "./NumeroDocumento";
 import { ValorRecarga } from "./ValorRecarga";
 
-export function FormRecargar({ recargar, refetch, recargarMutation}) {
+export function FormRecargar({ recargar, refetch, recargarMutation, setValor, tasa}) {
     // CONSTANTES
     const botonStyle = {
         borderTopLeftRadius: "0px",
@@ -24,12 +23,14 @@ export function FormRecargar({ recargar, refetch, recargarMutation}) {
     };
 
     // HOOKS
-    const { sesionData: { rol } } = useSesionContext();
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
 
     // MANEJADORES
     const handleInputChange = ({ target: { name, value } }) => {
+        if(name === "valorRecarga"){
+            setValor(value);
+        }
         setForm({ ...form, [name]: value });
     };
     const handleRecargar = async (event) => {
@@ -82,7 +83,8 @@ export function FormRecargar({ recargar, refetch, recargarMutation}) {
                         <ValorRecarga
                             value={form.valorRecarga}
                             onChange={(e) => handleInputChange(e)}
-                            md={10} />
+                            md={10}
+                            tasa={tasa} />
                     </Row>
                 </Form>
 

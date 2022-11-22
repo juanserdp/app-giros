@@ -3,7 +3,7 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber";
 import { FeedBack } from "../Feedback";
 
-export function ValorRecarga({ value, onChange, md, disabled }) {
+export function ValorRecarga({ value, onChange, md, disabled, tasa }) {
     return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_valorRecarga" md={md}>
         <Form.Label style={{ textAlign: "initial", width: "100%" }}>Valor de la Recarga (COP)</Form.Label>
         <Form.Control
@@ -17,6 +17,7 @@ export function ValorRecarga({ value, onChange, md, disabled }) {
             type="text"
             placeholder="Ingrese el valor..."
             disabled={disabled ? true : false} />
+            <span style={{ float: "left", opacity: 0.7 }}>{currencyFormatter.format(value / tasa)} (VES)</span>
         <FeedBack />
     </Form.Group>
 };

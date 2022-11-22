@@ -21,7 +21,6 @@ import { CircularProgressAnimation } from "../components/CircularProgressAnimati
 import { ErrorFetch } from "../components/errors/ErrorFetch";
 import { Cargando } from "../components/Cargando";
 import { useSesionContext } from "../providers/SesionProvider";
-import { styleH2, styleH3 } from "../assets/styles/fuentes";
 import { Nombres } from "../components/forms/Nombres";
 import { Apellidos } from "../components/forms/Apellidos";
 import { TipoDocumento } from "../components/forms/TipoDocumento";
@@ -30,7 +29,6 @@ import { TipoCuenta } from "../components/forms/TipoCuenta";
 import { NumeroCuenta } from "../components/forms/NumeroCuenta";
 import { Banco } from "../components/forms/Banco";
 import { ValorGiro } from "../components/forms/ValorGiro";
-import { MontoBolivares } from "../components/forms/MontoBolivares";
 import { currencyFormatter } from "../util/currencyFormatter";
 
 export default function EnviarGiro() {
@@ -111,18 +109,29 @@ export default function EnviarGiro() {
 
     if (error) return <ErrorFetch error={error} /> // ERROR
 
-    return (
-        <Container className="my-3 p-0 rounded" >
+    const styleTitulos = {
+        fontFamily: "'Roboto Slab', serif",
+        color: "white",
+        backgroundColor: "#0d6efd",
+    };
 
-            <h2 className="mb-3 p-3" >Datos de la persona que recibe el dinero</h2>
+    const bottonStyle = {
+        fontFamily:"'Roboto', sans-serif"
+    };
+
+    return (
+        <Container className="my-3 p-0 rounded card-container-inicio shadow" >
+
+            <h2 className="mb-3 p-3 rounded" style={styleTitulos}>Datos de la persona que recibe el dinero</h2>
 
             <Form
                 className="mx-5 "
                 validated={validated}>
+                <h3 className="mb-3 p-3 rounded w-25" >
+                    Datos personales
+                </h3>
                 <Row className="mb-3" >
-                    <h3 className="mb-3 p-3 rounded">
-                        Datos personales
-                    </h3>
+
                     <Nombres
                         value={giro.nombres}
                         onChange={(e) => handleInputChange(e)}
@@ -145,11 +154,11 @@ export default function EnviarGiro() {
                         onChange={(e) => handleInputChange(e)}
                         md={4} />
                 </Row>
-
+                <h3 className="mb-3 p-3 rounded w-25" >
+                    Datos Bancarios
+                </h3>
                 <Row className="mb-3">
-                    <h3 className="mb-3 p-3 rounded">
-                        Datos Bancarios
-                    </h3>
+
 
                     <TipoCuenta
                         value={giro.tipoCuenta}
@@ -168,12 +177,10 @@ export default function EnviarGiro() {
                         onChange={(e) => handleInputChange(e)}
                         md={4} />
                 </Row>
-
+                <h3 className="mb-3 p-3 rounded  w-25" >
+                    Datos de Envio
+                </h3>
                 <Row className="mb-3">
-                    <h3 className="mb-3 p-3 rounded">
-                        Datos de Envio
-                    </h3>
-
                     <ValorGiro
                         value={giro.valorGiro}
                         onChange={(e) => handleInputChange(e)}
@@ -186,6 +193,7 @@ export default function EnviarGiro() {
                 variant="primary"
                 className="my-3 mx-5"
                 disabled={loadingMutation}
+                style={bottonStyle}
                 onClick={handleEnviar}>
                 {(loadingMutation) ? <Cargando /> : "Enviar"}
             </Button>

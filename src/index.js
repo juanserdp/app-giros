@@ -16,7 +16,7 @@ import { urlHerokuHost, urlLocalHost } from "./services/apollo/client";
 export const sesion = new Sesion();
 
 const httpLink = createHttpLink({
-  uri: urlLocalHost,
+  uri: urlHerokuHost,
 });
 
 const authLink = setContext((_, { headers }) => {

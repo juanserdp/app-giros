@@ -151,7 +151,7 @@ export function Buzon({
                                 const blob = new Blob([array], { type: "image/jpeg" });
                                 return (
                                     <Carousel.Item key={index} interval={3000} className="pb-5">
-                                        <img src={URL.createObjectURL(blob)} height="200px" /><br />
+                                        <img alt={"imagen" + mensaje.id} src={URL.createObjectURL(blob)} height="200px" /><br />
                                         {(rol === "ADMINISTRADOR") ?
                                             (
                                                 <React.Fragment>

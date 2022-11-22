@@ -75,6 +75,7 @@ export function FormEnvios({
                 className="m-3"
                 variant="primary"
                 onClick={handleSubmit}
+                style={{fontFamily:"'Roboto', sans-serif"}}
                 disabled={loading}>
                 {(loading) ? <Cargando /> : "Editar"}
             </Button>

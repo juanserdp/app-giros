@@ -31,7 +31,7 @@ export function Configuracion() {
     const handleClick = () => setOpen(!open);
 
     return (
-        <Container>
+        <Container className="shadow my-3 card-container-inicio rounded ">
             <Row>
                 <Col md="3" className="mt-3">
                     <Row className="justify-content-center">
@@ -44,8 +44,7 @@ export function Configuracion() {
                     <Row>
                         <List sx={{
                             width: '100%',
-                            maxWidth: 360,
-                            bgcolor: 'background.paper',
+                            maxWidth: 360
                         }} component="nav" aria-label="mailbox folders">
 
                             <ListItem

@@ -60,8 +60,9 @@ export function generarFactura({
           <div class="col"></div>
           <div class="col-6">
             <img
-              height="100"
-              src="https://d500.epimg.net/cincodias/imagenes/2015/05/08/pyme/1431098283_691735_1431098420_noticia_normal.jpg"
+              height="150"
+              alt="logo_empresarial"
+              src="https://i.ibb.co/30DQqkm/logotipo-login.png"
             />
           </div>
           <div class="col"></div>
@@ -69,11 +70,13 @@ export function generarFactura({
   
         <div class="row text-center">
           <div class="col"></div>
+          <!-- 
           <div class="col-6">
             <p class="mb-1 cursive">${NOMBRE_EMPRESA}</p>
             <p class="mb-1 cursive">${DIRECCION_EMPRESA}</p>
             <p class="mb-1 cursive">${TELEFONO_EMPRESA}</p>
           </div>
+          -->
           <div class="col"></div>
         </div>
   
@@ -99,17 +102,18 @@ export function generarFactura({
         <div class="row mb-3">
           <div class="col-6">
             <h5 class="text-center mb-3">Persona que envia:</h5>
-            <p class="mb-1">
+            ${(nombresUsuario) ? 
+            `<p class="mb-1">
               <b class="cursive">Nombres: </b><span>${nombresUsuario + " " + apellidosUsuario}</span>
             </p>
             <p class="mb-1">
               <b class="cursive">Identificacion: </b><span>${numeroDocumentoUsuario}</span>
-            </p>
+            </p>` : ""}
           </div>
           <div class="col-6">
             <h5 class="text-center mb-3">Persona que recibe:</h5>
             <p class="mb-1">
-              <b class="cursive">Nombres: </b><span>${nombres + " " +apellidos}</span>
+              <b class="cursive">Nombres: </b><span>${nombres + " " + apellidos}</span>
             </p>
             <p class="mb-1">
               <b class="cursive">${tipoDocumento}: </b><span>${numeroDocumento}</span>
