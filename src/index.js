@@ -11,7 +11,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { Sesion } from "./util/Sesion";
 // import client from "./services/apollo/client";
-import { urlHerokuHost, urlLocalHost, urlRenderHost } from "./services/apollo/client";
+import { urlRenderHost } from "./services/apollo/client";
 
 export const sesion = new Sesion();
 

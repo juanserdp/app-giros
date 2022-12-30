@@ -16,7 +16,6 @@ import { useSesionContext } from "../../providers/SesionProvider";
 import { OBTENER_MENSAJES } from "../../services/apollo/gql/mensaje/obtenerMensajes";
 import { Acordion } from "../Acordion";
 import { ValorGiro } from "../forms/ValorGiro";
-import { MontoBolivares } from "../forms/MontoBolivares";
 import { currencyFormatter } from "../../util/currencyFormatter";
 import { TasaCompra } from "../inicio/TasaCompra";
 import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
@@ -134,6 +133,7 @@ export function InicioUsuario() {
                                     onChange={(e) => handleInputChange(e)}
                                     value={form.valorGiro}
                                     md={10}
+                                    titulo="Valor del Giro (COP)"
                                     tasa={usuario.usuario?.tasaVenta} />
                             </Row>
 

@@ -11,7 +11,7 @@ import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUs
 
 
 // COMPONENTES LIBRERIAS
-import { Button, Container, Form, Row, Col } from "react-bootstrap";
+import { Button, Container, Form, Row} from "react-bootstrap";
 import swal from "sweetalert";
 
 // FUNCIONES
@@ -211,6 +211,7 @@ export default function EnviarGiro() {
                         value={giro.valorGiro}
                         onChange={(e) => handleInputChange(e)}
                         md={4}
+                        titulo="Valor del Giro (COP)"
                         tasa={usuario.usuario?.tasaVenta} />
 
                 </Row>

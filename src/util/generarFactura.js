@@ -3,9 +3,10 @@ import { currencyFormatter } from "./currencyFormatter";
 
 export function generarFactura({
   id,
-  nombresUsuario,
-  apellidosUsuario,
-  numeroDocumentoUsuario,
+  nombresRemitente,
+  apellidosRemitente,
+  tipoDocumentoRemitente,
+  numeroDocumentoRemitente,
   nombres,
   apellidos,
   tipoDocumento,
@@ -102,12 +103,12 @@ export function generarFactura({
         <div class="row mb-3">
           <div class="col-6">
             <h5 class="text-center mb-3">Persona que envia:</h5>
-            ${(nombresUsuario) ? 
+            ${(nombresRemitente) ? 
             `<p class="mb-1">
-              <b class="cursive">Nombres: </b><span>${nombresUsuario + " " + apellidosUsuario}</span>
+              <b class="cursive">Nombres: </b><span>${nombresRemitente + " " + apellidosRemitente}</span>
             </p>
             <p class="mb-1">
-              <b class="cursive">Identificacion: </b><span>${numeroDocumentoUsuario}</span>
+              <b class="cursive">${tipoDocumentoRemitente}: </b><span>${numeroDocumentoRemitente}</span>
             </p>` : ""}
           </div>
           <div class="col-6">

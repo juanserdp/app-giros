@@ -199,6 +199,7 @@ export function ModalGiro({
                             value={giro.valorGiro}
                             onChange={(e) => handleInputChange(e)}
                             md={3}
+                            titulo="Valor del Giro (VES)"
                             tasa={giro.tasaCompra}
                             disabled={true} />
 

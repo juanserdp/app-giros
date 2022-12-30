@@ -3,9 +3,9 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber";
 import { FeedBack } from "../Feedback";
 
-export function ValorGiro({ value, onChange, md, disabled, tasa }) {
+export function ValorGiro({ value, onChange, md, disabled, tasa, titulo }) {
     return <Form.Group style={{ fontFamily: "'Roboto', sans-serif" }} as={Col} className="mb-3" controlId="label_valorGiro" md={md}>
-        <Form.Label style={{ textAlign: "initial", width: "100%"}}>Valor del Giro (COP)</Form.Label>
+        <Form.Label style={{ textAlign: "initial", width: "100%" }}>{titulo}</Form.Label>
         <Form.Control
             required
             name="valorGiro"
@@ -17,7 +17,9 @@ export function ValorGiro({ value, onChange, md, disabled, tasa }) {
             type="text"
             placeholder="Ingrese el valor..."
             disabled={disabled ? true : false} />
-            <span style={{ float: "left", opacity: 0.7 }}>{currencyFormatter.format(value / tasa)} (VES)</span>
+        {(titulo === "Valor del Giro (VES)") ?
+            null :
+            <span style={{ float: "left", opacity: 0.7 }}>{currencyFormatter.format(value / tasa)} (VES)</span>}
         <FeedBack />
     </Form.Group>
 };
