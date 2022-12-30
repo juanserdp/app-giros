@@ -130,7 +130,7 @@ export default function EnviarGiro() {
     return (
         <Container className="my-3 p-0 rounded card-container-inicio shadow" >
 
-            <h2 className="mb-3 p-3 rounded" style={styleTitulos}>Datos de la persona que recibe el dinero</h2>
+            <h2 className="mb-3 p-3 rounded" style={styleTitulos}>Datos del Giro</h2>
 
             <Form
                 className="mx-5 "
