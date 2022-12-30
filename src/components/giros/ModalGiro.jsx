@@ -16,6 +16,10 @@ import { EstadoGiro } from "../forms/EstadoGiro";
 import { useSesionContext } from "../../providers/SesionProvider";
 import { useMutation } from "@apollo/client";
 import { EDITAR_GIRO } from "../../services/apollo/gql/giro/editarGiro";
+import { NombresRemitente } from "../forms/NombresRemitente";
+import { ApellidosRemitente } from "../forms/ApellidosRemitente";
+import { TipoDocumentoRemitente } from "../forms/TipoDocumentoRemitente";
+import { NumeroDocumentoRemitente } from "../forms/NumeroDocumentoRemitente";
 
 export function ModalGiro({
     giros,
@@ -29,9 +33,13 @@ export function ModalGiro({
     // CONSTANTES
     const estadoInicialFomularioNuevoGiro = {
         nombres: "",
+        nombresRemitente: "",
         apellidos: "",
+        apellidosRemitente: "",
         tipoDocumento: "",
+        tipoDocumentoRemitente: "",
         numeroDocumento: "",
+        numeroDocumentoRemitente: "",
         banco: "",
         tipoCuenta: "",
         numeroCuenta: "",
@@ -108,6 +116,37 @@ export function ModalGiro({
             <Modal.Body>
                 <Form validated={validated}>
                     <Row className="mb-3">
+                        <p><b>Remitente:</b></p>
+                        <NombresRemitente
+                            md={6}
+                            onChange={(e) => handleInputChange(e)}
+                            value={giro.nombresRemitente}
+                            disabled={desactivado} />
+
+                        <ApellidosRemitente
+                            md={6}
+                            onChange={(e) => handleInputChange(e)}
+                            value={giro.apellidosRemitente}
+                            disabled={desactivado} />
+                    </Row>
+
+                    <Row className="mb-3">
+                        <TipoDocumentoRemitente
+                            value={giro.tipoDocumentoRemitente}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6}
+                            disabled={desactivado} />
+
+                        <NumeroDocumentoRemitente
+                            value={giro.numeroDocumentoRemitente}
+                            onChange={(e) => handleInputChange(e)}
+                            md={6}
+                            disabled={desactivado} />
+                    </Row>
+
+
+                    <Row className="mb-3">
+                        <p><b>Destinatario:</b></p>
                         <Nombres
                             md={6}
                             onChange={(e) => handleInputChange(e)}
@@ -160,6 +199,7 @@ export function ModalGiro({
                             value={giro.valorGiro}
                             onChange={(e) => handleInputChange(e)}
                             md={3}
+                            tasa={giro.tasaCompra}
                             disabled={true} />
 
                         {rol !== "USUARIO"

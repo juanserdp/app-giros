@@ -11,7 +11,7 @@ import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUs
 
 
 // COMPONENTES LIBRERIAS
-import { Button, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import swal from "sweetalert";
 
 // FUNCIONES
@@ -30,6 +30,10 @@ import { NumeroCuenta } from "../components/forms/NumeroCuenta";
 import { Banco } from "../components/forms/Banco";
 import { ValorGiro } from "../components/forms/ValorGiro";
 import { currencyFormatter } from "../util/currencyFormatter";
+import { NombresRemitente } from "../components/forms/NombresRemitente";
+import { ApellidosRemitente } from "../components/forms/ApellidosRemitente";
+import { TipoDocumentoRemitente } from "../components/forms/TipoDocumentoRemitente";
+import { NumeroDocumentoRemitente } from "../components/forms/NumeroDocumentoRemitente";
 
 export default function EnviarGiro() {
 
@@ -41,9 +45,13 @@ export default function EnviarGiro() {
 
     const estadoInicialGiro = {
         nombres: "",
+        nombresRemitente: "",
         apellidos: "",
+        apellidosRemitente: "",
         tipoDocumento: "",
+        tipoDocumentoRemitente: "",
         numeroDocumento: "",
+        numeroDocumentoRemitente: "",
         banco: "",
         tipoCuenta: "",
         numeroCuenta: "",
@@ -72,7 +80,7 @@ export default function EnviarGiro() {
     // MANEJADORES
     const handleEnviar = async (event) => {
         event.preventDefault();
-        const tasa = (usuario.usuario?.usarTasaDelAsesor) ? usuario.usuario?.asesor?.tasaVenta : usuario.usuario?.tasaVenta;
+        const tasa = usuario.usuario?.tasaVenta;
         const valorMinimo = usuario.usuario?.asesor?.valorMinimoGiro;
 
         if (validarCamposNotNull(giro)) {
@@ -116,7 +124,7 @@ export default function EnviarGiro() {
     };
 
     const bottonStyle = {
-        fontFamily:"'Roboto', sans-serif"
+        fontFamily: "'Roboto', sans-serif"
     };
 
     return (
@@ -130,29 +138,47 @@ export default function EnviarGiro() {
                 <h3 className="mb-3 p-3 rounded w-25" >
                     Datos personales
                 </h3>
-                <Row className="mb-3" >
-
-                    <Nombres
-                        value={giro.nombres}
+                <Row className="mb-3">
+                    <p><b>Remitente:</b></p>
+                    <NombresRemitente
+                        value={giro.nombresRemitente}
                         onChange={(e) => handleInputChange(e)}
-                        md={4} />
+                        md={3} />
 
-                    <Apellidos
-                        value={giro.apellidos}
+                    <ApellidosRemitente
+                        value={giro.apellidosRemitente}
                         onChange={(e) => handleInputChange(e)}
-                        md={4} />
+                        md={3} />
+                    <TipoDocumentoRemitente
+                        value={giro.tipoDocumentoRemitente}
+                        onChange={(e) => handleInputChange(e)}
+                        md={3} />
+
+                    <NumeroDocumentoRemitente
+                        value={giro.numeroDocumentoRemitente}
+                        onChange={(e) => handleInputChange(e)}
+                        md={3} />
                 </Row>
 
                 <Row className="mb-3">
+                    <p><b>Destinatario:</b></p>
+                    <Nombres
+                        value={giro.nombres}
+                        onChange={(e) => handleInputChange(e)}
+                        md={3} />
+                    <Apellidos
+                        value={giro.apellidos}
+                        onChange={(e) => handleInputChange(e)}
+                        md={3} />
                     <TipoDocumento
                         value={giro.tipoDocumento}
                         onChange={(e) => handleInputChange(e)}
-                        md={4} />
+                        md={3} />
 
                     <NumeroDocumento
                         value={giro.numeroDocumento}
                         onChange={(e) => handleInputChange(e)}
-                        md={4} />
+                        md={3} />
                 </Row>
                 <h3 className="mb-3 p-3 rounded w-25" >
                     Datos Bancarios
@@ -184,7 +210,8 @@ export default function EnviarGiro() {
                     <ValorGiro
                         value={giro.valorGiro}
                         onChange={(e) => handleInputChange(e)}
-                        md={4} />
+                        md={4}
+                        tasa={usuario.usuario?.tasaVenta} />
 
                 </Row>
             </Form >

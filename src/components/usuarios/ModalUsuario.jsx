@@ -19,6 +19,7 @@ import { useMutation } from "@apollo/client";
 import { CREAR_USUARIO } from "../../services/apollo/gql/usuario/crearUsuario";
 import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
 import { UsarTasaPreferencial } from "../forms/UsarTasaPreferencial";
+import { TasaVenta } from "../forms/TasaVenta";
 
 export function ModalUsuario({
     usuarios,
@@ -167,16 +168,16 @@ export function ModalUsuario({
                             value={usuario.capacidadPrestamo}
                             onChange={(e) => handleInputChange(e)}
                             md={3} />
-                     
+
 
                     </Row>
 
                     <Row className="mb-3 mx-5">
-                    {(voyAEditarUnUsuario) ? (
+                        {(voyAEditarUnUsuario) ? (
                             <Estado
                                 value={usuario.estado}
                                 onChange={(e) => handleInputChange(e)}
-                                md={6} />
+                                md={3} />
                         ) : null}
 
                         {(voyAEditarUnUsuario) ? (
@@ -186,13 +187,18 @@ export function ModalUsuario({
                                 md={3} />
                         ) : null}
 
+                        {(voyAEditarUnUsuario) ? (
+                            <TasaVenta
+                                value={usuario.tasaVenta}
+                                onChange={(e) => handleInputChange(e)}
+                                md={3} />
+                        ) : null}
+
                         {(usuario.usarTasaPreferencial) ? (
                             <TasaPreferencial
                                 value={usuario.tasaPreferencial}
                                 onChange={(e) => handleInputChange(e)}
                                 md={3} />) : null}
-
-
                     </Row>
 
                     <Row className="mb-3 mx-5">

@@ -16,7 +16,7 @@ import { LinearProgress } from "@mui/material";
 import { dobleConfirmacionEliminacion } from "../../util/dobleConfirmacionEliminacion";
 import { generarFactura } from "../../util/generarFactura";
 import { handleError } from "../../util/handleError";
-import { currencyFormatter } from "../../util/currencyFormatter";
+import { currencyFormatterWithDecimals } from "../../util/currencyFormatter";
 import { descargar } from "../../util/descargar";
 import { transformarImagenABinaryString } from "../../util/transformarImagenABinaryString";
 import swal from "sweetalert";
@@ -138,29 +138,54 @@ export function TablaGiros({
   ];
 
   const columnas = [
-
+    {
+      field: "nombresRemitente",
+      headerName: "NOMBRES REMITENTE",
+      width: "200",
+      headerAlign: "center",
+    },
+    {
+      field: "apellidosRemitente",
+      headerName: "APELLIDOS REMITENTE",
+      width: "200",
+      headerAlign: "center",
+    },
+    {
+      field: "tipoDocumentoRemitente",
+      headerName: "TIPO DOCUMENTO REMITENTE",
+      width: "200",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "numeroDocumentoRemitente",
+      headerName: "NUM. DOCUMENTO REMITENTE",
+      width: "150",
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "nombres",
-      headerName: "NOMBRES",
+      headerName: "NOMBRES DESTINATARIO",
       width: "200",
       headerAlign: "center",
     },
     {
       field: "apellidos",
-      headerName: "APELLIDOS",
+      headerName: "APELLIDOS DESTINATARIO",
       width: "200",
       headerAlign: "center",
     },
     {
       field: "tipoDocumento",
-      headerName: "TIPO DOCUMENTO",
+      headerName: "TIPO DOCUMENTO DESTINATARIO",
       width: "200",
       headerAlign: "center",
       align: "center",
     },
     {
       field: "numeroDocumento",
-      headerName: "NUM. DOCUMENTO",
+      headerName: "NUM. DOCUMENTO DESTINATARIO",
       width: "150",
       headerAlign: "center",
       align: "center",
@@ -190,7 +215,7 @@ export function TablaGiros({
       field: "valorGiro",
       headerName: "VALOR",
       type: "number",
-      valueFormatter: ({ value }) => currencyFormatter.format(value),
+      valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
       cellClassName: "font-tabular-nums",
       width: "150",
       align: "center",
@@ -203,13 +228,13 @@ export function TablaGiros({
       headerAlign: "center",
       align: "center",
     },
-    // {
-    //   field: "tasaCompra",
-    //   headerName: "TASA COMPRA",
-    //   width: "150",
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
+    {
+      field: "tasaCompra",
+      headerName: "TASA COMPRA",
+      width: "150",
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "estadoGiro",
       headerName: "ESTADO",

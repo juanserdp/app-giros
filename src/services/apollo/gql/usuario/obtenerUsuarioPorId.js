@@ -21,7 +21,8 @@ query obtenerUsuarioPorId($id: ID!){
             id
         },
         tasaPreferencial,
-        usarTasaPreferencial
+        usarTasaPreferencial,
+        tasaVenta
     }
 }
 `;

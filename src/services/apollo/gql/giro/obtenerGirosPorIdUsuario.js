@@ -3,20 +3,24 @@ import { gql } from "@apollo/client";
 export const OBTENER_GIROS_POR_ID_USUARIO =gql`
     query obtenerGirosPorIdUsuario($id:ID!){
         giros: obtenerGirosPorIdUsuario(id:$id){
-            id,
-            usuario,
-            nombres,
-            apellidos,
-            tipoDocumento,
-            numeroDocumento,
-            banco,
-            tipoCuenta,
-            numeroCuenta,
-            valorGiro,
-            comprobantePago,
+            id
+            usuario
+            nombres
+            nombresRemitente
+            apellidos
+            apellidosRemitente
+            tipoDocumento
+            tipoDocumentoRemitente
+            numeroDocumento
+            numeroDocumentoRemitente
+            banco
+            tipoCuenta
+            numeroCuenta
+            valorGiro
+            comprobantePago
             fechaEnvio
-            #tasaCompra,
             estadoGiro
+            tasaCompra
         }
     }
 `;

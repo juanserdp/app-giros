@@ -1,12 +1,5 @@
 import { Card, CardContent } from "@mui/material";
-
-const textStyleH2 = {
-    fontWeight: "500",
-    fontSize: "1.5rem",
-    fontFamily: "'Roboto Slab', serif",
-    color: "white",
-    backgroundColor: "#0d6efd",
-};
+import { Acordion } from "../Acordion";
 
 const textStyleH3 = {
     fontWeight: "400",
@@ -16,20 +9,21 @@ const textStyleH3 = {
     verticalAlign: "center"
 };
 
-const cardStyle = {
-    height: "220px"
-};
+
 
 export function GananciaPorcentaje({ tasaCompra, tasaVenta }) {
 
     const ganancia = (tasaVenta - tasaCompra) / tasaVenta * 100;
-    
+
     return (
-        <Card className="mb-3 card-container-saldo rounded" style={cardStyle}>
+        <Card className="mb-3 card-container-saldo rounded" >
             <CardContent className="p-0 ">
-                <h2 className="mb-3 py-2" style={textStyleH2}>Ganancia %</h2>
-                <br />
+                <Acordion titulo="Ganancia">
+                    Aquí veras la ganancia que tendras en porcentaje segun la tasa actual de compra, tu tasa
+                    actual de venta y el valor de la recarga.
+                </Acordion>
                 <h3 style={textStyleH3} >{Number(ganancia.toFixed(3))} %</h3>
+                <br />
             </CardContent>
         </Card>
     )

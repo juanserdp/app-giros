@@ -15,7 +15,7 @@ import { LinearProgress } from '@mui/material';
 import { CustomNoRowsOverlay } from '../toolbar/CustomNoRowsOverlay';
 import { GridColumnMenu } from '../toolbar/GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
-import { currencyFormatter } from '../../util/currencyFormatter';
+import {  currencyFormatterWithDecimals } from '../../util/currencyFormatter';
 import { ELIMINAR_ASESOR } from '../../services/apollo/gql/asesor/eliminarAsesor';
 import { useMutation } from '@apollo/client';
 
@@ -127,7 +127,7 @@ export function TablaAsesores({
             field: 'saldo',
             headerName: 'SALDO (VES)',
             type: 'number',
-            valueFormatter: ({ value }) => currencyFormatter.format(value),
+            valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",

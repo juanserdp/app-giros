@@ -1,13 +1,7 @@
 import { Card, CardContent } from "@mui/material";
-import { currencyFormatter } from "../../util/currencyFormatter";
+import { currencyFormatterWithDecimals } from "../../util/currencyFormatter";
+import { Acordion } from "../Acordion";
 
-const textStyleH2 = {
-    fontWeight: "500",
-    fontSize: "1.5rem",
-    fontFamily: "'Roboto Slab', serif",
-    color: "white",
-    backgroundColor: "#0d6efd",
-};
 
 const textStyleH3 = {
     fontWeight: "400",
@@ -17,21 +11,23 @@ const textStyleH3 = {
     verticalAlign: "center"
 };
 
-const cardStyle = {
-    height: "220px"
-};
+
 
 export function GananciaMonto({ valor, tasaVenta, tasaCompra }) {
 
     const ganancia = (tasaVenta - tasaCompra) / tasaVenta;
 
     return (
-        <Card className="mb-3 card-container-saldo rounded" style={cardStyle}>
+        <Card className="mb-3 card-container-saldo rounded" >
             <CardContent className="p-0 ">
-                <h2 className="mb-3 py-2" style={textStyleH2}>Ganancia</h2>
-                <br />
-                <h3 style={textStyleH3} >{currencyFormatter.format(valor * ganancia) } COP</h3>
-                <h3 style={textStyleH3} >({currencyFormatter.format(valor / tasaVenta * ganancia)} VES)</h3>
+                <Acordion titulo="Ganancia">
+                    Aquí veras la ganancia que tendras segun la tasa actual de compra, tu tasa 
+                    actual de venta y el valor de la recarga.
+                </Acordion>
+              
+                <h3 style={textStyleH3} >{currencyFormatterWithDecimals.format(valor * ganancia)} COP</h3>
+                <h3 style={textStyleH3} >({currencyFormatterWithDecimals.format(valor / tasaVenta * ganancia)} VES)</h3>
+                <br/>
             </CardContent>
         </Card>
     )

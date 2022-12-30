@@ -18,7 +18,7 @@ export const OBTENER_USUARIOS_POR_ID_ASESOR = gql`
             estado,
             tasaPreferencial,
             usarTasaPreferencial,
-
+            tasaVenta
         }
     }
 `;

@@ -14,7 +14,7 @@ import { CustomNoRowsOverlay } from '../toolbar/CustomNoRowsOverlay';
 import { GridColumnMenu } from '../toolbar/GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
 import { handleError } from '../../util/handleError';
-import { currencyFormatter } from '../../util/currencyFormatter';
+import { currencyFormatterWithDecimals } from '../../util/currencyFormatter';
 import { useMutation } from '@apollo/client';
 import { ELIMINAR_USUARIO } from '../../services/apollo/gql/usuario/eliminarUsuario';
 
@@ -103,7 +103,7 @@ export function TablaUsuarios({
             field: 'saldo',
             headerName: 'SALDO (VES)',
             type: 'number',
-            valueFormatter: ({ value }) => currencyFormatter.format(value),
+            valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",
@@ -113,17 +113,17 @@ export function TablaUsuarios({
             field: 'deuda',
             headerName: 'DEUDA (VES)',
             type: 'number',
-            valueFormatter: ({ value }) => currencyFormatter.format(value),
+            valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",
             headerAlign: 'center',
         },
         {
-            field: 'capacidadPrestamo (VES)',
-            headerName: 'CAPACIDAD PRESTAMO',
+            field: 'capacidadPrestamo',
+            headerName: 'CAPACIDAD PRESTAMO (VES)',
             type: 'number',
-            valueFormatter: ({ value }) => currencyFormatter.format(value),
+            valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",

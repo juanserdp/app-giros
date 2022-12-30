@@ -49,7 +49,8 @@ export function InicioAsesor() {
         variables: { id }
     });
     const [valor, setValor] = useState(0);
-
+    // global: 632d09bde690d71065208f78
+    // local: 637950357e6c9a7c9cce88b5
     const admin = useQuery(OBTENER_ASESOR_POR_ID, { variables: { id: "632d09bde690d71065208f78" } });
 
     const asesor = data || initialStateAsesor;

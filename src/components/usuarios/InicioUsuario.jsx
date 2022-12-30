@@ -3,7 +3,7 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Buzon } from "../inicio/Buzon";
 import { CardContent, Card } from "@mui/material";
 import { OBTENER_USUARIO_POR_ID } from "../../services/apollo/gql/usuario/obtenerUsuarioPorId";
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { validarCamposNotNull } from "../../util/validarCamposNotNull";
@@ -18,6 +18,9 @@ import { Acordion } from "../Acordion";
 import { ValorGiro } from "../forms/ValorGiro";
 import { MontoBolivares } from "../forms/MontoBolivares";
 import { currencyFormatter } from "../../util/currencyFormatter";
+import { TasaCompra } from "../inicio/TasaCompra";
+import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
+import { handleError } from "../../util/handleError";
 
 export function InicioUsuario() {
     // INSTANCIAS
@@ -38,7 +41,7 @@ export function InicioUsuario() {
         borderTopLeftRadius: "0px",
         borderTopRightRadius: "0px",
         width: "100%",
-        fontFamily:"'Roboto', sans-serif"
+        fontFamily: "'Roboto', sans-serif"
     };
     const initialStateMensajes = {
         mensajes: []
@@ -48,10 +51,10 @@ export function InicioUsuario() {
     const { sesionData: { id } } = useSesionContext();
 
     const buzon = useQuery(OBTENER_MENSAJES);
-
+    const [editarTasaVenta] = useMutation(EDITAR_USUARIO);
     const mensajes = buzon.data?.mensajes || initialStateMensajes.mensajes;
 
-    const { loading, data, error } = useQuery(OBTENER_USUARIO_POR_ID, {
+    const { loading, data, error, refetch } = useQuery(OBTENER_USUARIO_POR_ID, {
         variables: { id },
     });
 
@@ -76,7 +79,30 @@ export function InicioUsuario() {
             else swal("Error!", `El valor minimo para hacer un giro es: ${currencyFormatter.format(valorMinimo)}`, "error");
         }
         else setValidated(true);
-    }
+    };
+
+    const handleEditarTasa = async () => {
+        swal("Nueva tasa de venta:", {
+            content: "input",
+        }).then(async (value) => {
+            if (value) {
+                await editarTasaVenta({
+                    variables: {
+                        id,
+                        usuario: {
+                            tasaVenta: Number(value)
+                        }
+                    },
+                    onCompleted: () => {
+                        swal("Editado!", "La tasa de Venta ha sido editada con exito", "success");
+                        refetch();
+                    },
+                    onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
+                });
+            }
+            else swal("Error!", "Todos los campos son obligatorios!", "error");
+        });
+    };
 
     if (loading) return <CircularProgressAnimation />;
 
@@ -88,9 +114,8 @@ export function InicioUsuario() {
                 <Col md="4">
                     <Card className="card-container-inicio mb-3 rounded">
                         <CardContent className="p-0">
-                            <Acordion titulo={<span style={{fontFamily:"'Roboto', sans-serif", fontSize:"1.2rem"}}>Enviar Giro</span>}>
-                                Aquí puedes enviar giros a las personas.
-                                Ingrese el valor del monto que va a enviar.
+                            <Acordion titulo={<span style={{ fontFamily: "'Roboto', sans-serif", fontSize: "1.2rem" }}>Enviar Giro</span>}>
+                                Aquí puedes poner el valor del giro que vas a enviar.
                             </Acordion>
 
                             <Row
@@ -101,7 +126,8 @@ export function InicioUsuario() {
                                 <ValorGiro
                                     onChange={(e) => handleInputChange(e)}
                                     value={form.valorGiro}
-                                    md={10} />
+                                    md={10}
+                                    tasa={usuario.usuario?.tasaVenta} />
                             </Row>
 
                             <Row>
@@ -118,6 +144,12 @@ export function InicioUsuario() {
                         </CardContent>
                     </Card>
                 </Col>
+                <Col md="4">
+                    <TasaVenta
+                        tasa={usuario.usuario?.tasaVenta}
+                        handleEditarTasa={handleEditarTasa}
+                        rol="USUARIO" />
+                </Col>
             </Row>
 
             <hr />
@@ -132,14 +164,13 @@ export function InicioUsuario() {
 
             <Row className="mb-3">
                 <Col md="4">
-                    <TasaVenta
+                    <TasaCompra
                         tasa={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : usuario.usuario?.asesor.tasaVenta}
-                        loading={loading}
-                        rol="USUARIO" />
+                    />
                 </Col>
 
                 <Col md="4">
-                    <Saldo saldo={usuario.usuario.saldo} />
+                    <Saldo saldo={usuario.usuario.saldo} tasa={usuario.usuario?.tasaVenta} />
                 </Col>
 
                 <Col md="4">
