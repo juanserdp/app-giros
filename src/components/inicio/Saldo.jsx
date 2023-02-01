@@ -27,8 +27,8 @@ export function Saldo({ saldo, tasa }) {
             <CardContent className="p-0 ">
                 <h2 className="mb-3 py-2" style={textStyleH2}>Saldo</h2>
                 <br />
-                <h3 style={textStyleH3} >{currencyFormatterWithDecimals.format(saldo)} VES</h3>
-                <h3 style={textStyleH3} >({currencyFormatterWithDecimals.format(saldo * tasa)} COP)</h3>
+                <h3 style={textStyleH3} >{currencyFormatterWithDecimals.format(saldo)} COP</h3>
+                {/* <h3 style={textStyleH3} >({currencyFormatterWithDecimals.format(saldo * tasa)} COP)</h3> */}
             </CardContent>
         </Card>
     )

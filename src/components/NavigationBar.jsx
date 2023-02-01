@@ -10,6 +10,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import PaymentsIcon from '@mui/icons-material/Payments';
 // COMPONENTES
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Container from "react-bootstrap/Container";
@@ -103,6 +104,13 @@ export function NavigationBar() {
                 as={NavLink}>
                 <ReplyIcon />
                 &nbsp;Giros
+              </Nav.Link>
+
+              <Nav.Link
+                to={"/movimientos"}
+                as={NavLink}>
+                <PaymentsIcon />
+                &nbsp;Movimientos
               </Nav.Link>
 
 

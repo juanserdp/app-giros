@@ -11,12 +11,12 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { Sesion } from "./util/Sesion";
 // import client from "./services/apollo/client";
-import { urlRenderHost } from "./services/apollo/client";
+//import { urlLocalHost } from "./services/apollo/client";
 
 export const sesion = new Sesion();
 
 const httpLink = createHttpLink({
-  uri: urlRenderHost,
+  uri: "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {

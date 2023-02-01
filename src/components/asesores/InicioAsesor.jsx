@@ -51,8 +51,8 @@ export function InicioAsesor() {
     const [valor, setValor] = useState(0);
     // global: 632d09bde690d71065208f78
     // local: 637950357e6c9a7c9cce88b5
-    const admin = useQuery(OBTENER_ASESOR_POR_ID, { variables: { id: "632d09bde690d71065208f78" } });
-
+    const admin = useQuery(OBTENER_ASESOR_POR_ID, { variables: { id: "63d09e3ca482592f4d617f4b" } });
+    console.log(admin.data?.asesor)
     const asesor = data || initialStateAsesor;
     const mensajes = buzon?.data?.mensajes || initialStateMensajes.mensajes;
 
@@ -86,7 +86,7 @@ export function InicioAsesor() {
 
     return (
         <Container className="my-4" style={{ textAlign: "center" }}>
-            <Row className="mb-3 justify-content-center">
+            <Row className="mb-3 ">
                 <Col md="4">
                     <GananciaPorcentaje
                         tasaCompra={(asesor.asesor?.usarTasaPreferencial) ? asesor.asesor?.tasaPreferencial : admin.data?.asesor.tasaVenta}
@@ -100,12 +100,7 @@ export function InicioAsesor() {
                         recargarMutation={recargarMutation}
                         tasa={asesor.asesor?.tasaVenta} />
                 </Col>
-                <Col md="4">
-                    <GananciaMonto
-                        valor={valor}
-                        tasaCompra={(asesor.asesor?.usarTasaPreferencial) ? asesor.asesor?.tasaPreferencial : admin.data?.asesor.tasaVenta}
-                        tasaVenta={asesor.asesor.tasaVenta} />
-                </Col>
+                
             </Row>
 
             <Row className="mb-3">

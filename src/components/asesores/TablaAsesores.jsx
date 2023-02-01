@@ -15,9 +15,24 @@ import { LinearProgress } from '@mui/material';
 import { CustomNoRowsOverlay } from '../toolbar/CustomNoRowsOverlay';
 import { GridColumnMenu } from '../toolbar/GridColumnMenu';
 import { dobleConfirmacionEliminacion } from '../../util/dobleConfirmacionEliminacion';
-import {  currencyFormatterWithDecimals } from '../../util/currencyFormatter';
+import { currencyFormatter, currencyFormatterWithDecimals } from '../../util/currencyFormatter';
 import { ELIMINAR_ASESOR } from '../../services/apollo/gql/asesor/eliminarAsesor';
 import { useMutation } from '@apollo/client';
+import { GridCellExpand } from '../GridCellExpand';
+
+import PropTypes from 'prop-types';
+import { useEffect } from 'react';
+
+function renderCellExpand(params) {
+    return (
+        <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+    );
+}
+
+renderCellExpand.propTypes = {
+    colDef: PropTypes.object.isRequired,
+    value: PropTypes.string,
+};
 
 export function TablaAsesores({
     asesores,
@@ -100,13 +115,15 @@ export function TablaAsesores({
             headerName: 'NOMBRES',
             width: "200",
             headerAlign: 'center',
+            renderCell: renderCellExpand
 
         },
         {
             field: 'apellidos',
             headerName: 'APELLIDOS',
             width: "200",
-            headerAlign: 'center'
+            headerAlign: 'center',
+            renderCell: renderCellExpand
         },
         {
             field: 'tipoDocumento',
@@ -114,24 +131,26 @@ export function TablaAsesores({
             width: "200",
             headerAlign: 'center',
             align: "center",
+            renderCell: renderCellExpand
         },
         {
             field: 'numeroDocumento',
-            headerName: 'NUM. DOCUMENTO',
-            width: "150",
+            headerName: '# DOCUMENTO',
+            width: "170",
             headerAlign: 'center',
             align: "center",
+            renderCell: renderCellExpand
 
         },
         {
             field: 'saldo',
-            headerName: 'SALDO (VES)',
+            headerName: 'SALDO',
             type: 'number',
-            valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
+            valueFormatter: ({ value }) => currencyFormatter.format(Number(value)),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",
-            headerAlign: 'center',
+            headerAlign: 'center'
         },
         {
             field: 'estado',
@@ -163,7 +182,7 @@ export function TablaAsesores({
             headerHeight={50} // ALTURA TITULOS
             apiRef={apiRef}
             rowHeight={50} // ALTURA FILA
-            rows={asesores.filter(a => a.numeroDocumento !== "admin")} // FILAS
+            rows={[...asesores].reverse()} // FILAS
             columns={columnas} // COLUMNAS
             components={{ // COMPONENTES
                 Toolbar: () => <CustomToolbar

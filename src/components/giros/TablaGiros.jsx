@@ -24,6 +24,133 @@ import { useMutation} from "@apollo/client";
 import { EDITAR_GIRO } from "../../services/apollo/gql/giro/editarGiro";
 import { ELIMINAR_GIRO } from "../../services/apollo/gql/giro/eliminarGiro";
 
+
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import React from "react";
+
+function isOverflown(element) {
+  return (
+    element.scrollHeight > element.clientHeight ||
+    element.scrollWidth > element.clientWidth
+  );
+}
+
+const GridCellExpand = React.memo(function GridCellExpand(props) {
+  const { width, value } = props;
+  const wrapper = React.useRef(null);
+  const cellDiv = React.useRef(null);
+  const cellValue = React.useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [showFullCell, setShowFullCell] = React.useState(false);
+  const [showPopper, setShowPopper] = React.useState(false);
+
+  const handleMouseEnter = () => {
+    const isCurrentlyOverflown = isOverflown(cellValue.current);
+    setShowPopper(isCurrentlyOverflown);
+    setAnchorEl(cellDiv.current);
+    setShowFullCell(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowFullCell(false);
+  };
+
+  React.useEffect(() => {
+    if (!showFullCell) {
+      return undefined;
+    }
+
+    function handleKeyDown(nativeEvent) {
+      // IE11, Edge (prior to using Bink?) use 'Esc'
+      if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+        setShowFullCell(false);
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [setShowFullCell, showFullCell]);
+
+  return (
+    <Box
+      ref={wrapper}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{
+        alignItems: 'center',
+        lineHeight: '24px',
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        display: 'flex',
+      }}
+    >
+      <Box
+        ref={cellDiv}
+        sx={{
+          height: '100%',
+          width,
+          display: 'block',
+          position: 'absolute',
+          top: 0,
+        }}
+      />
+      <Box
+        ref={cellValue}
+        sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+      >
+        {value}
+      </Box>
+      {showPopper && (
+        <Popper
+          open={showFullCell && anchorEl !== null}
+          anchorEl={anchorEl}
+          style={{ marginLeft: -17 }}
+        >
+          <Paper
+            elevation={1}
+            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+          >
+            <Typography variant="body2" style={{ padding: 8 }}>
+              {value}
+            </Typography>
+          </Paper>
+        </Popper>
+      )}
+    </Box>
+  );
+});
+
+GridCellExpand.propTypes = {
+  value: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+};
+
+function renderCellExpand(params) {
+  return (
+    <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+  );
+}
+
+renderCellExpand.propTypes = {
+  /**
+   * The column of the row that the current cell belongs to.
+   */
+  colDef: PropTypes.object.isRequired,
+  /**
+   * The cell value.
+   * If the column has `valueGetter`, use `params.row` to directly access the fields.
+   */
+  value: PropTypes.string,
+};
+
 export function TablaGiros({
   giros,
   refetch,
@@ -32,6 +159,7 @@ export function TablaGiros({
   ids,
   setIds
 }) {
+  
   // HOOKS
   const { sesionData: { rol } } = useSesionContext();
   const apiRef = useGridApiRef();
@@ -129,54 +257,62 @@ export function TablaGiros({
     {
       field: "nombresRemitente",
       headerName: "NOMBRES REMITENTE",
-      width: "200",
+      width: "220",
       headerAlign: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "apellidosRemitente",
       headerName: "APELLIDOS REMITENTE",
-      width: "200",
+      width: "220",
       headerAlign: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "tipoDocumentoRemitente",
       headerName: "TIPO DOCUMENTO REMITENTE",
-      width: "200",
+      width: "280",
       headerAlign: "center",
       align: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "numeroDocumentoRemitente",
-      headerName: "NUM. DOCUMENTO REMITENTE",
-      width: "150",
+      headerName: "# DOCUMENTO REMITENTE",
+      width: "260",
       headerAlign: "center",
       align: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "nombres",
       headerName: "NOMBRES DESTINATARIO",
-      width: "200",
+      width: "240",
       headerAlign: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "apellidos",
       headerName: "APELLIDOS DESTINATARIO",
-      width: "200",
+      width: "250",
       headerAlign: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "tipoDocumento",
       headerName: "TIPO DOCUMENTO DESTINATARIO",
-      width: "200",
+      width: "320",
       headerAlign: "center",
       align: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "numeroDocumento",
-      headerName: "NUM. DOCUMENTO DESTINATARIO",
-      width: "150",
+      headerName: "# DOCUMENTO DESTINATARIO",
+      width: "280",
       headerAlign: "center",
       align: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "banco",
@@ -184,6 +320,7 @@ export function TablaGiros({
       width: "200",
       headerAlign: "center",
       align: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "tipoCuenta",
@@ -191,11 +328,12 @@ export function TablaGiros({
       width: "150",
       headerAlign: "center",
       align: "center",
+      renderCell: renderCellExpand
     },
     {
       field: "numeroCuenta",
       headerName: "NUMERO CUENTA",
-      width: "150",
+      width: "200",
       headerAlign: "center",
       align: "center",
     },
@@ -272,7 +410,7 @@ export function TablaGiros({
         headerHeight={50}
         apiRef={apiRef}
         rowHeight={50}
-        rows={giros}
+        rows={[...giros].reverse()}
         columns={columnas}
         components={{
           Toolbar: () =>

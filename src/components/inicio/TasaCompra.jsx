@@ -15,15 +15,12 @@ const textStyleH3 = {
     verticalAlign: "center"
 };
 
-const cardStyle = {
-    // height: "220px"
-};
 
 export function TasaCompra({
     tasa
 }) {
     return (
-        <Card className="card-container-tasa mb-3 rounded" style={cardStyle}>
+        <Card className="card-container-tasa mb-3 rounded" >
             <CardContent className="p-0">
                 <h2 className="mb-4 py-2" style={textStyleH2}>Tasa de Compra</h2>
                 <br />

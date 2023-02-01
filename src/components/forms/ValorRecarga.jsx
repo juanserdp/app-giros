@@ -1,5 +1,5 @@
 import { Col, Form } from "react-bootstrap";
-import { currencyFormatter, currencyFormatterWithDecimals } from "../../util/currencyFormatter";
+import { currencyFormatter } from "../../util/currencyFormatter";
 import { parseNumberFormatToNumber } from "../../util/parseNumberFormatToNumber";
 import { FeedBack } from "../Feedback";
 
@@ -17,7 +17,7 @@ export function ValorRecarga({ value, onChange, md, disabled, tasa }) {
             type="text"
             placeholder="Ingrese el valor..."
             disabled={disabled ? true : false} />
-            <span style={{ float: "left", opacity: 0.7 }}>{currencyFormatterWithDecimals.format(value / tasa)} (VES)</span>
+            {/* <span style={{ float: "left", opacity: 0.7 }}>{currencyFormatterWithDecimals.format(value / tasa)} (VES)</span> */}
         <FeedBack />
     </Form.Group>
 };

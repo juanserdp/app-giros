@@ -18,6 +18,7 @@ import { OBTENER_USUARIOS_POR_ID_ASESOR } from "./services/apollo/gql/usuario/ob
 import { OBTENER_GIROS } from "./services/apollo/gql/giro/obtenerGiros";
 import { OBTENER_GIROS_POR_ID_USUARIO } from "./services/apollo/gql/giro/obtenerGirosPorIdUsuario";
 import { OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR } from "./services/apollo/gql/giro/obtenerGirosPorUsuariosPorIdAsesor";
+import Movimientos from "./pages/Movimientos";
 
 export const context = React.createContext();
 
@@ -49,7 +50,17 @@ export function App() {
               <PrivatizarPorRol rolAccess="OPERARIO">
                 <NavigationBar />
                 <Giros
-                consulta={OBTENER_GIROS} />
+                  consulta={OBTENER_GIROS} />
+              </PrivatizarPorRol>
+            }
+          />
+
+          <Route
+            path="/movimientos"
+            element={
+              <PrivatizarPorRol rolAccess="OPERARIO">
+                <NavigationBar />
+                <Movimientos />
               </PrivatizarPorRol>
             }
           />

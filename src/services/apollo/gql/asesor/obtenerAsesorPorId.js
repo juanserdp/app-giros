@@ -18,7 +18,16 @@ query obtenerAsesorPorId($id: ID!){
         tasaVenta
         valorMinimoGiro,
         tasaPreferencial,
-        usarTasaPreferencial
+        usarTasaPreferencial,
+        movimientos{
+            id,
+            valor,
+            saldo, 
+            deuda,
+            fechaEnvio,
+            sentido,
+            concepto
+        }
     }
 }
 `;

@@ -17,6 +17,20 @@ import { handleError } from '../../util/handleError';
 import { currencyFormatterWithDecimals } from '../../util/currencyFormatter';
 import { useMutation } from '@apollo/client';
 import { ELIMINAR_USUARIO } from '../../services/apollo/gql/usuario/eliminarUsuario';
+import { GridCellExpand } from '../GridCellExpand';
+import PropTypes from 'prop-types';
+
+function renderCellExpand(params) {
+    return (
+        <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+    );
+}
+
+renderCellExpand.propTypes = {
+    colDef: PropTypes.object.isRequired,
+    value: PropTypes.string,
+};
+
 
 export function TablaUsuarios({
     usuarios,
@@ -76,13 +90,15 @@ export function TablaUsuarios({
             headerName: 'NOMBRES',
             width: "200",
             headerAlign: 'center',
+            renderCell: renderCellExpand
 
         },
         {
             field: 'apellidos',
             headerName: 'APELLIDOS',
             width: "200",
-            headerAlign: 'center'
+            headerAlign: 'center',
+            renderCell: renderCellExpand
         },
         {
             field: 'tipoDocumento',
@@ -90,44 +106,47 @@ export function TablaUsuarios({
             width: "200",
             headerAlign: 'center',
             align: "center",
+            renderCell: renderCellExpand
         },
         {
             field: 'numeroDocumento',
-            headerName: 'NUM. DOCUMENTO',
-            width: "150",
+            headerName: '# DOCUMENTO',
+            width: "170",
             headerAlign: 'center',
             align: "center",
+            renderCell: renderCellExpand
 
         },
         {
             field: 'saldo',
-            headerName: 'SALDO (VES)',
+            headerName: 'SALDO',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",
-            headerAlign: 'center',
+            headerAlign: 'center'
+            
         },
         {
             field: 'deuda',
-            headerName: 'DEUDA (VES)',
+            headerName: 'DEUDA',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
             width: "150",
             align: "center",
-            headerAlign: 'center',
+            headerAlign: 'center'
         },
         {
             field: 'capacidadPrestamo',
-            headerName: 'CAPACIDAD PRESTAMO (VES)',
+            headerName: 'CAPACIDAD PRESTAMO',
             type: 'number',
             valueFormatter: ({ value }) => currencyFormatterWithDecimals.format(value),
             cellClassName: 'font-tabular-nums',
-            width: "150",
+            width: "230",
             align: "center",
-            headerAlign: 'center',
+            headerAlign: 'center'
         },
         {
             field: 'estado',
@@ -140,7 +159,7 @@ export function TablaUsuarios({
         {
             field: 'tasaPreferencial',
             headerName: 'TASA PREFERENCIAL',
-            width: "150",
+            width: "200",
             align: "center",
             headerAlign: 'center'
         },
@@ -176,7 +195,7 @@ export function TablaUsuarios({
                 headerHeight={50}
                 apiRef={apiRef}
                 rowHeight={50}
-                rows={usuarios}
+                rows={[...usuarios].reverse()}
                 columns={columnas}
                 components={{
                     Toolbar: () => CustomToolbar({

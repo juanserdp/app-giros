@@ -9,7 +9,7 @@ import { Buzon } from "../inicio/Buzon";
 import { Mensaje } from "../inicio/Mensaje";
 import { FormRecargar } from "../forms/FormRecargar";
 // COMPONENTES TERCEROS
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSesionContext } from "../../providers/SesionProvider";
 import { OBTENER_ASESOR_POR_ID } from "../../services/apollo/gql/asesor/obtenerAsesorPorId";
 import { TasaVenta } from "../inicio/TasaVenta";
@@ -17,6 +17,30 @@ import { EDITAR_ASESOR } from "../../services/apollo/gql/asesor/editarAsesor";
 import swal from "sweetalert";
 import { handleError } from "../../util/handleError";
 import { ErrorFetch } from "../errors/ErrorFetch";
+import { Saldo } from "../inicio/Saldo";
+import { Card, CardContent } from "@mui/material";
+import { GananciaPorcentaje } from "../inicio/GananciaPorcentaje";
+
+const textStyleH2 = {
+    fontWeight: "500",
+    fontSize: "1.5rem",
+    fontFamily: "'Roboto Slab', serif",
+    color: "white",
+    backgroundColor: "#0d6efd",
+};
+const textStyleH3 = {
+    fontWeight: "400",
+    fontSize: "2rem",
+    fontFamily: "'Roboto Slab', serif",
+    color: "white",
+    verticalAlign: "center"
+};
+
+const buttonStyle = {
+    borderTopLeftRadius: "0px",
+    borderTopRightRadius: "0px",
+    width: "100%"
+};
 
 export function InicioAdmin() {
 
@@ -42,7 +66,7 @@ export function InicioAdmin() {
     const [autoFocusMensaje, setAutoFocusMensaje] = useState(false);
     const buzon = useQuery(OBTENER_MENSAJES);
     const [idMensajeEditar, setIdMensajeEditar] = useState("");
-    const [valor, setValor] = useState(0);
+    const [setValor] = useState(0);
     const { data, loading, error, refetch } = useQuery(OBTENER_ASESOR_POR_ID,
         { variables: { id } }
     );
@@ -72,18 +96,59 @@ export function InicioAdmin() {
         });
     };
 
+    const handleEditarTasaCompra = async () => {
+        swal("Nueva tasa de compra:", {
+            content: "input",
+        }).then(async (value) => {
+            if (value) {
+                await editarTasaVenta({
+                    variables: {
+                        id,
+                        asesor: {
+                            tasaPreferencial: Number(value)
+                        }
+                    },
+                    onCompleted: () => {
+                        swal("Editado!", "La tasa de compra ha sido editada con exito", "success");
+                        refetch();
+                    },
+                    onError: ({ graphQLErrors, networkError }) => handleError({ graphQLErrors, networkError })
+                });
+            }
+            else swal("Error!", "Todos los campos son obligatorios!", "error");
+        });
+    };
+
     if (error) return <ErrorFetch />
 
     return (
         <React.Fragment>
             <Container {...containerProps}>
-                <Row className="mb-3 justify-content-center">
+                <Row className="mb-3 ">
+                    <Col md="4">
+                        <Card className="card-container-tasa mb-3 rounded" >
+                            <CardContent className="p-0">
+                                <h2 className="mb-4 py-2" style={textStyleH2}>Tasa de Compra</h2>
+                                <br />
+                                <h3 className="mb-4" style={textStyleH3}>{data?.asesor.tasaPreferencial}</h3>
+                                <Row >
+                                    <Col md="12">
+                                        <Button style={buttonStyle} onClick={handleEditarTasaCompra}>Editar</Button>
+                                    </Col>
+                                </Row>
+                            </CardContent>
+                        </Card>
+                    </Col>
                     <Col md="4">
                         <FormRecargar
                             recargar={recargarAsesor}
+                            refetch={refetch}
                             recargarMutation={recargarMutation}
                             setValor={setValor}
                             tasa={data?.asesor.tasaVenta} />
+                    </Col>
+                    <Col md="4">
+                        <GananciaPorcentaje tasaVenta={data?.asesor.tasaVenta} tasaCompra={data?.asesor.tasaPreferencial} />
                     </Col>
                 </Row>
 
@@ -125,6 +190,12 @@ export function InicioAdmin() {
                             isNewMensaje={isNewMensaje}
                             setIsNewMensaje={setIsNewMensaje}
                             idMensajeEditar={idMensajeEditar} />
+                    </Col>
+                    <Col md="4">
+                        <Saldo
+                            saldo={data?.asesor.saldo}
+                            loading={loading}
+                            tasa={data?.asesor.tasaVenta} />
                     </Col>
                 </Row>
             </Container>

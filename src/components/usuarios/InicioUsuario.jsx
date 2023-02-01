@@ -20,7 +20,7 @@ import { currencyFormatter } from "../../util/currencyFormatter";
 import { TasaCompra } from "../inicio/TasaCompra";
 import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
 import { handleError } from "../../util/handleError";
-import { GananciaMonto } from "../inicio/GananciaMonto";
+import { GananciaPorcentaje } from "../inicio/GananciaPorcentaje";
 
 export function InicioUsuario() {
     // INSTANCIAS
@@ -112,10 +112,9 @@ export function InicioUsuario() {
         <Container className="my-4" style={{ textAlign: "center" }}>
             <Row className="mb-3 justify-content-center">
                 <Col md="4">
-                    <GananciaMonto
-                        valor={form.valorGiro}
-                        tasaVenta={usuario.usuario?.tasaVenta}
-                        tasaCompra={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : usuario.usuario?.asesor.tasaVenta} />
+                    <GananciaPorcentaje
+                         tasaVenta={usuario.usuario?.tasaVenta}
+                         tasaCompra={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : usuario.usuario?.asesor.tasaVenta} />
                 </Col>
                 <Col md="4">
                     <Card className="card-container-inicio mb-3 rounded">
