@@ -21,6 +21,7 @@ import { TasaCompra } from "../inicio/TasaCompra";
 import { EDITAR_USUARIO } from "../../services/apollo/gql/usuario/editarUsuario";
 import { handleError } from "../../util/handleError";
 import { GananciaPorcentaje } from "../inicio/GananciaPorcentaje";
+import { OBTENER_TASA_ASESOR } from "../../services/apollo/gql/asesor/obtenerTasaAsesor";
 
 export function InicioUsuario() {
     // INSTANCIAS
@@ -55,8 +56,20 @@ export function InicioUsuario() {
     const mensajes = buzon.data?.mensajes || initialStateMensajes.mensajes;
 
     const { loading, data, error, refetch } = useQuery(OBTENER_USUARIO_POR_ID, {
-        variables: { id },
+        variables: { id }
     });
+
+    const [tasa, setTasa] = useState(null);
+
+    const tasaAsesor = useQuery(OBTENER_TASA_ASESOR, {
+        onCompleted: ({asesor}) => {
+            setTasa(asesor.tasaVenta);
+        }
+    });
+
+    tasaAsesor.startPolling(1000);
+
+
 
     const [validated, setValidated] = useState(false);
     const [form, setForm] = useState(initialState);
@@ -113,8 +126,8 @@ export function InicioUsuario() {
             <Row className="mb-3 justify-content-center">
                 <Col md="4">
                     <GananciaPorcentaje
-                         tasaVenta={usuario.usuario?.tasaVenta}
-                         tasaCompra={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : usuario.usuario?.asesor.tasaVenta} />
+                        tasaVenta={usuario.usuario?.tasaVenta}
+                        tasaCompra={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : tasaAsesor.data?.asesor.tasaVenta} />
                 </Col>
                 <Col md="4">
                     <Card className="card-container-inicio mb-3 rounded">
@@ -171,7 +184,7 @@ export function InicioUsuario() {
             <Row className="mb-3">
                 <Col md="4">
                     <TasaCompra
-                        tasa={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : usuario.usuario?.asesor.tasaVenta}
+                        tasa={(usuario.usuario?.usarTasaPreferencial) ? usuario.usuario?.tasaPreferencial : tasaAsesor.data?.asesor.tasaVenta}
                     />
                 </Col>
 

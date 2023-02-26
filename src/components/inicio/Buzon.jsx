@@ -25,7 +25,6 @@ export function Buzon({
     setIdMensajeEditar,
     initialStateMensaje
 }) {
-    console.log(mensajes);
     let mensajesOrdenados = [];
     if(mensajes.length > 0){
         mensajesOrdenados = [...mensajes];

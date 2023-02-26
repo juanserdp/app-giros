@@ -23,6 +23,15 @@ query obtenerUsuarioPorId($id: ID!){
         tasaPreferencial,
         usarTasaPreferencial,
         tasaVenta
+        movimientos{
+            id,
+            valor,
+            saldo, 
+            deuda,
+            fechaEnvio,
+            sentido,
+            concepto
+        }
     }
 }
 `;

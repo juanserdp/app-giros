@@ -9,6 +9,7 @@ import { TablaMovimientos } from "../components/movimientos/TablaMovimientos";
 import { ErrorFetch } from "../components/errors/ErrorFetch";
 import { OBTENER_ASESOR_POR_ID } from "../services/apollo/gql/asesor/obtenerAsesorPorId";
 import { useSesionContext } from "../providers/SesionProvider";
+import { OBTENER_USUARIO_POR_ID } from "../services/apollo/gql/usuario/obtenerUsuarioPorId";
 
 
 export default function Movimientos() {
@@ -18,13 +19,11 @@ export default function Movimientos() {
     }
 
     // HOOKS
-    const { sesionData: { id } } = useSesionContext();
-    const { loading, error, data, refetch } = useQuery(OBTENER_ASESOR_POR_ID, { variables: { id } });
+    const { sesionData: { id, rol } } = useSesionContext();
+    const { loading, error, data, refetch } = useQuery((rol === "USUARIO") ? OBTENER_USUARIO_POR_ID : OBTENER_ASESOR_POR_ID, { variables: { id } });
 
-    const movimientos = data?.asesor?.movimientos || [];
-    
-    console.log(data)
-    
+    const movimientos = ((rol === "USUARIO") ? (data?.usuario?.movimientos) : (data?.asesor?.movimientos)) || [];
+
     if (error) return <ErrorFetch error={error} />;
 
     return (
@@ -33,7 +32,7 @@ export default function Movimientos() {
                 movimientos={movimientos}
                 refetch={refetch}
                 loading={loading}
-                />
+            />
         </React.Fragment>
     );
 };

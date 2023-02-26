@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Asesores from "./pages/Asesores";
 import Cuenta from "./pages/Cuenta";
@@ -11,7 +11,7 @@ import { PrivatizarPorRol } from "./routes/PrivatizarPorRol";
 import "./assets/styles/fonts.css";
 import "./assets/styles/scroll.css";
 import { Configuracion } from "./pages/Configuracion";
-import { SesionProvider } from "./providers/SesionProvider";
+import { SesionProvider, useSesionContext } from "./providers/SesionProvider";
 import { NavigationBar } from "./components/NavigationBar";
 import { OBTENER_USUARIOS } from "./services/apollo/gql/usuario/obtenerUsuarios";
 import { OBTENER_USUARIOS_POR_ID_ASESOR } from "./services/apollo/gql/usuario/obtenerUsuarioPorIdAsesor";
@@ -19,13 +19,103 @@ import { OBTENER_GIROS } from "./services/apollo/gql/giro/obtenerGiros";
 import { OBTENER_GIROS_POR_ID_USUARIO } from "./services/apollo/gql/giro/obtenerGirosPorIdUsuario";
 import { OBTENER_GIROS_POR_USUARIOS_POR_ID_ASESOR } from "./services/apollo/gql/giro/obtenerGirosPorUsuariosPorIdAsesor";
 import Movimientos from "./pages/Movimientos";
+import { OBTENER_TASA_ADMIN } from "./services/apollo/gql/asesor/obtenerTasaAdmin";
+import { OBTENER_TASA_ASESOR } from "./services/apollo/gql/asesor/obtenerTasaAsesor";
+import { useQuery } from "@apollo/client";
+import { Sesion } from "./util/Sesion";
+import { Alert, Snackbar } from "@mui/material";
+import sonidoNotificacion from "./assets/sounds/sonido-notificacion.mp3";
 
 export const context = React.createContext();
 
 export function App() {
+  const sesion = new Sesion();
+  const [open, setOpen] = useState(false);
+  const [openTasaAsesor, setOpenTasaAsesor] = useState(false);
+
+  const audioPlayer = useRef(null);
+
+  const [tasas, setTasas] = useState({
+    admin: null,
+    asesor: null
+  });
+
+
+
+  const tasaAdmin = useQuery(OBTENER_TASA_ADMIN, {
+    onCompleted: () => {
+      setTasas({ ...tasas, admin: tasaAdmin.data?.admin?.tasaVenta });
+    }
+  });
+  const tasaAsesor = useQuery(OBTENER_TASA_ASESOR, {
+    onCompleted: () => {
+      setTasas({ ...tasas, asesor: tasaAsesor.data?.asesor?.tasaVenta });
+    }
+  });
+
+
+  const activarSonidoNotificacion = () => {
+    audioPlayer.current.play();
+  }
+  useEffect(() => {
+
+    if (sesion.getRol() === "ASESOR") {
+      tasaAdmin.startPolling(1000);
+      if (tasas.admin !== tasaAdmin.data?.admin?.tasaVenta && tasas.admin != undefined) {
+        handleClickTasaAdmin();
+        setTasas({ ...tasas, admin: tasaAdmin.data?.admin?.tasaVenta });
+      };
+    }
+    if (sesion.getRol() === "USUARIO") {
+      tasaAdmin.startPolling(1000);
+      tasaAsesor.startPolling(1000);
+      if (tasas.admin !== tasaAdmin.data?.admin?.tasaVenta && tasas.admin != undefined) {
+        handleClickTasaAdmin();
+        setTasas({ ...tasas, admin: tasaAdmin.data?.admin?.tasaVenta });
+      };
+      if (tasas.asesor !== tasaAsesor.data?.asesor?.tasaVenta && tasas.asesor != undefined) {
+        handleClickTasaAsesor();
+        setTasas({ ...tasas, asesor: tasaAsesor.data?.asesor?.tasaVenta });
+      }
+    }
+  })
+
+  const handleClickTasaAdmin = () => {
+    setOpen(true);
+    activarSonidoNotificacion();
+  };
+
+  const handleClickTasaAsesor = () => {
+    setOpenTasaAsesor(true);
+    activarSonidoNotificacion();
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+    setOpenTasaAsesor(false);
+  };
+
+
+
+
 
   return (
     <SesionProvider>
+      <audio ref={audioPlayer} src={sonidoNotificacion} />
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+          El administrador cambio su tasa de venta!
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={openTasaAsesor} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+          El asesor cambio su tasa de venta!
+        </Alert>
+      </Snackbar>
       <BrowserRouter>
         <Routes>
           {/*
@@ -33,6 +123,7 @@ export function App() {
           /////USUARIOS////// 
           ///////////////////
            */}
+
           <Route path="/" element={<Login />} />
           <Route
             path="/inicio"
@@ -58,7 +149,7 @@ export function App() {
           <Route
             path="/movimientos"
             element={
-              <PrivatizarPorRol rolAccess="OPERARIO">
+              <PrivatizarPorRol rolAccess="USUARIO">
                 <NavigationBar />
                 <Movimientos />
               </PrivatizarPorRol>

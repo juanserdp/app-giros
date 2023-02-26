@@ -76,14 +76,12 @@ export function TablaMovimientos({
             renderCell: renderCellExpand
         },
     ];
-    console.log(movimientos)
     const styleTablaAsesores = {
         height: 'calc(100vh - 60px)',
         borderRadius: "0px",
         backgroundColor: "white",
         fontSize: "20px"
     };
-    console.log(movimientos)
     return (
         <DataGrid
             headerHeight={50} // ALTURA TITULOS

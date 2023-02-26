@@ -66,7 +66,7 @@ export function InicioAdmin() {
     const [autoFocusMensaje, setAutoFocusMensaje] = useState(false);
     const buzon = useQuery(OBTENER_MENSAJES);
     const [idMensajeEditar, setIdMensajeEditar] = useState("");
-    const [setValor] = useState(0);
+    const [valor, setValor] = useState(0);
     const { data, loading, error, refetch } = useQuery(OBTENER_ASESOR_POR_ID,
         { variables: { id } }
     );
